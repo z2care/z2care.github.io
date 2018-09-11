@@ -1,47 +1,27 @@
-permalink: /:year/:month/:day/:title.html
-paginate: 10
-markdown: redcarpet
-
-# 作者信息
-author: 
-  name: Anya Lin
-  email: lay.1010@hotmail.com
-  link: http://painterlin.com
-  weibo: http://weibo.com/orangeissweet
-  github: http://github.com/lay1010
-  music: http://site.douban.com/linanya
-  linkedin: https://www.linkedin.com/pub/anya-lin/81/91/232
-
-# 站点信息
-title: 林安亚的博客
-description: My personal blog
-url: http://painterlin.com
-rss_url: /pages/atom.xml
-
-# gavatar头像及Favicon
-gavatar: /public/img/deer3.png
-favicon: /public/img/deer3.png
-
-# google analytics 设置
-ga:
-  id: UA-54262064-1 
-  url: painterlin.com
-
-# disqus 设置
-disqus:
-  shortname: painterlin
-
-# 主题设置，自动激活某个标签
-active: 读书
-
-# 首页除了最新文章外显示分类
-cates: 
-  - Optimization
-  - LaTeX
-
-# 中文本地化
-locals:
-  tags: 标签
-  about: 关于
-  newest: 最新文章
-  archive: 归档
+# Site settings
+name: 小可嗒嗒的博客
+email: maoxiaoke@outlook.com
+author: M/J
+url: http://xiaokedada.com
+resume_site: http://xiaokedada.com/me/
+github: https://github.com/maoxiaoke/
+baseurl: ""  #根目录
+description: 假如生活欺骗了你，不要悲伤，不要哭泣。
+motto: 我们笑着说再见，却深知再见遥遥无期。
+#motto: 如果生活欺骗了你，不要悲伤，不要哭泣。
+banner: 我想带你去看绚丽的山峦，去看秀丽的溪谷，这份心情，人类是如何称呼的呢。
+#permalink: /:categories/:year/:month/:day/:title/
+permalink: /:year/:month/:day/:title/
+excerpt_separator:  '<!-- more -->' #文章摘要
+paginate: 8
+paginate_path: "page:num"
+gems: [jekyll-paginate]
+exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
+github_username: maoxiaoke
+highlighter: rouge
+markdown: kramdown
+FB:
+  comments :
+    provider : disqus
+    disqus :
+        short_name : xiaokedada
