@@ -1,86 +1,52 @@
-<!DOCTYPE HTML>
-<html lang = "en">
-{% include head.html %}
-<body class="no-slider">
-<!-- <body class="has-top-menu"> -->
-  <!-- BEGIN #slider-imgs -->
-  <div id="slider-imgs">
-    <div class="featured-img-box">
-      <div id="featured-img-1" class="featured-img"></div>
-      <div id="featured-img-2" class="featured-img invisible"></div>
-      <div id="featured-img-3" class="featured-img invisible"></div>
-      <div id="featured-img-4" class="featured-img invisible"></div>
-    </div>
-  <!-- END #slider-imgs -->
-  </div>
-  <!-- BEGIN #top-layer -->
-  <div id="top-layer">
-  {% include head-top.html %}
-  <section id="content">
-    {% include header.html %}
-    <div id="main-box">
-      <!-- BEGIN #main -->
-      <div id="main">
-        <h1><span>{{ page.title }}</span></h1>
-        <div class="content-padding">
-          <div class="article-full">
-            {% if page.image %}
-            <div class="article-main-photo">
-              <img src="{{ page.image }}" alt="{{ page.title }}" title="{{ page.title }}" />
-            </div>
-            {% elsif page.video %}
-            <div class="article-main-photo">
-              {{ page.video }}
-            </div>
-            {% elsif page.audio %}
-            <div class="article-main-photo">
-              {{ page.audio }}
-            </div>
-            {% endif %}
-            <div class="article-icons">
-              <a href="user-single.html" class="user-tooltip"><i class="fa fa-user"></i>{{ site.author }}</a>
-              <a href="javascript:;"><i class="fa fa-calendar"></i>{{ page.date | date: '%B %d, %Y' }}</a>
-              <a href="{{ site.url }}/categories/{{ page.category | downcase }}/"><i class="fa fa-tag"></i>{{ page.category }}</a>
-              <a href="{{ page.url | prepend: site.url }}#disqus_thread" data-disqus-identifier="{{ site.url }}/{{ page.id }}"><i class="fa fa-comments"></i>0 Comment</a>
-              <a href="javascript:;"><i class="fa fa-check-square-o"></i>{% capture count_words %}{{ content | strip_html | strip_newlines | size }}{% endcapture %}{{ count_words }} words.</a>
-            </div>
-            <div class="clear-float do-the-split"></div>
-            <div class="article-content mylist" onmousedown='return false;' onselectstart='return false;'>
-              {{ content }}
-              <p>
-                <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-                <!-- 160824 -->
-                <ins class="adsbygoogle"
-                    style="display:block"
-                    data-ad-client="ca-pub-7353085750925432"
-                    data-ad-slot="1222227706"
-                    data-ad-format="auto"></ins>
-                <script>
-                (adsbygoogle = window.adsbygoogle || []).push({});
-                </script>
-              </p>
-              <div class="article-icons">
-                <span><i class="fa fa-tags"></i></span>{% for tag in page.tags %}
-                <a href="{{ site.url }}/tags/#{{ tag }}" class="tags">{{ tag }}</a>
-                {% endfor %}
-                <span><i class="fa fa-eye"></i></span><a href="javascripts:;" id="busuanzi_value_page_pv">1</a>
-              </div>
-              <div class="breaking-line"></div>
-            </div>
-          </div>
-          {% include article-footer.html %}
-        <!-- END .content-padding -->
-        </div>
-        {% include comments.html %}
-      <!-- END #main -->
+---
+layout: default
+---
+<div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        {% include lefttree.html %} 
       </div>
-      {% include post-sidebar.html %}
-      <div class="clear-float"></div>
     </div>
-  </section>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">{{ page.title }}</h1>
+              <!--
+                <p class="post-meta">{{ page.date | date: "%b %-d, %Y" }}{% if page.author %} • {{ page.author }}{% endif %}{% if page.meta %} • {{ page.meta }}{% endif %}</p>
+              -->
+              <div class="meta">Date： <span class="postdate">{{ page.date | date: "%b %d, %Y" }}</span> Author： <a target="_blank" href="{{site.url}}">{{ site.author }}</a></div>
+              <br />
+              <blockquote><p>本文章采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh"> 知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 </a>进行许可。转载请注明来自<a href="http://z2care.github.io">Z2CARE的博客</a></p></blockquote>
+            </header>
+            <article class="post-content">
+              {{ content }}
+            </article>
+          <hr>
+          <blockquote><p>对于本文内容有问题或建议的小伙伴，欢迎在文章底部留言交流讨论。</p></blockquote>
+          <div class="text-center">
+            <a href="{{ '/donate/' | prepend: site.baseurl }}" target="_blank" style="text-decoration: none"><button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> 您的支持是将是我写作最大的动力!</button></a>
+          </div>
+        </div>
+      </div>
+      <!--Gitment-->
+      <div id="container"></div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <script>
+        var gitment = new Gitment({
+          id: window.location.pathname, 
+          owner: 'z2care',
+          repo: 'z2care.github.io',
+          oauth: {
+          client_id: '3b962d46bab20f713630',
+          client_secret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          },
+        })
+        gitment.render('container')
+      </script>
+    </div>
   </div>
-  <div class="clear-float"></div>
-  {% include footer.html %}
-  {% include scripts.html %}
-</body>
-</html>
+</div>
+
