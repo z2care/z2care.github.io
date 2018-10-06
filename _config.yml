@@ -25,3 +25,8 @@ kramdown:
 FB:
  comments:
    provider: disqus
+gitalk:
+  owner: z2care
+  repo: z2care.github.io
+  clientID: 3b962d46bab20f713630
+  clientSecret: 32365f06df4cceb10fa60ca61ddb30bc14db7d29
