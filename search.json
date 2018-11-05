@@ -30,21 +30,21 @@
 
 {
 
-"title"    : "博文分类",
-"category" : "",
-"tags"     : "",
-"url"      : "/categories/",
-"date"     : ""
-
-} ,
-
-{
-
 "title"    : "DEMO",
 "category" : "",
 "tags"     : "",
 "url"      : "/effects/",
 "date"     : "2017-04-18 09:00:00 +0800"
+
+} ,
+
+{
+
+"title"    : "博文分类",
+"category" : "",
+"tags"     : "",
+"url"      : "/categories/",
+"date"     : ""
 
 } ,
 
