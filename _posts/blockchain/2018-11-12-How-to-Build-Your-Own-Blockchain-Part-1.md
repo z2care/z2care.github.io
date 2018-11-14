@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "How to Build Your Own Blockchain Part 1"
+title: "如何构建自己的区块链 第一部分 - 创建，存储，同步，显示，挖矿和工作量证明"
 date: 2018-11-12 23:56:00 +0800
 categories: 开发技术
 tag: Blockchain
@@ -8,53 +8,53 @@ tag: Blockchain
 * content
 {:toc}
 
-The reason I’m writing this post is 1) so people reading this can learn more about blockchains themselves, and 2) so I can try to learn more by explaining the code and not just writing it.
-
+在本文中，我将展示我想要存储区块链数据并生成创世块的方式，节点如何与本地区块链数据同步，如何显示区块链（将来将用于与其他节点同步），然后如何通过和挖掘并创建有效的新块。 对于第一篇文章，没有其他节点。没有钱包，没有其他节点，没有重要数据。相关信息后面再说。
 <!-- more -->
 
-# How to Build Your Own Blockchain Part 1 — Creating, Storing, Syncing, Displaying, Mining, and Proving Work
+# 如何构建自己的区块链 第一部分 - 创建，存储，同步，显示，挖矿和工作量证明
 
-I can actually look up how long I have by logging into my Coinbase account, looking at the history of the Bitcoin wallet, and seeing this transaction I got back in 2012 after signing up for Coinbase. Bitcoin was trading at about $6.50 per. If I still had that 0.1 BTC, that’d be worth over $500 at the time of this writing. In case people are wondering, I ended up selling that when a Bitcoin was worth $2000. So I only made $200 out of it rather than the $550 now. Should have held on.
+实际上我能够通过登录到我的Coinbase账户查询到账户有多久了，查看比特比钱包的历史记录，以及看看2012年注册后Coinbase上的交易。比特比是以约6.5美元每个交易的。如果我仍然持有那0.1BTC，那么此刻它价值超过500美元。有人会想知道，当比特币价值2000美元时我卖掉了它。所以我仅获得了200美元而不是现在的550美元。应继续持有的。
 
 ![image](https://bigishdata.files.wordpress.com/2017/10/screen-shot-2017-10-14-at-9-47-47-pm.png?w=696&h=754)
 
-Thank you Brian.
+感谢脑子 胳膊壮(Someone named Brain Armstrong, haha). 
 
-Despite knowing about Bitcoin’s existence, I never got much involved. I saw the rises and falls of the $/BTC ratio. I’ve seen people talk about how much of the future it is, and seen a few articles about how pointless BTC is. I never had an opinion on that, only somewhat followed along.
+尽管知道比特币的存在，但我从未介入其中。我看到了$/BTC汇率的涨涨跌跌。我看到人们谈论它未来值多少，并且看了一些关于BTC是多么无意义的文章。我从来没有对此发表意见，只是持续跟进。
 
-Similarly, I have barely followed blockchains themselves. Recently, my dad has brought up multiple times how the CNBC and Bloomberg stations he watches in the mornings bring up blockchains often, and he doesn’t know what it means at all.
+同样，我很少跟进区块链。最近，我父亲多次强调早上CNBC和Bloomberg电台经常提到区块链，以及他完全不懂它是什么。
 
-And then suddenly, I figured I should try to learn about the blockchain more than the top level information I had. I started by doing a lot of “research”, which means I would search all around the internet trying to find other articles explaining the blockchain. Some were good, some were bad, some were dense, some were super upper level.
+突然间，我意识到我应该尝试学习区块链而不是我所仅知道的前沿新闻。我开始做了很多“研究”，这意味着我会在互联网上搜索，试图找到解释区块链的其他文章。有些很好，有些不好，有些讲的太细了，有些则是太宏观了。
 
-Reading only goes so far, and if there’s one thing I know, it’s that **reading to learn doesn’t get you even close to the knowledge you get from programming to learn**. So I figured I should go through and try to write my own basic local blockchain.
+阅读只能浅尝辄止，我就知道一件事，那就是**阅读学习并不能让你获得到从编程中学到的知识**。所以我意识到我应该通过尝试编写自己的基本本地区块链.
 
-A big thing to mention here is that there are differences in a basic blockchain like I’m describing here and a ‘professional’ blockchain. This chain will not create a crypto currency. **Blockchains do not require producing coins that can be traded and exchanged for physical money**. Blockchains are used to store and verify information. Coins help incentive nodes to participate in validation but don’t need to exist.
+这里重点要说的是我在这里描述的基本区块链和“专业”区块链存在差异。本区块链不会创建加密货币。**区块链不需要生产可以交易和兑换实物货币的硬币**。区块链用于存储和验证信息。 货币用于鼓励节点参与验证，但不必存在。
 
-The reason I’m writing this post is 1) so people reading this can learn more about blockchains themselves, and 2) so I can try to learn more by explaining the code and not just writing it.
+我写这篇文章的原因是1）阅读本文的人因此可以更多地了解区块链本身，2）我可以因此尝试通过讲解代码来学习更多，而不仅仅是编写代码
 
-In this post, I’ll show the way I want to store the blockchain data and generate an initial block, how a node can sync up with the local blockchain data, how to display the blockchain (which will be used in the future to sync with other nodes), and then how to go through and mine and create valid new blocks. For this first post, there are no other nodes. There are no wallets, no peers, no important data. Information on those will come later.
+在本文中，我将展示我想要存储区块链数据并生成创世块的方式，节点如何与本地区块链数据同步，如何显示区块链（将来将用于与其他节点同步），然后如何通过和挖掘并创建有效的新块。 对于第一篇文章，没有其他节点。没有钱包，没有其他节点，没有重要数据。相关信息后面再说。
 
-## Other Posts in This Series
+## 本文其他系列文
 - [Part 2 — Syncing Chains From Different Nodes](https://bigishdata.com/2017/10/27/build-your-own-blockchain-part-2-syncing-chains-from-different-nodes/)
 - [Part 3 — Nodes that Mine](https://bigishdata.com/2017/11/02/build-your-own-blockchain-part-3-writing-nodes-that-mine/)
 - [Part 4.1 — Bitcoin Proof of Work Difficulty Explained](https://bigishdata.com/2017/11/02/build-your-own-blockchain-part-3-writing-nodes-that-mine/)
 - [Part 4.2 — Ethereum Proof of Work Difficulty Explained](https://bigishdata.com/2017/11/21/how-to-build-your-own-blockchain-part-4-2-ethereum-proof-of-work-difficulty-explained/)
 
-## TL;DR
-If you don’t want to get into specifics and read the code, or if you came across this post while searching for an article that describes blockchains understandably, I’ll attempt to write a summary about how a blockchains work.
+## 长话短说
+如果你不想涉入细节和阅读代码，或者如果你在搜索区块链理解的文章时遇到过这篇文章，我将尝试撰写有关区块链如何工作的摘要。
 
-At a super high level, a blockchain is a database where everyone participating in the blockchain is able to store, view, confirm, and never delete the data.
+在上层角度来看，区块链是一个参与区块链的每个人都能够存储，查看，确认和永不删除数据的数据库。
 
-On a somewhat lower level, the data in these blocks can be anything as long as that specific blockchain allows it. For example, the data in the Bitcoin blockchain is only transactions of Bitcoins between accounts. The Ethereum blockchain allows similar transactions of Ether’s, but also transactions that are used to run code.
+从底层角度来看，块中的数据可以是任何数据只要这个区块链允许。例如，比特别区块链中的数据只是比特别账户间的交易信息。以太坊区块链允许Ether的类似事务，但也允许用于运行代码的事务。
 
-Slightly more downward, before a block is created and linked into the blockchain, it is validated by a majority of people working on the blockchain, referred to as nodes. The true blockchain is the chain containing the greatest number of blocks that is correctly verified by the majority of the nodes. That means if a node attempts to change the data in a previous block, the newer blocks will not be valid and nodes will not trust the data from the incorrect block.
+继续往后说，在创建块并链接到区块链之前，它由大多数处理区块链的人（称为节点）进行验证。 真正的区块链是包含被大量节点正确验证的最大块数的链。这意味着如果一个节点尝试更改前一个块中的数据，则较新的块将无效，并且节点将不信任来自不正确块的数据。
 
-Don’t worry if this is all confusing. It took me a while to figure that out myself and a much longer time to be able to write this in a way that my sister (who has no background in anything blockchain) understands.
+别担心这困惑的一切。我花了一段时间自己才明白并且花更长的时间以我姐姐（没有任何区块链背景）能理解的方式来写这篇文章。
 
-If you want to look at the code, check out [the part 1 branch on Github](https://github.com/jackschultz/jbc/tree/part-1). Anyone with questions, comments, corrections, or praise (if you feel like being super nice!), get in contact, or let me know on [twitter](https://twitter.com/jack_schultz).
+如果你想看代码，检出[the part 1 branch on Github](https://github.com/jackschultz/jbc/tree/part-1). 任何人有问题，留言，纠错或打赏（如果你乐意就太好了）保持联络, 或在 [twitter](https://twitter.com/jack_schultz)告诉我.
 
-## Step 1 — Classes and Files
-Step 1 for me is to write a class that handles the blocks when a node is running. I’ll call this class `Block`. Frankly, there isn’t much to do with this class. In the `__init__` function, we’re going to trust that all the required information is provided in a dictionary. If I were writing a production blockchain, this wouldn’t be smart, but it’s fine for the example where I’m the only one writing all the code. I also want to write a method that spits out the important block information into a dict, and then have a nicer way to show block information if I print a block to the terminal.
+## Step 1 — 类和文件
+
+对我来说，第1步是编写一个在节点运行时处理块的类。我将这个类称为“Block”。坦率地说，这个类没什么要做的。在`__init__`函数中，我们将默认所有必需的信息都在字典中提供了。如果我正在编写一个生产区块链，这就不明智了，但对于只有我是编写所有代码的范例来说还算可以了。我还想编写一个方法，将重要的块信息输出到dict中，然后如果我要是将一个块信息打印到终端，就会有好的方式来显示块信息。
 
 ```
 class Block(object):
@@ -79,7 +79,8 @@ class Block(object):
   def __str__(self):
     return "Block<prev_hash: %s,hash: %s>" % (self.prev_hash, self.hash)
 ```
-When we’re looking to create a first block, we can run the simple code.
+
+当我们想要创建第一个块时，我们可以运行简单的代码。
 
 ```
 def create_first_block():
@@ -92,11 +93,11 @@ def create_first_block():
   block = Block(block_data)
   return block
 ```
-Nice. The final question of this section is where to store the data in the file system. We want this so we don’t lose our local block data if we turn off the node.
+漂亮。本节的最后一个问题是将数据存储在文件系统中的位置。我们需要这样做，因为当我们关闭节点，我们不会丢失本地块数据。
 
-In an attempt to somewhat copy the Etherium Mist folder scheme, I’m going to name the folder with the data ‘chaindata’. Each block will be allowed its own file for now where it’s named based on its index. We need to make sure that the filename begins with plenty of leading zeros so the blocks are in numerical order.
+为了尝试模仿以太坊Mist文件夹机制，我将使用'chaindata'命名该数据文件夹。每个块都将被允许根据其索引命名自己的文件。我们需要确保文件名以大量前导零开头，使得块按数字顺序排列。
 
-With the code above, this is what I need to create the first block.
+以上这些代码，就是我创建第一个块所需要的
 
 ```
 #check if chaindata folder exists.
@@ -110,8 +111,8 @@ if os.listdir(chaindata_dir) == []:
   first_block = create_first_block()
   first_block.self_save()
 ```
-## Step 2 — Syncing the blockchain, locally
-When you start a node, before you’re able to start mining, interpreting the data, or send / create new data for the chain, you need to sync the node. Since there are no other nodes, I’m only talking about reading the blocks from the local files. In the future, reading from files will be part of syncing, but also talking to peers to gather the blocks that were generated while you weren’t running your own node.
+## Step 2 — 本地同步区块链
+当你启动节点时，在能够开始挖矿，解释数据或发送/创建链的新数据之前，你需要同步节点。 由于没有其他节点，我只谈从本地文件中读取块。后面从文件读取将是同步的一部分，但也会与其他节点交流以收集在你未运行自己的节点时生成的块。
 
 ```
 def sync():
@@ -128,14 +129,14 @@ def sync():
           node_blocks.append(block_object)
 return node_blocks
 ```
-Nice and simple, for now. Reading strings from a folder and loading them into data structures doesn’t require super complicated code. For now this works. But in future posts when I write the ability for different nodes to communicate, this sync function is going to get a lot more complicated.
+现在还比较简单。从文件夹中读取字符串并将其加载到数据结构中不需要太复杂的代码。 现在这些可以正常工作。但是在以后的文章中，当我编写不同节点进行通信的能力时，这个同步功能将变得更加复杂。
 
-## Step 3 — Displaying the blockchain
-Now that we have the blockchain in memory, I want to start being able to show the chain in a browser. Two reasons for doing this now. First is to validate in a browser that things have changed. And then also I’ll want to use the browser in the future to view and act on the blockchain. Like sending transactions or managing wallets.
+## Step 3 — 展示区块连
+现在我们在内存中有Blockchain了，我想开始能够在浏览器中显示链。现在这样做的两个原因。 首先是在浏览器中验证事情已经发生了变化。然后我还想在将来使用浏览器来查看和操作区块链。比如发起交易或管理钱包。
 
-I use Flask here since it’s impressively easy to start, and also since I’m in control.
+我在这里使用Flask，因为它非常容易开始，而且因为我掌控着它。
 
-Here’s the code to show the blockchain json. I’ll ignore the import requirements to save space here.
+这是显示区块链json的代码。 我会忽略这里节省空间的导入要求。
 
 ```
 node = Flask(__name__)
@@ -165,40 +166,44 @@ def blockchain():
 if __name__ == '__main__':
   node.run()
 ```
-Run this code, visit localhost:3000/blockchain.json, and you’ll see the current blocks spit out.
+运行这段代码，访问`localhost:3000/blockchain.json`, 你将看到当前块信息输出。
 
-## Part 4 — “Mining”, also known as block creation
-We only have that one genesis block, and if we have more data we want to store and distribute, we need a way to include that into a new block. The question is how to create a new block while linking back to a previous one.
+## Part 4 — “挖矿”, 也被认为是创建区块
 
-In the Bitcoin whitepaper, Satoshi describes it as the following. Note that ‘timestamp server’ is referred to as a ‘node’:
+
+我们只有一个创世块，如果我们想要存储和分发更多数据，我们需要一种方法将其包含在一个新块中。问题是如何在链接到前一个区块时创建一个新块。
+
+在比特币白皮书中，Satoshi将其描述如下。请注意，'timestamp server'被称为'node'：
 
 ---
+> 本解决方案首先提出一个“时间戳服务器”。时间戳服务器通过对以区块(block)形式存在的一组数据实施随机散列而加上时间戳，并将该随机散列进行广播，就像在新闻或世界性新闻组网络（Usenet）的发帖一样。显然，该时间戳能够证实特定数据必然于某特定时间是的确存在的，因为只有在该时刻存在了才能获取相应的随机散列值。每个时间戳应当将前一个时间戳纳入其随机散列值中，每一个随后的时间戳都对之前的一个时间戳进行增强(reinforcing)，这样就形成了一个链条（Chain）。
+
 > The solution we propose begins with a timestamp server. A timestamp server works by taking a hash of a block of items to be timestamped and widely publishing the hash... The timestamp proves that the data must have existed at the time, obviously, in order to get into the hash. Each timestamp includes the previous timestamp in its hash, forming a chain, with each additional timestamp reinforcing the ones before it.
 
-Here’s a screenshot of the picture below the description.
+这时描述下面的截图。
 
 ![image](https://bigishdata.files.wordpress.com/2017/10/screen-shot-2017-10-16-at-11-41-52-am.png)
 
-A summary of that section is that in order to link the blocks together, we create a hash of the information of a new block that includes the time of block creation, the hash of the previous block, and the information in the block. I’ll refer to this group of information as the block’s ‘header’. In this way, we’re able to verify a block’s truthfulness by running through all the hashes before a block and validating the sequence.
 
-For my header the case here the header I’m creating is adding the string values together into a giant string. The data I’m including is:
+该部分的摘要是，为了将块链接在一起，我们创建新块信息的哈希值，其包括块创建的时间，前一块的哈希值以及块中的信息。我将这组信息称为块的“头部”。通过这种方式，我们可以通过遍历块之前的所有哈希并验证序列来验证块的真实性。
 
-1. Index, meaning which number of block this will be
-2. Previous block’s hash
-3. the data, in this case is just random strings. For bitcoin, this is referred to as the Merkle root, which is info about the transactions
-4. The timestamp of when we’re mining the block
+对于本例中的头部，我正在创建的头部是将字符串值一起添加到一个巨大的字符串中。 我包括的数据是：
 
+1. 索引, 指这将是第几个块
+2. 前块的哈希值
+3. 数据,在这种情况下只是随机字符串。对于比特币，这被称为Merkle根，它是关于交易的信息
+4. 我们挖掘块时的时间戳
 
 ```
 def generate_header(index, prev_hash, data, timestamp):
   return str(index) + prev_hash + data + str(timestamp)
 ```
-Before getting confused, adding the strings of information together isn’t required to create a header. T**he requirement is that everyone knows how to generate a block’s header, and within the header is the previous block’s hash. This is so everyone can confirm the correct hash for the new block, and validate the link between the two blocks.**
 
-The [Bitcoin header](https://en.bitcoin.it/wiki/Block_hashing_algorithm) is much more complex than combining strings. It uses hashes of data, times, and deals with how the bytes are stored in computer memory. But for now, adding strings suffices.
+在感到困惑之前，不需要一起添加信息字符串来创建头部。 **要求是每个人都知道如何生成块的头，并且在头部内是前一个块的哈希。 这样每个人都可以确认新块的正确哈希值，并验证两个块之间的链接。**
 
-Once we have the header, we want to go through and calculate the validated hash, and by calculating the hash. In my hash calculation, I’m going to be doing something slightly different than Bitcoin’s method, but I’m still running the block header through the sha256 function.
+[比特币头部](https://en.bitcoin.it/wiki/Block_hashing_algorithm) 比组合字符串复杂多了。它使用数据的哈希值，时间以及关联字节如何存储在计算机内存中。 但是现在，添加字符串就足够了。
 
+一旦我们有了头部，我们想要通过并计算经过验证的哈希值，并计算哈希值。 在我的哈希计算中，我将做一些与比特币方法略有不同的事情，但我仍然通过sha256函数计算块头。
 
 ```
 def calculate_hash(index, prev_hash, data, timestamp, nonce):
@@ -208,8 +213,7 @@ def calculate_hash(index, prev_hash, data, timestamp, nonce):
   return sha.hexdigest()
 ```
 
-Finally, to mine the block we use the functions above to get a hash for the new block, store the hash in the new block, and then save that block to the chaindata directory.
-
+最后，为了挖掘块，我们使用上面的函数来获取新块的哈希值，将哈希值存储在新块中，然后将该块保存到chaindata目录中。
 
 ```
 node_blocks = sync.sync()
@@ -241,21 +245,19 @@ if __name__ == '__main__':
   new_block = mine(last_block)
   save_block(new_block)
 ```
+嘿哈！虽然使用这种类型的块创建，但拥有最快CPU的人能够创建一个其他节点承认真实的最长链。我们需要一些方法来减缓块创建并在移向下一个块之前相互确认。
 
-Tada! Though with this type of block creation, whoever has the fastest CPU is able to create a chain that’s the longest which other nodes would conceive as true. We need some way to slow down block creation and confirm each other before moving towards the next block.
+## Part 5 — 工作量证明
 
-## Part 5 — Proof-of-Work
+为了减速，我们研究一下比特币的工作量证明做法。[股权证明](https://en.wikipedia.org/wiki/Proof-of-stake)是你看到区块链用来达成共识的另一种方式，但这个我还要研究一下。
 
-In order to do the slowdown, I’m throwing in Proof-of-Work as Bitcoin does. [Proof-of-Stake](https://en.wikipedia.org/wiki/Proof-of-stake) is another way you’ll see blockchains use to get consensus, but for this I’ll go with work.
-
-The way to do this is to adjust the requirement that a block’s hash has certain properties. Like bitcoin, I’m going to make sure that the hash begins with a certain number of zeros before you can move on to the next one. The way to do this is to throw on one more piece of information into the header — a nonce.
+做这个的方法是调整块的哈希值具有某些属性的要求。就像比特币一样，我要确保哈希值以一定数量的零开始，然后才能继续下一个。 这样做的方法是在头部中添加一条信息 - nonce。
 
 ```
 def generate_header(index, prev_hash, data, timestamp, nonce):
   return str(index) + prev_hash + data + str(timestamp) + str(nonce)
 ```
-
-Now the mining function is adjusted to create the hash, but if the block’s hash doesn’t lead with enough zeros, we increment the nonce value, create the new header, calculate the new hash and check to see if that leads with enough zeros.
+现在调整挖掘函数以创建哈希，但是如果块的哈希没有带足够的零，我们递增nonce值，创建新头部，计算新哈希值并检查是否带有足够的零。
 
 ```
 NUM_ZEROS = 4
@@ -280,13 +282,13 @@ def mine(last_block):
   block_data['nonce'] = nonce
   return Block(block_data)
 ```
-Excellent. This new block contains the valid nonce value so other nodes can validate the hash. We can generate, save, and distribute this new block to the rest.
+精彩。这个新块包含有效的nonce值，因此其他节点可以验证哈希值。 我们可以生成，保存和分发这个新块到其他部分。
 
-## Summary
-And that’s it! For now. There are tons of questions and features for this blockchain that I haven’t included.
+## 总结
+就是这样！目前。关于区块链的大量问题和功能我还没有引入。 
 
-For example, how do other nodes become involved? How would nodes transfer data that they want included in a block? How do we store the information in the block other than just a giant string Is there a better type of header that doesn’t include that giant data string?
+例如，其他节点如何参与？节点如何传输他们想要包含在块中的数据？我们如何将信息存储在块中而不仅仅是一个巨大的字符串？是否有更好的头部类型而不用包含那个巨大的数据字符串？
 
-There will be more parts of the series coming where I’ll move forward with solving these questions. So if you have suggestions of what parts you want to see, let me know on [twitter](https://twitter.com/jack_schultz), comment on this post, or [get in contact](https://bigishdata.com/contact/)!
+这个系列的更多部分将会出现，我将继续解决这些问题。所以，如果你有关于你想看到哪些部分的建议，直接告诉我[twitter](https://twitter.com/jack_schultz), 在下面留言, 或者 [get in contact](https://bigishdata.com/contact/)!
 
-Thanks to my sister Sara for reading through this for edits, and asking questions about blockchains so I had to rewrite to clarify.
+感谢我的姐姐Sara阅读这篇文章进行编辑，并询问有关区块链的问题，所以我不得不重写以澄清。
