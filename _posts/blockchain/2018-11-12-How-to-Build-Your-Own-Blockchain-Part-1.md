@@ -1,3 +1,17 @@
+---
+layout: post
+title: "How to Build Your Own Blockchain Part 1"
+date: 2018-11-12 23:56:00 +0800
+categories: 开发技术
+tag: Blockchain
+---
+* content
+{:toc}
+
+The reason I’m writing this post is 1) so people reading this can learn more about blockchains themselves, and 2) so I can try to learn more by explaining the code and not just writing it.
+
+<!-- more -->
+
 # How to Build Your Own Blockchain Part 1 — Creating, Storing, Syncing, Displaying, Mining, and Proving Work
 
 I can actually look up how long I have by logging into my Coinbase account, looking at the history of the Bitcoin wallet, and seeing this transaction I got back in 2012 after signing up for Coinbase. Bitcoin was trading at about $6.50 per. If I still had that 0.1 BTC, that’d be worth over $500 at the time of this writing. In case people are wondering, I ended up selling that when a Bitcoin was worth $2000. So I only made $200 out of it rather than the $550 now. Should have held on.
