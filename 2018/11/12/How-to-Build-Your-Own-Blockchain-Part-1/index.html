@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+	<title>How to Build Your Own Blockchain Part 1</title>
+	<meta name="description" content="z2care的个人博客、Android、Telephony、Java、CPP、Tensorflow">
+	<meta name="keywords" content="z2care的个人博客、Android、Telephony、Java、CPP、Tensorflow" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="msapplication-tap-highlight" content="no">
+	<meta name="author" contect="z2care, z2care@gmail.com">
+	<meta name="robots" content="index,follow">
+	<link rel="shortcut icon" href="/styles/images/favicon.png">
+	<link rel="icon" href="/styles/images/favicon.png">
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<link rel="canonical" href="http://localhost:4000">
+	<!--[if lte IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7/html5shiv.min.js"></script>
+  	<![endif]-->
+	<!--[if lt IE 9]>
+    	<script>window.location.href='/upgrade-your-browser.html';</script>
+    <![endif]-->
+	<!-- TODO use google analysis instead of baidu -->
+</head>
+
+  <body class="index">
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.png" alt="小可嗒嗒的个人博客">
+      </a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li></li>
+        <li>
+          <a href="/">首页</a>
+        </li>
+        <li>
+          <a href="/categories/">博文分类</a>
+        </li>
+        <li>
+          <a href="/tag">标签目录</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a rel="nofollow" href="/reference">外域链接</a></li>
+        <li><a href="/effects">DEMO</a></li>
+        <li><a href="/donate">打赏我</a></li>
+        <li><a rel="nofollow" href="/me">关于我</a></li> 
+        <li><a rel="nofollow" href="/talktome">TalkToMe</a></li>
+             
+        <!--
+        <li><a rel="nofollow" target="_blank" href="https://z2care.github.io/me/">关于我</a></li> 
+        -->
+      </ul>
+    </nav>
+  </div>
+</header>
+    <div class="docs-header pa" id="content">
+    <canvas id="mycanvas">你的浏览器不支持canvas</canvas>
+    <div class="container" >
+        <h1>松子的博客</h1>
+        <p>当你有了责任感，就值得被托付</p>
+    </div>
+</div>
+
+    
+      
+<div class="banner">
+  <div class="container lh30">
+  	
+    	<a href="/categories/#开发技术-ref">开发技术</a>	/
+    	<a href="/tag/#Blockchain-ref">Blockchain</a>
+    
+      <div id="search-container" class="pull-right">
+          <input type="text" id="search-input" placeholder=" 试试直接搜索吧...">
+          <label class="searchIcon glyphicon glyphicon-search" for="search-input"></label>
+          <ul id="results-container"></ul>
+      </div>
+  </div>
+</div>
+
+    
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2018">2018</a>
+          <ul class="nav">
+            <li><a href="#month_2018_November">November</a></li>
+      
+
+      
+            
+          
+              <li><a href="#month_2018_October">October</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">How to Build Your Own Blockchain Part 1</h1>
+              <!--
+                <p class="post-meta">Nov 12, 2018</p>
+              -->
+              <div class="meta">Date： <span class="postdate">Nov 12, 2018</span> Author： <a target="_blank" href="http://localhost:4000">Zarey C.Y. Chang</a></div>
+              <br />
+              <blockquote><p>本文章采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh"> 知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 </a>进行许可。转载请注明来自<a href="http://z2care.github.io">Z2CARE的博客</a></p></blockquote>
+            </header>
+            <article class="post-content">
+              <ul id="markdown-toc">
+  <li><a href="#how-to-build-your-own-blockchain-part-1--creating-storing-syncing-displaying-mining-and-proving-work" id="markdown-toc-how-to-build-your-own-blockchain-part-1--creating-storing-syncing-displaying-mining-and-proving-work">How to Build Your Own Blockchain Part 1 — Creating, Storing, Syncing, Displaying, Mining, and Proving Work</a>    <ul>
+      <li><a href="#other-posts-in-this-series" id="markdown-toc-other-posts-in-this-series">Other Posts in This Series</a></li>
+      <li><a href="#tldr" id="markdown-toc-tldr">TL;DR</a></li>
+      <li><a href="#step-1--classes-and-files" id="markdown-toc-step-1--classes-and-files">Step 1 — Classes and Files</a></li>
+      <li><a href="#step-2--syncing-the-blockchain-locally" id="markdown-toc-step-2--syncing-the-blockchain-locally">Step 2 — Syncing the blockchain, locally</a></li>
+      <li><a href="#step-3--displaying-the-blockchain" id="markdown-toc-step-3--displaying-the-blockchain">Step 3 — Displaying the blockchain</a></li>
+      <li><a href="#part-4--mining-also-known-as-block-creation" id="markdown-toc-part-4--mining-also-known-as-block-creation">Part 4 — “Mining”, also known as block creation</a></li>
+      <li><a href="#part-5--proof-of-work" id="markdown-toc-part-5--proof-of-work">Part 5 — Proof-of-Work</a></li>
+      <li><a href="#summary" id="markdown-toc-summary">Summary</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>The reason I’m writing this post is 1) so people reading this can learn more about blockchains themselves, and 2) so I can try to learn more by explaining the code and not just writing it.</p>
+
+<!-- more -->
+
+<h1 id="how-to-build-your-own-blockchain-part-1--creating-storing-syncing-displaying-mining-and-proving-work">How to Build Your Own Blockchain Part 1 — Creating, Storing, Syncing, Displaying, Mining, and Proving Work</h1>
+
+<p>I can actually look up how long I have by logging into my Coinbase account, looking at the history of the Bitcoin wallet, and seeing this transaction I got back in 2012 after signing up for Coinbase. Bitcoin was trading at about $6.50 per. If I still had that 0.1 BTC, that’d be worth over $500 at the time of this writing. In case people are wondering, I ended up selling that when a Bitcoin was worth $2000. So I only made $200 out of it rather than the $550 now. Should have held on.</p>
+
+<p><img src="https://bigishdata.files.wordpress.com/2017/10/screen-shot-2017-10-14-at-9-47-47-pm.png?w=696&amp;h=754" alt="image" /></p>
+
+<p>Thank you Brian.</p>
+
+<p>Despite knowing about Bitcoin’s existence, I never got much involved. I saw the rises and falls of the $/BTC ratio. I’ve seen people talk about how much of the future it is, and seen a few articles about how pointless BTC is. I never had an opinion on that, only somewhat followed along.</p>
+
+<p>Similarly, I have barely followed blockchains themselves. Recently, my dad has brought up multiple times how the CNBC and Bloomberg stations he watches in the mornings bring up blockchains often, and he doesn’t know what it means at all.</p>
+
+<p>And then suddenly, I figured I should try to learn about the blockchain more than the top level information I had. I started by doing a lot of “research”, which means I would search all around the internet trying to find other articles explaining the blockchain. Some were good, some were bad, some were dense, some were super upper level.</p>
+
+<p>Reading only goes so far, and if there’s one thing I know, it’s that <strong>reading to learn doesn’t get you even close to the knowledge you get from programming to learn</strong>. So I figured I should go through and try to write my own basic local blockchain.</p>
+
+<p>A big thing to mention here is that there are differences in a basic blockchain like I’m describing here and a ‘professional’ blockchain. This chain will not create a crypto currency. <strong>Blockchains do not require producing coins that can be traded and exchanged for physical money</strong>. Blockchains are used to store and verify information. Coins help incentive nodes to participate in validation but don’t need to exist.</p>
+
+<p>The reason I’m writing this post is 1) so people reading this can learn more about blockchains themselves, and 2) so I can try to learn more by explaining the code and not just writing it.</p>
+
+<p>In this post, I’ll show the way I want to store the blockchain data and generate an initial block, how a node can sync up with the local blockchain data, how to display the blockchain (which will be used in the future to sync with other nodes), and then how to go through and mine and create valid new blocks. For this first post, there are no other nodes. There are no wallets, no peers, no important data. Information on those will come later.</p>
+
+<h2 id="other-posts-in-this-series">Other Posts in This Series</h2>
+<ul>
+  <li><a href="https://bigishdata.com/2017/10/27/build-your-own-blockchain-part-2-syncing-chains-from-different-nodes/">Part 2 — Syncing Chains From Different Nodes</a></li>
+  <li><a href="https://bigishdata.com/2017/11/02/build-your-own-blockchain-part-3-writing-nodes-that-mine/">Part 3 — Nodes that Mine</a></li>
+  <li><a href="https://bigishdata.com/2017/11/02/build-your-own-blockchain-part-3-writing-nodes-that-mine/">Part 4.1 — Bitcoin Proof of Work Difficulty Explained</a></li>
+  <li><a href="https://bigishdata.com/2017/11/21/how-to-build-your-own-blockchain-part-4-2-ethereum-proof-of-work-difficulty-explained/">Part 4.2 — Ethereum Proof of Work Difficulty Explained</a></li>
+</ul>
+
+<h2 id="tldr">TL;DR</h2>
+<p>If you don’t want to get into specifics and read the code, or if you came across this post while searching for an article that describes blockchains understandably, I’ll attempt to write a summary about how a blockchains work.</p>
+
+<p>At a super high level, a blockchain is a database where everyone participating in the blockchain is able to store, view, confirm, and never delete the data.</p>
+
+<p>On a somewhat lower level, the data in these blocks can be anything as long as that specific blockchain allows it. For example, the data in the Bitcoin blockchain is only transactions of Bitcoins between accounts. The Ethereum blockchain allows similar transactions of Ether’s, but also transactions that are used to run code.</p>
+
+<p>Slightly more downward, before a block is created and linked into the blockchain, it is validated by a majority of people working on the blockchain, referred to as nodes. The true blockchain is the chain containing the greatest number of blocks that is correctly verified by the majority of the nodes. That means if a node attempts to change the data in a previous block, the newer blocks will not be valid and nodes will not trust the data from the incorrect block.</p>
+
+<p>Don’t worry if this is all confusing. It took me a while to figure that out myself and a much longer time to be able to write this in a way that my sister (who has no background in anything blockchain) understands.</p>
+
+<p>If you want to look at the code, check out <a href="https://github.com/jackschultz/jbc/tree/part-1">the part 1 branch on Github</a>. Anyone with questions, comments, corrections, or praise (if you feel like being super nice!), get in contact, or let me know on <a href="https://twitter.com/jack_schultz">twitter</a>.</p>
+
+<h2 id="step-1--classes-and-files">Step 1 — Classes and Files</h2>
+<p>Step 1 for me is to write a class that handles the blocks when a node is running. I’ll call this class <code class="highlighter-rouge">Block</code>. Frankly, there isn’t much to do with this class. In the <code class="highlighter-rouge">__init__</code> function, we’re going to trust that all the required information is provided in a dictionary. If I were writing a production blockchain, this wouldn’t be smart, but it’s fine for the example where I’m the only one writing all the code. I also want to write a method that spits out the important block information into a dict, and then have a nicer way to show block information if I print a block to the terminal.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Block(object):
+  def __init__(self, dictionary):
+  '''
+    We're looking for index, timestamp, data, prev_hash, nonce
+  '''
+  for k, v in dictionary.items():
+    setattr(self, k, v)
+  if not hasattr(self, 'hash'): #in creating the first block, needs to be removed in future
+    self.hash = self.create_self_hash()
+
+  def __dict__(self):
+    info = {}
+    info['index'] = str(self.index)
+    info['timestamp'] = str(self.timestamp)
+    info['prev_hash'] = str(self.prev_hash)
+    info['hash'] = str(self.hash)
+    info['data'] = str(self.data)
+    return info
+
+  def __str__(self):
+    return "Block&lt;prev_hash: %s,hash: %s&gt;" % (self.prev_hash, self.hash)
+</code></pre></div></div>
+<p>When we’re looking to create a first block, we can run the simple code.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def create_first_block():
+  # index zero and arbitrary previous hash
+  block_data = {}
+  block_data['index'] = 0
+  block_data['timestamp'] = date.datetime.now()
+  block_data['data'] = 'First block data'
+  block_data['prev_hash'] = None
+  block = Block(block_data)
+  return block
+</code></pre></div></div>
+<p>Nice. The final question of this section is where to store the data in the file system. We want this so we don’t lose our local block data if we turn off the node.</p>
+
+<p>In an attempt to somewhat copy the Etherium Mist folder scheme, I’m going to name the folder with the data ‘chaindata’. Each block will be allowed its own file for now where it’s named based on its index. We need to make sure that the filename begins with plenty of leading zeros so the blocks are in numerical order.</p>
+
+<p>With the code above, this is what I need to create the first block.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>#check if chaindata folder exists.
+chaindata_dir = 'chaindata'
+if not os.path.exists(chaindata_dir):
+  #make chaindata dir
+  os.mkdir(chaindata_dir)
+  #check if dir is empty from just creation, or empty before
+if os.listdir(chaindata_dir) == []:
+  #create first block
+  first_block = create_first_block()
+  first_block.self_save()
+</code></pre></div></div>
+<h2 id="step-2--syncing-the-blockchain-locally">Step 2 — Syncing the blockchain, locally</h2>
+<p>When you start a node, before you’re able to start mining, interpreting the data, or send / create new data for the chain, you need to sync the node. Since there are no other nodes, I’m only talking about reading the blocks from the local files. In the future, reading from files will be part of syncing, but also talking to peers to gather the blocks that were generated while you weren’t running your own node.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def sync():
+  node_blocks = []
+  #We're assuming that the folder and at least initial block exists
+  chaindata_dir = 'chaindata'
+  if os.path.exists(chaindata_dir):
+    for filename in os.listdir(chaindata_dir):
+      if filename.endswith('.json'): #.DS_Store sometimes screws things up
+        filepath = '%s/%s' % (chaindata_dir, filename)
+        with open(filepath, 'r') as block_file:
+          block_info = json.load(block_file)
+          block_object = Block(block_info) #since we can init a Block object with just a dict
+          node_blocks.append(block_object)
+return node_blocks
+</code></pre></div></div>
+<p>Nice and simple, for now. Reading strings from a folder and loading them into data structures doesn’t require super complicated code. For now this works. But in future posts when I write the ability for different nodes to communicate, this sync function is going to get a lot more complicated.</p>
+
+<h2 id="step-3--displaying-the-blockchain">Step 3 — Displaying the blockchain</h2>
+<p>Now that we have the blockchain in memory, I want to start being able to show the chain in a browser. Two reasons for doing this now. First is to validate in a browser that things have changed. And then also I’ll want to use the browser in the future to view and act on the blockchain. Like sending transactions or managing wallets.</p>
+
+<p>I use Flask here since it’s impressively easy to start, and also since I’m in control.</p>
+
+<p>Here’s the code to show the blockchain json. I’ll ignore the import requirements to save space here.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node = Flask(__name__)
+
+node_blocks = sync.sync() #inital blocks that are synced
+
+@node.route('/blockchain.json', methods=['GET'])
+def blockchain():
+  '''
+  Shoots back the blockchain, which in our case, is a json list of hashes
+  with the block information which is:
+  index
+  timestamp
+  data
+  hash
+  prev_hash
+  '''
+  node_blocks = sync.sync() #regrab the nodes if they've changed
+  # Convert our blocks into dictionaries
+  # so we can send them as json objects later
+  python_blocks = []
+  for block in node_blocks:
+    python_blocks.append(block.__dict__())
+  json_blocks = json.dumps(python_blocks)
+  return json_blocks
+
+if __name__ == '__main__':
+  node.run()
+</code></pre></div></div>
+<p>Run this code, visit localhost:3000/blockchain.json, and you’ll see the current blocks spit out.</p>
+
+<h2 id="part-4--mining-also-known-as-block-creation">Part 4 — “Mining”, also known as block creation</h2>
+<p>We only have that one genesis block, and if we have more data we want to store and distribute, we need a way to include that into a new block. The question is how to create a new block while linking back to a previous one.</p>
+
+<p>In the Bitcoin whitepaper, Satoshi describes it as the following. Note that ‘timestamp server’ is referred to as a ‘node’:</p>
+
+<hr />
+<blockquote>
+  <p>The solution we propose begins with a timestamp server. A timestamp server works by taking a hash of a block of items to be timestamped and widely publishing the hash… The timestamp proves that the data must have existed at the time, obviously, in order to get into the hash. Each timestamp includes the previous timestamp in its hash, forming a chain, with each additional timestamp reinforcing the ones before it.</p>
+</blockquote>
+
+<p>Here’s a screenshot of the picture below the description.</p>
+
+<p><img src="https://bigishdata.files.wordpress.com/2017/10/screen-shot-2017-10-16-at-11-41-52-am.png" alt="image" /></p>
+
+<p>A summary of that section is that in order to link the blocks together, we create a hash of the information of a new block that includes the time of block creation, the hash of the previous block, and the information in the block. I’ll refer to this group of information as the block’s ‘header’. In this way, we’re able to verify a block’s truthfulness by running through all the hashes before a block and validating the sequence.</p>
+
+<p>For my header the case here the header I’m creating is adding the string values together into a giant string. The data I’m including is:</p>
+
+<ol>
+  <li>Index, meaning which number of block this will be</li>
+  <li>Previous block’s hash</li>
+  <li>the data, in this case is just random strings. For bitcoin, this is referred to as the Merkle root, which is info about the transactions</li>
+  <li>The timestamp of when we’re mining the block</li>
+</ol>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def generate_header(index, prev_hash, data, timestamp):
+  return str(index) + prev_hash + data + str(timestamp)
+</code></pre></div></div>
+<p>Before getting confused, adding the strings of information together isn’t required to create a header. T<strong>he requirement is that everyone knows how to generate a block’s header, and within the header is the previous block’s hash. This is so everyone can confirm the correct hash for the new block, and validate the link between the two blocks.</strong></p>
+
+<p>The <a href="https://en.bitcoin.it/wiki/Block_hashing_algorithm">Bitcoin header</a> is much more complex than combining strings. It uses hashes of data, times, and deals with how the bytes are stored in computer memory. But for now, adding strings suffices.</p>
+
+<p>Once we have the header, we want to go through and calculate the validated hash, and by calculating the hash. In my hash calculation, I’m going to be doing something slightly different than Bitcoin’s method, but I’m still running the block header through the sha256 function.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def calculate_hash(index, prev_hash, data, timestamp, nonce):
+  header_string = generate_header(index, prev_hash, data, timestamp, nonce)
+  sha = hashlib.sha256()
+  sha.update(header_string)
+  return sha.hexdigest()
+</code></pre></div></div>
+
+<p>Finally, to mine the block we use the functions above to get a hash for the new block, store the hash in the new block, and then save that block to the chaindata directory.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>node_blocks = sync.sync()
+
+def mine(last_block):
+  index = int(last_block.index) + 1
+  timestamp = date.datetime.now()
+  data = "I block #%s" % (int(last_block.index) + 1) #random string for now, not transactions
+  prev_hash = last_block.hash
+  block_hash = calculate_hash(index, prev_hash, data, timestamp)
+
+  block_data = {}
+  block_data['index'] = int(last_block.index) + 1
+  block_data['timestamp'] = date.datetime.now()
+  block_data['data'] = "I block #%s" % last_block.index
+  block_data['prev_hash'] = last_block.hash
+  block_data['hash'] = block_hash
+  return Block(block_data)
+
+def save_block(block):
+  chaindata_dir = 'chaindata'
+  filename = '%s/%s.json' % (chaindata_dir, block.index)
+  with open(filename, 'w') as block_file:
+    print new_block.__dict__()
+    json.dump(block.__dict__(), block_file)
+
+if __name__ == '__main__':
+  last_block = node_blocks[-1]
+  new_block = mine(last_block)
+  save_block(new_block)
+</code></pre></div></div>
+
+<p>Tada! Though with this type of block creation, whoever has the fastest CPU is able to create a chain that’s the longest which other nodes would conceive as true. We need some way to slow down block creation and confirm each other before moving towards the next block.</p>
+
+<h2 id="part-5--proof-of-work">Part 5 — Proof-of-Work</h2>
+
+<p>In order to do the slowdown, I’m throwing in Proof-of-Work as Bitcoin does. <a href="https://en.wikipedia.org/wiki/Proof-of-stake">Proof-of-Stake</a> is another way you’ll see blockchains use to get consensus, but for this I’ll go with work.</p>
+
+<p>The way to do this is to adjust the requirement that a block’s hash has certain properties. Like bitcoin, I’m going to make sure that the hash begins with a certain number of zeros before you can move on to the next one. The way to do this is to throw on one more piece of information into the header — a nonce.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def generate_header(index, prev_hash, data, timestamp, nonce):
+  return str(index) + prev_hash + data + str(timestamp) + str(nonce)
+</code></pre></div></div>
+
+<p>Now the mining function is adjusted to create the hash, but if the block’s hash doesn’t lead with enough zeros, we increment the nonce value, create the new header, calculate the new hash and check to see if that leads with enough zeros.</p>
+
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>NUM_ZEROS = 4
+
+def mine(last_block):
+  index = int(last_block.index) + 1
+  timestamp = date.datetime.now()
+  data = "I block #%s" % (int(last_block.index) + 1) #random string for now, not transactions
+  prev_hash = last_block.hash
+  nonce = 0
+
+  block_hash = calculate_hash(index, prev_hash, data, timestamp, nonce)
+  while str(block_hash[0:NUM_ZEROS]) != '0' * NUM_ZEROS:
+    nonce += 1
+    block_hash = calculate_hash(index, prev_hash, data, timestamp, nonce)
+  block_data = {}
+  block_data['index'] = int(last_block.index) + 1
+  block_data['timestamp'] = date.datetime.now()
+  block_data['data'] = "I block #%s" % last_block.index
+  block_data['prev_hash'] = last_block.hash
+  block_data['hash'] = block_hash
+  block_data['nonce'] = nonce
+  return Block(block_data)
+</code></pre></div></div>
+<p>Excellent. This new block contains the valid nonce value so other nodes can validate the hash. We can generate, save, and distribute this new block to the rest.</p>
+
+<h2 id="summary">Summary</h2>
+<p>And that’s it! For now. There are tons of questions and features for this blockchain that I haven’t included.</p>
+
+<p>For example, how do other nodes become involved? How would nodes transfer data that they want included in a block? How do we store the information in the block other than just a giant string Is there a better type of header that doesn’t include that giant data string?</p>
+
+<p>There will be more parts of the series coming where I’ll move forward with solving these questions. So if you have suggestions of what parts you want to see, let me know on <a href="https://twitter.com/jack_schultz">twitter</a>, comment on this post, or <a href="https://bigishdata.com/contact/">get in contact</a>!</p>
+
+<p>Thanks to my sister Sara for reading through this for edits, and asking questions about blockchains so I had to rewrite to clarify.</p>
+
+            </article>
+          <hr>
+          <blockquote><p>对于本文内容有问题或建议的小伙伴，欢迎在文章底部留言交流讨论。</p></blockquote>
+          <div class="text-center">
+            <a href="/donate/" target="_blank" style="text-decoration: none"><button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> 您的支持是将是我写作最大的动力!</button></a>
+          </div>
+        </div>
+      </div>
+      <!--Gitment-->
+      <!--
+      <div id="container"></div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <script>
+        var gitment = new Gitment({
+          id: window.location.pathname, 
+          owner: 'z2care',
+          repo: 'z2care.github.io',
+          oauth: {
+          client_id: '3b962d46bab20f713630',
+          client_secret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          },
+        })
+        gitment.render('container')
+      </script>
+      -->
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+      <script>
+        const gitalk = new Gitalk({
+          clientID: '3b962d46bab20f713630',
+          clientSecret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          repo: 'z2care.github.io',
+          owner: 'z2care',
+          admin: ['z2care'],
+          id: location.pathname
+        })
+        gitalk.render('gitalk-container')
+      </script>
+    </div>
+  </div>
+</div>
+
+
+    <footer class="footer" role="contentinfo">
+	<!--不蒜子pv/uv统计-->
+	<div class="post-meta">
+            <p>Total <span id="busuanzi_value_site_pv"></span> views，您是本站的第<span id="busuanzi_value_site_uv"></span>个小伙伴，<span id="busuanzi_value_page_pv"></span> Hits</p><br/>
+    </div>
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2018 <a href="https://z2care.github.io/me/" target="_blank"><code>Zarey C.Y. Chang</code></a>. All rights reserved. </p>
+		<p>Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>， Data by <a href="https://analytics.google.com/analytics/web/" target="_blank">Google Analytics</a>.</p>
+	</div>
+	<ul id="gotop"><li><span>TOP</span></li></ul>
+</footer>
+<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128576901-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-128576901-1');
+</script>
+<script src="/styles/js/function.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.min.js"></script>
+
+  </body>
+</html>
