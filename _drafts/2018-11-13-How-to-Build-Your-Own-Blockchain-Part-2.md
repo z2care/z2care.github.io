@@ -48,13 +48,13 @@ tag: Blockchain
 
 ## 扩展Block类和增加Chain类
 
-这个项目是OOP优势的大好例子。本节中，我将开始讨论Block类的变动，然后去添加Chain类。
+这个项目是`OOP`优势的大好例子。本节中，我将开始讨论`Block`类的变动，然后去添加`Chain`类。
 
 Blocks区块的关键点是：
 
-1. 加入一种方式把块头中的键值从输入的值转换成我们要的类型。这样就能轻而易举的从文件写入json字典以及把index,nonce,second timestamp转换成ints。这可以更改后续的新变量。例如如果我想转换datetime成为datetimes对象，这个方法会很有用。
+1. 加入一种方式把块头中的键值从输入的值转换成我们要的类型。这样就能轻而易举的从文件写入json字典以及把`index,nonce,second timestamp`转换成`ints`。这可以更改后续的新变量。例如如果我想转换datetime成为datetimes对象，这个方法会很有用。
 2. 通过检查hash是否以必要数量的零开头来验证块。
-3. 块可以将自己保存在chaindata文件夹中。允许这样做而不需要工具函数来处理它。
+3. 块可以将自己保存在`chaindata`文件夹中。允许这样做而不需要工具函数来处理它。
 4. 重载一些操作符函数
 - `__repr__` 令debug时更易获取块的信息。打印时它重载了`__str__`方法。
 - `__eq__` 允许您用==来比较两个块是否相等。否则Python将比较块的内存地址。我们想要的是数据对比。
@@ -127,21 +127,19 @@ class Block(object):
   def __ne__(self, other):
     return not self.__eq__(other)
 ```
+同样，这些操作将来很容易改变。
 
-Again, these operations can easily change in the future.
+该讲链了。
 
-Chain time.
-
-Initialize a Chain by passing in a list of blocks. Chain([block_zero, block_one]) or Chain([]) if you’re creating an empty chain.
-Validity is determined by index incrementing by one, prev_hash is actually the hash of the previous block, and hashes have valid zeros.
-The ability to save the block to chaindata
-The ability to find a specific block in the chain by index or by hash
-The length of the chain, which can be called by len(chain_obj) is the length of self.blocks
-Equality of chains requires list of blocks of equal lengths that are all equal.
-Greater than, less than are determined only by the length of the chain
-Ability to add a block to the chain, currently by throwing it on the end of the block variable, not checking validitiy
-Returning a list of dictionary objects for all the blocks in the chain.
-
+1. 通过传入块列表来初始化链。如果你要创建空链，用`Chain([block_zero，block_one])`或`Chain([])`。
+2. 有效性由索引递增1确定，prev_hash实际上是前一个块的哈希值，而哈希值具有有效零。
+3. 将块保存到`chaindata`的功能
+4. 能够通过索引或哈希在链中查找特定块
+5. 可以通过`len(chain_obj)`调用得到链的长度即是`self.blocks`的长度
+6. 链的相等性要求相等长度的块列表全部相等。
+7. 大于，小于仅由链的长度决定
+8. 是否能够将一个块添加到链中，目前是通过将其放到块变量的末尾，而不是检查有效性
+9. 返回字典对象列表给链中所有的块。
 
 ```
 from block import Block
@@ -226,10 +224,9 @@ class Chain(object):
   def block_list_dict(self):
     return [b.to_dict() for b in self.blocks]
 ```
+哦。很好，我在这里列出了很多Chain类的功能。后面，这些功能可能会发生变化，尤其是`__gt__`和`__lt__`比较。现在，它处理了我们正需的一些功能。
 
-Woof. Ok fine, I listed a lot of the functions of the Chain class here. In the future, these functions are probably going to change, most notably the __gt__ and __lt__ comparisons. Right now, this handles a bunch of abilities we’re looking for.
-
-## Testing
+## 测试
 I’m going to throw my note about testing the classes here. I have the ability to mine new blocks which use the classes. One way to test is to change the classes, run the mining, observe the errors, try to fix, and then run the mining again. That’s quite a waste of time in that testing all parts of the code would take forever, especially when .
 
 There are a bunch of testing libraries out there, but they do involve a bunch of formatting. I don’t want to take that on right now, so having a test.py definitely works.
