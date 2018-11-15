@@ -16,7 +16,6 @@
 	<link rel="icon" href="/styles/images/favicon.png">
 	<link rel="stylesheet" href="/styles/css/index.css">
 	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
-	<link rel="canonical" href="https://z2care.github.io">
 	<!--[if lte IE 9]>
     <script src="https://cdn.bootcss.com/html5shiv/3.7/html5shiv.min.js"></script>
   	<![endif]-->
@@ -36,7 +35,7 @@
         <span class="icon-bar"></span>
       </button>
       <a href="/" class="navbar-brand">
-        <img src="/styles/images/logo.png" alt="小可嗒嗒的个人博客">
+        <img src="/styles/images/logo.png" alt="松子的个人博客">
       </a>
     </div>
     <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
@@ -163,18 +162,18 @@
             </header>
             <article class="post-content">
               <ul id="markdown-toc">
-  <li><a href="#nitz" id="markdown-toc-nitz">NITZ时间同步流程</a>    <ul>
-      <li><a href="#rilc" id="markdown-toc-rilc">RILC层</a>        <ul>
-          <li><a href="#at" id="markdown-toc-at">1. 接收到AT上报</a></li>
-          <li><a href="#rilonunsolicitedresponse" id="markdown-toc-rilonunsolicitedresponse">2. RIL_onUnsolicitedResponse处理</a></li>
-          <li><a href="#section" id="markdown-toc-section">3. 继续传递</a></li>
+  <li><a href="#nitz时间同步流程" id="markdown-toc-nitz时间同步流程">NITZ时间同步流程</a>    <ul>
+      <li><a href="#rilc层" id="markdown-toc-rilc层">RILC层</a>        <ul>
+          <li><a href="#1-接收到at上报" id="markdown-toc-1-接收到at上报">1. 接收到AT上报</a></li>
+          <li><a href="#2-ril_onunsolicitedresponse处理" id="markdown-toc-2-ril_onunsolicitedresponse处理">2. RIL_onUnsolicitedResponse处理</a></li>
+          <li><a href="#3-继续传递" id="markdown-toc-3-继续传递">3. 继续传递</a></li>
         </ul>
       </li>
-      <li><a href="#rilj" id="markdown-toc-rilj">RILJ层</a>        <ul>
-          <li><a href="#section-1" id="markdown-toc-section-1">1. 处理上报消息</a></li>
-          <li><a href="#section-2" id="markdown-toc-section-2">2. 观察监听者是如何处理的</a></li>
-          <li><a href="#gsmservicestatetracker" id="markdown-toc-gsmservicestatetracker">3. 注册监听的GsmServiceStateTracker</a></li>
-          <li><a href="#section-3" id="markdown-toc-section-3">4. 关键的设置时间函</a></li>
+      <li><a href="#rilj层" id="markdown-toc-rilj层">RILJ层</a>        <ul>
+          <li><a href="#1-处理上报消息" id="markdown-toc-1-处理上报消息">1. 处理上报消息</a></li>
+          <li><a href="#2-观察监听者是如何处理的" id="markdown-toc-2-观察监听者是如何处理的">2. 观察监听者是如何处理的</a></li>
+          <li><a href="#3-注册监听的gsmservicestatetracker" id="markdown-toc-3-注册监听的gsmservicestatetracker">3. 注册监听的GsmServiceStateTracker</a></li>
+          <li><a href="#4-关键的设置时间函" id="markdown-toc-4-关键的设置时间函">4. 关键的设置时间函</a></li>
         </ul>
       </li>
     </ul>
@@ -186,26 +185,25 @@
 
 <!-- more -->
 
-<h1 id="nitz">NITZ时间同步流程</h1>
+<h1 id="nitz时间同步流程">NITZ时间同步流程</h1>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>sequenceDiagram
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>sequenceDiagram
 sprd_ril-&gt;&gt;sprd_libril: RIL_onUnsolicitedResponse
 sprd_libril-&gt;&gt;sprd_libril: sendResponse
 sprd_libril-&gt;&gt;RILJ: RIL_UNSOL_NITZ_TIME_RECEIVED
 RILJ-&gt;&gt;RILJ: setOnNITZTime
 RILJ-&gt;&gt;GsmServiceStateTracker: EVENT_NITZ_TIME
 GsmServiceStateTracker-&gt;&gt;GsmServiceStateTracker: setTimeFromNITZString
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h2 id="rilc">RILC层</h2>
+<h2 id="rilc层">RILC层</h2>
 
-<h3 id="at">1. 接收到AT上报</h3>
+<h3 id="1-接收到at上报">1. 接收到AT上报</h3>
 <blockquote>
   <p>++vendor/sprd/proprietories-source/ril/sprd_ril/sprd_ril.c +14034++</p>
 </blockquote>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>static void onUnsolicited (const char *s, const char *sms_pdu)
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>static void onUnsolicited (const char *s, const char *sms_pdu)
 {
     ...
 14034    if (strStartsWith(s, "+CTZV:")) {
@@ -232,15 +230,14 @@ GsmServiceStateTracker-&gt;&gt;GsmServiceStateTracker: setTimeFromNITZString
 14055                    response, strlen(response)+1);//response是内容，长度加1是因为不含换行
 14056#endif
 14057        }
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="rilonunsolicitedresponse">2. RIL_onUnsolicitedResponse处理</h3>
+<h3 id="2-ril_onunsolicitedresponse处理">2. RIL_onUnsolicitedResponse处理</h3>
 <blockquote>
   <p>++vendor/sprd/proprietories-source/ril/sprd_libril/sprd_ril.c +6322++</p>
 </blockquote>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>6326    int unsolResponseIndex = -1;
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>6326    int unsolResponseIndex = -1;
 6327    int ret;
 6328    int64_t timeReceived = 0;
 ...
@@ -276,27 +273,25 @@ GsmServiceStateTracker-&gt;&gt;GsmServiceStateTracker: setTimeFromNITZString
 6487        memcpy(s_lastNITZTimeData, p.data(), p.dataSize());
 6488    }
 ...
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section">3. 继续传递</h3>
+<h3 id="3-继续传递">3. 继续传递</h3>
 <blockquote>
   <p>++vendor/sprd/proprietories-source/ril/sprd_libril/sprd_ril.cpp++</p>
 </blockquote>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>2734static int
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2734static int
 2735sendResponse (Parcel &amp;p, RIL_SOCKET_TYPE socket_type) {
 2736    printResponse;//打印log信息
 2737    return sendResponseRaw(p.data(), p.dataSize(), socket_type);//传递打包后的信息
 2738}
-</code></pre>
-</div>
+</code></pre></div></div>
 
 <ol>
-  <li>写入节点<br />
-&gt; ++vendor/sprd/proprietories-source/ril/sprd_libril/sprd_ril.cpp++<br />
-<code class="highlighter-rouge">
-2687static int
+  <li>写入节点
+    <blockquote>
+      <p>++vendor/sprd/proprietories-source/ril/sprd_libril/sprd_ril.cpp++</p>
+      <div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2687static int
 2688sendResponseRaw (const void *data, size_t dataSize, RIL_SOCKET_TYPE socket_type) {
 2689    int fd = s_rilSocketParam.fdCommand;//socket节
 2690    int ret;
@@ -313,17 +308,19 @@ GsmServiceStateTracker-&gt;&gt;GsmServiceStateTracker: setTimeFromNITZString
 2730
 2731    return 0;
 2732}
-</code></li>
+</code></pre></div>      </div>
+    </blockquote>
+  </li>
 </ol>
 
-<h2 id="rilj">RILJ层</h2>
+<h2 id="rilj层">RILJ层</h2>
 
-<h3 id="section-1">1. 处理上报消息</h3>
+<h3 id="1-处理上报消息">1. 处理上报消息</h3>
 <blockquote>
   <p>++frameworks/opt/telephony/src/java/com/android/internal/telephony/RIL.java++</p>
 </blockquote>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>2632    protected void
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>2632    protected void
 2633    processUnsolicited (Parcel p) {
 ...
 2637        response = p.readInt();//读出消息ID
@@ -352,15 +349,14 @@ GsmServiceStateTracker-&gt;&gt;GsmServiceStateTracker: setTimeFromNITZString
 2817                    }
 2818                }
 2819            break;
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-2">2. 观察监听者是如何处理的</h3>
+<h3 id="2-观察监听者是如何处理的">2. 观察监听者是如何处理的</h3>
 <blockquote>
   <p>++frameworks/opt/telephony/src/java/com/android/internal/telephony/RIL.java++</p>
 </blockquote>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>665    @Override public void
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>665    @Override public void
 666    setOnNITZTime(Handler h, int what, Object obj) {
 667        **super.setOnNITZTime(h, what, obj);**//在父类BaseCommands.java里实例化
 668
@@ -372,15 +368,14 @@ GsmServiceStateTracker-&gt;&gt;GsmServiceStateTracker: setTimeFromNITZString
 674            mLastNITZTimeInfo = null;
 675        }
 676    }
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="gsmservicestatetracker">3. 注册监听的GsmServiceStateTracker</h3>
+<h3 id="3-注册监听的gsmservicestatetracker">3. 注册监听的GsmServiceStateTracker</h3>
 <blockquote>
   <p>++frameworks/opt/telephony/src/java/com/android/internal/telephony/gsm/GsmServiceStateTracker.java++</p>
 </blockquote>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>252    public GsmServiceStateTracker(GSMPhone phone) {
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>252    public GsmServiceStateTracker(GSMPhone phone) {
 ...
 268        mCi.setOnNITZTime(this, EVENT_NITZ_TIME, null);//注册消息事件
 ...
@@ -395,15 +390,14 @@ GsmServiceStateTracker-&gt;&gt;GsmServiceStateTracker: setTimeFromNITZString
 455
 456                setTimeFromNITZString(nitzString, nitzReceiveTime);
 457                break;
-</code></pre>
-</div>
+</code></pre></div></div>
 
-<h3 id="section-3">4. 关键的设置时间函</h3>
+<h3 id="4-关键的设置时间函">4. 关键的设置时间函</h3>
 <blockquote>
   <p>++</p>
 </blockquote>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>1747    /**
+<div class="highlighter-rouge"><div class="highlight"><pre class="highlight"><code>1747    /**
 1748     * nitzReceiveTime is time_t that the NITZ time was posted
 1749     */
 1750    private void setTimeFromNITZString (String nitz, long nitzReceiveTime) {
@@ -596,8 +590,7 @@ GsmServiceStateTracker-&gt;&gt;GsmServiceStateTracker: setTimeFromNITZString
 1985        intent.putExtra("time", time);
 1986        mPhone.getContext().sendStickyBroadcastAsUser(intent, UserHandle.ALL);//用于NetworkTimeUpdateService.java记录本次设置的时间
 1987    }
-</code></pre>
-</div>
+</code></pre></div></div>
 
             </article>
           <hr>
