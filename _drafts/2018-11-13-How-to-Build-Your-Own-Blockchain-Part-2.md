@@ -11,7 +11,6 @@ tag: Blockchain
 起初我的目标是写关于节点间同步和彼此通信，还有挖矿和广播它们成功区块给其他节点。最终我意识到这些大量的代码和阐释在一篇文章中完成太多了。基于此因，我决定第二部分只谈节点作为后续话题的开始。
 
 <!-- more -->
-# 如何构建自己的区块链 第二部分 - 从不同节点同步区块链
 
 欢迎来进入JackBlockChain第二部分，这里我将介绍不同节点间通信的能力。
 
@@ -227,11 +226,11 @@ class Chain(object):
 哦。很好，我在这里列出了很多Chain类的功能。后面，这些功能可能会发生变化，尤其是`__gt__`和`__lt__`比较。现在，它处理了我们正需的一些功能。
 
 ## 测试
-I’m going to throw my note about testing the classes here. I have the ability to mine new blocks which use the classes. One way to test is to change the classes, run the mining, observe the errors, try to fix, and then run the mining again. That’s quite a waste of time in that testing all parts of the code would take forever, especially when .
+我将在这里放上关于测试类的说明。可以用这些新类挖掘新区块。 一种测试方法是更改类，运行挖掘，观察错误，尝试修复，然后再次运行挖掘。测试代码的所有部分需要很久，特别是这时候，这是相当浪费时间的。
 
-There are a bunch of testing libraries out there, but they do involve a bunch of formatting. I don’t want to take that on right now, so having a test.py definitely works.
+虽然有很多测试库可用，但它们却涉及一堆格式要求。我现在不想用它们，所以有一个`test.py`足够工作了。
 
-In order to get the block dicts listed at the start, I simply ran the mining algorithm a few times to get a valid chain of the block dicts. From there, I write sections that test the different parts of the classes. If I change or add something to the classes, it barely takes any time to write the test for it. When I run python test.py, the file runs incredibly quickly and tells me exactly which line the error was from.
+为了在开始时列出块序列，我简单运行几次挖掘算法以获得块序列的有效链。从那里，我编写了测试类中不同部分的方法。如果我改变或添加某类，几乎不费时间为它编写测试。当我运行`python test.py`时，文件运行速度非常快，并告诉我错误来自哪一行。
 
 ```
 from block import Block
@@ -290,9 +289,9 @@ assert blockchain >= another_blockchain
 assert blockchain > another_blockchain
 assert another_blockchain < blockchain
 ```
-Future additions to test.py include using one of the fancy testing libraries which will run all the tests separately. This would let you know all of the tests that could fail rather than dealing with them one at a time. Another would be to put the test block dicts in files instead of in the script. For example, adding a chaindata dir in the test dir so I can test the creation and saving of blocks.
+将来添加到test.py的功能包括所有独立运行的测试库。这会让你体会所有测试失败和而不是一次只能处理它们中的一个。另一种方法是将测试块dicts放在文件中而不是脚本中。例如，在测试目录中添加chaindata目录，以便我可以测试块的创建和保存。
 
-## Peers, and Hard Links
+## 对等点, 以及硬链接
 The whole point of this part of the jbc is to be able to create different nodes that can run their own mining, own nodes on different ports, store their own chains to their own chaindata folder, and have the ability to give other peers their blockchain.
 
 To do this, I want to share the files quickly between the folders so any change to one will be represented in the other blockchain nodes. Enter hard links.
