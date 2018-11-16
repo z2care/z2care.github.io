@@ -14,7 +14,7 @@ permalink: /:year/:month/:day/:title/
 excerpt_separator:  '<!-- more -->'
 paginate: 8
 paginate_path: "page:num"
-gems: [jekyll-paginate]
+plugins: [jekyll-paginate]
 plugins_dir: ./_plugins
 exclude: ['README.md', 'Gemfile.lock', 'Gemfile', 'Rakefile']
 github_username: z2care

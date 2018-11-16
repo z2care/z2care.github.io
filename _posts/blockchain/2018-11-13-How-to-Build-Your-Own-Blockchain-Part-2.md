@@ -5,12 +5,11 @@ date: 2018-11-13 23:56:00 +0800
 categories: 开发技术
 tag: Blockchain
 ---
+
+独立翻译自:[How to Build Your Own Blockchain Part 2 — Syncing Chains From Different Nodes](https://bigishdata.com/2017/10/27/build-your-own-blockchain-part-2-syncing-chains-from-different-nodes/)
+<!-- more -->
 * content
 {:toc}
-
-起初我的目标是写关于节点间同步和彼此通信，还有挖矿和广播它们成功区块给其他节点。最终我意识到这些大量的代码和阐释在一篇文章中完成太多了。基于此因，我决定第二部分只谈节点作为后续话题的开始。
-
-<!-- more -->
 
 欢迎来进入JackBlockChain第二部分，这里我将介绍不同节点间通信的能力。
 
@@ -291,16 +290,16 @@ assert another_blockchain < blockchain
 ```
 将来添加到test.py的功能包括所有独立运行的测试库。这会让你体会所有测试失败和而不是一次只能处理它们中的一个。另一种方法是将测试块dicts放在文件中而不是脚本中。例如，在测试目录中添加chaindata目录，以便我可以测试块的创建和保存。
 
-## 对等点, 以及硬链接
-The whole point of this part of the jbc is to be able to create different nodes that can run their own mining, own nodes on different ports, store their own chains to their own chaindata folder, and have the ability to give other peers their blockchain.
+## 对等节点, 以及硬链接
+jbc的这一部分的重点是能够创建不同的自己进行挖掘的节点，节点有自己的端口，将自己的链存储到自己的chaindata文件夹，并且能够为其他对等节点提供它们的链。
 
-To do this, I want to share the files quickly between the folders so any change to one will be represented in the other blockchain nodes. Enter hard links.
+为此，我想在文件夹之间快速共享文件，以便其中的任何更改能在其他区块链节点中表现出来。 用了硬链接的方式。
 
-At first I tried rsync, where I would run the bash script and have it copy the main files into a different local folder. The problem with this is that every change to a file and restart of the node would require me to ship the files over. I don’t want to have to do that all the time.
+起初我尝试了rsync，我运行bash脚本，并将主要文件复制到本地不同文件夹内。问题是每次更改文件和重新启动节点都需要我同步文件。我不想一直这样做。
 
-Hard links, on the other hand, will make the OS point the files in the different folder exactly to the files in my main jbc folder. Any change and save for the main files will be represented in the other nodes.
+反之，硬链接将使操作系统将不同文件夹中的文件指向我的主jbc文件夹中的文件。主文件的任何更改和保存都将在其他节点中得以表现。
 
-Here’s the bash script I created that will link the folders.
+这里是我写的链接文件夹的脚
 
 ```
 #!/bin/bash
@@ -326,9 +325,9 @@ echo Synced new jbc folder for port $port
 
 exit 1
 ```
-To run, $./linknodes 5001 to create a folder called jbc5001 with the correct files.
+运行`$./linknodes 5001`来创建一个叫`jbc5001`的文件夹和相应文件。
 
-Since Flask runs initially on port 5000, I’m gong to use 5001, 5002, and 5003 as my initial peer nodes. Define them in config.py and use them when config is imported. As with many parts of the code, this will definitely change to make sure peers aren’t hardcoded. We want to be able to ask for new ones.
+由于Flask初始端口在5000上，我将使用5001,5002和5003作为我的其他初始对等节点。在config.py中定义它们并在导入配置时使用它们。与代码的许多部分一样，这肯定会改变以确保对等节点不是固定的。我们希望能获取新节点。
 
 ```
 #config.py
@@ -352,20 +351,23 @@ if __name__ == '__main__':
 
   node.run(host='127.0.0.1', port=port)
 ```
-Cool. In part 1, the Flask node already has an endpoint for sharing it’s blockchain so we’re good on that front, but we still need to write the code to ask our peer friends about what they’re working with.
+酷。在第一部分中，Flask节点已经有一个分享区块的后台了，所以我们在这方面做的很好，但是我们仍然需要写一段代码来请求我们对等节点的工作情况。
 
-Quick side, we’re using Flask and http. This works in our case, but a blockchain like Ethereum has their own protocol for broadcasting, the [Ethereum Wire Protocol](https://github.com/ethereum/wiki/wiki/Ethereum-Wire-Protocol).
+加快速度, 我们使用Flask和http. 这在我们这里有效，但是在像以太坊它们有自己的广播协议，[Ethereum Wire Protocol](https://github.com/ethereum/wiki/wiki/Ethereum-Wire-Protocol).
 
-## Syncing
-When a node or mine starts, the first requirement is to sync up to get a valid blockchain to work from. There are two parts to this – first, getting that node’s local blockchain it has in its (fix the it’s to be its) chaindata dtr, and second, the ability to ask your peers what they have.
+## 同步
+当节点或挖矿程序启动时，首要需求是同步用以获得有效的区块链。 这分两个部分 - 第一，在它的（将它是变成它的）`chaindata`目录中获取该节点的本地区块链，第二，能够向对等节点询问它们具有什么。
 
-There’s a big part of syncing that I’m ignoring for now — determining which chain is the best to work with. Remember back in the __gt__ method in the Chain class? All I’m doing is seeing which chain is longer than the other. That’s not going to cut it when we’re dealing with information being locked in and unchangeable.
+我现在忽略同步中很重要一部分-即确定用哪个链最佳。还记得之前的Chain类的`__gt__`方法吗？我所做的就是看哪条链比另一条长。当我们要解决信息锁定且不可更改，这并不能解决问题。
 
-Imagine if a node starts mining on its own, goes off in a different direction and doesn’t ask peers what they’re working on, gets lucky to create new valid blocks with its own data, and ends up longer than the others but wayy different blocks. Should they be considered to have the most valid and correct block? Right now, I’m going to stick with length. This’ll change in a future part of this project.
+这个时候我们能把这些区块当做合法的吗？答案应该是不能。但是目前，我还是以长度为依据。在项目以后的部分我会改进这一设计。
 
-Another part of the code below to keep in mind is how few error checks I have. I’m assuming the files and block dicts are valid without any attempted changes. Important for production and wider distribution, but not for now.
 
-Foreward: sync_local() is pretty much the same as the initial sync_local() from part 1 so I’m not going to include the difference here. The new sync_overall.py asks peers what they have for the blockchains and determines the best by chain length.
+想象一下，如果一个节点开始自己挖掘，走向不同的方向且不询问其他节点在做什么，幸运地用自己的数据创建了新的有效块，并且最后它比其他的要长，但却是不同的块。它们应该被认为具有最有效和正确性的块吗?现在，我将坚持依据长度。这将在这个项目的后面改进。
+
+下面要记住的代码的另一部分是我有多少错误检查。我假设文件和块字典是有效的，没有任何尝试变更。重要的是生产和更广泛的分布，但不是现在。
+
+前面:`sync_local()`与第1部分中初始的`sync_local()`非常相似，所以这里我不打算包含差异。新`sync_overall.py`询问对等节点他们有什么区块链，并通过长度决定最佳链。
 
 ```
 from block import Block
@@ -400,7 +402,7 @@ def sync_overall(save=False):
 def sync(save=False):
   return sync_overall(save=save)
 ```
-Now when we run node.py we want to sync the blockchain we’re going to use. This involves initially asking peers what they’re woking with and saving the best. Then when we get asked about our own blockchain we’ll use the local-saved chain. node.py requires a couple changes. Also see how much simpler the blockchain function is than from part 1? That’s why classes are great to use.
+当我们运行`node.py`时，我们想要同步我们将要使用的区块链。这包括首先询问对等节点他们的工作并保存最佳的链。然后，当我们被问及我们自己的区块链时，我们将使用本地保存的链。`node.py`需要做一些更改。还可以看到区块链函数比第1部分更简单对吗?这就是为什么类很好用。
 
 ```
 #node.py
@@ -417,21 +419,22 @@ def blockchain():
 
 .....
 ```
-Testing time! We want to do the following to show that our nodes are syncing up.
+测试时间！我们要做以下工作来展示我们节点正在同步。
 
-1. Create an initial generation and main node where we mine something like 6 blocks.
-2. Hard link the files to create a new folder with a node for a different port.
-3. Run node.py for the secondary node and view the blockchain.json endpoint to see that we don’t have any blocks for now.
-4. Run the main node.
-5. Shutdown and restart the secondary node.
-6. Check to see if the secondary node’s chaindata dir has the block json files, and see that its /blockchain.json enpoint is now showing the same chain as the main node.
-I suppose I could share screenshots of this, or create a video that depicts me going through the process, but you can believe me or take the git repo and try this yourself. Did I mention that programming > only reading?
+1. 创建一个初代和主节点，我们在其中挖掘大约6个块。
+2. 硬链接这些文件以创建一个新的文件夹，其中包含一个不同端口的节点。
+3. 运行`node.py`作为第二节点，并查看`blockchain.json`我们是不是现在没有任何块。
+4. 运行主节点。
+5. 关闭并重新启动第二节点。
+6. 检查第二节点的`chaindata`目录是否具有块json文件，并查看其/blockchain.json路径现在是否显示了与主节点相同的链。
 
-## That’s it, for now
-As you read above and as you read from reading this post all the way to the bottom, I didn’t talk about syncing with other nodes after mining. That’ll be Part 3. And then after Part 3 there’s still a bunch to go. Things like creating a Header class that advances the information and structure of the header rather than only having the Block object.
+我想我可以分享这个的截图，或者创建一个视频来描述我正在经历的过程，但是你可以相信我，或者使用git仓库自己尝试一下。我是否提到过编写代码>只读文章?
 
-How about the bigger and more correct logic behind determining what the correct blockchain is when you sync up? Huge part I haven’t addressed yet.
+## 就这么多，当前
+正如您在上面看到的，以及从阅读这篇文章直到本文末尾，我并没有谈到挖矿之后与其他节点的同步。这是第三部分。在第三部分之后还有很多东西要做。例如，创建一个头部类，以提升头部的信息和结构，而不仅仅是块对象。
 
-Another big part would be syncing data transactions. Right now all we have are dumb little sentences for data that tell people what index the block is. We need to be able to distribute data and tell other nodes what to include in the block.
+同步的时候，在确定正确的区块链后面的更重要的逻辑是什么?很大一部分我还没讲。
 
-Tons to go, but we’re on our way. Again, [twitter](https://twitter.com/jack_schultz), [contact](https://bigishdata.com/contact/), [github repo](https://github.com/jackschultz/jbc/tree/part-2) for Part 2 branch. Catch y’all next time.
+另一个重要部分是同步数据交易。现在我们只有一些简单的句子，用来表示数据，告诉人们数据块的索引值。我们需要能够分发数据并告诉其他节点在块中包含什么。
+
+还有很多，我们已经在路上了. 再说一遍, [twitter](https://twitter.com/jack_schultz), [contact](https://bigishdata.com/contact/), [github repo](https://github.com/jackschultz/jbc/tree/part-2) part-2分支. 我们下次见.
