@@ -1,6 +1,14 @@
 [
 
 {
+"title"    : "如何构建自己的区块链 第三部分 - 编写挖矿和沟通的节点",
+"category" : "",
+"tags"     : "Blockchain",
+"url"      : "/2018/11/13/How-to-Build-Your-Own-Blockchain-Part-3/",
+"date"     : "2018-11-13 15:56:00 +0000"
+} ,
+
+{
 "title"    : "如何构建自己的区块链 第二部分 - 从不同节点同步区块链",
 "category" : "",
 "tags"     : "Blockchain",
