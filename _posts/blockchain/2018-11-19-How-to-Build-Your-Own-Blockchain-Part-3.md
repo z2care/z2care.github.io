@@ -2,7 +2,7 @@
 layout: post
 title: "如何构建自己的区块链 第三部分 - 编写挖矿和沟通的节点"
 date: 2018-11-13 23:56:00 +0800
-categories: 开发技术
+categories: 开发与技术
 tag: Blockchain
 ---
 

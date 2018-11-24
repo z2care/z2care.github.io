@@ -2,7 +2,7 @@
 layout: post
 title: "如何构建自己的区块链 第二部分 - 从不同节点同步区块链"
 date: 2018-11-13 23:56:00 +0800
-categories: 开发技术
+categories: 开发与技术
 tag: Blockchain
 ---
 
