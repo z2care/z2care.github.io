@@ -44,16 +44,6 @@
 
 {
 
-"title"    : "DEMO",
-"category" : "",
-"tags"     : "",
-"url"      : "/effects/",
-"date"     : "2017-04-18 01:00:00 +0000"
-
-} ,
-
-{
-
 "title"    : "标签目录",
 "category" : "",
 "tags"     : "",
@@ -69,6 +59,16 @@
 "tags"     : "",
 "url"      : "/categories/",
 "date"     : ""
+
+} ,
+
+{
+
+"title"    : "DEMO",
+"category" : "",
+"tags"     : "",
+"url"      : "/projects/",
+"date"     : "2017-04-18 01:00:00 +0000"
 
 } ,
 
