@@ -2,7 +2,7 @@
 layout: post
 title: "NITZ时间同步流程"
 date: 2018-10-06 23:56:00 +0800
-categories: 研究生涯
+categories: 分析与探索
 tag: Telephony
 ---
 * content

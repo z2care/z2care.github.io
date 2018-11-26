@@ -2,7 +2,7 @@
 layout: original
 title: "test markdown"
 date: 2018-10-06 23:58:00 +0800
-categories: 研究生涯
+categories: 测试文章
 tag: Markdown
 ---
 * content

@@ -2,7 +2,7 @@
 layout: post
 title: "如何构建自己的区块链 第一部分 - 创建，存储，同步，显示，挖矿和工作量证明"
 date: 2018-11-12 23:56:00 +0800
-categories: 开发技术
+categories: 开发与技术
 tag: Blockchain
 ---
 独立翻译自:[How to Build Your Own Blockchain Part 1 — Creating, Storing, Syncing, Displaying, Mining, and Proving Work](https://bigishdata.com/2017/10/17/write-your-own-blockchain-part-1-creating-storing-syncing-displaying-mining-and-proving-work/)
