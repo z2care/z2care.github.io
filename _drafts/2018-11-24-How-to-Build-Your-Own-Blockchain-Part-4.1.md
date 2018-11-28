@@ -10,22 +10,22 @@ tag: Blockchain
 * content
 {:toc}
 
-If you’re wondering why this is part 4.1 instead of part 4, and why I’m not talking about continuing to build the local jbc, it’s because explaining Bitcoin’s Proof of Work difficulty at a somewhat lower level takes a lot of space. So unlike what this title says, this post in part 4 is not how to build a blockchain. It’s about how an existing blockchain is built.
+如果您想知道为什么这是第4.1部分而不是第4部分，以及为什么我不讨论继续构建本地jbc，那是因为在较低的层次上解释比特币的工作困难证明需要大量篇幅。所以不像这个标题说的，这篇文章在第4部分不是如何建立一个区块链。它是关于现有的区块链是如何构建。
 
-My main goal of the part 4 post was to have one section on the Bitcoin PoW, the next on Ethereum’s PoW, and finally talk about how jbc is going to run and validate proof or work. After writing all of part 1 to explain how Bitcoin’s PoW difficulty, it wasn’t going to fit in a single section. People, me included, tend get bored in the middle reading a long post and don’t finish.
+我在这个第4篇文章的主要目标是有一个关于比特币的部分，下一个是关于Ethereum的部分，最后讨论jbc将如何运行和验证工作量证明。在写完第1部分的全部内容来解释比特币的PoW难度之后，它不适合放在一个单独的部分中。人们，包括我在内，在阅读一篇冗长的文章时，往往会感到无聊而无法完成。
 
-So part 4.1 will be going through Bitcoin’s PoW difficulty calculations. Part 4.2 will be going through Ethereum’s PoW calculations. And then part 4.3 will be me deciding how I want the jbc PoW to be as well as doing time calculations to see how long the mining will take.
+因此，第4.1部分将介绍比特币的PoW难度计算。第4.2部分将通过以太坊的工作量证明来计算。然后第4.3部分将是我决定我想要的jbc PoW如何做以及做时间计算来看看挖掘将花费多长时间。
 
-The sections of this post are:
+本文分为以下几个部分：
 
-1. Calculate Target from Bits
-2. Determining if a Hash is less than the Target
-3. Calculating Difficulty
-4. How and when block difficulty is updated
-5. Full code
-6. Final Questions
+1. Calculate Target from Bits//从位计算目标
+2. Determining if a Hash is less than the Target//确定哈希是否小于目标
+3. Calculating Difficulty//计算难度
+4. How and when block difficulty is updated//如何以及何时更新块难度
+5. Full code//完整代码
+6. Final Questions//最后的问题
 
-# TL;DR
+# 长话短说
 The overall term of difficulty refers to how much work has to be done for a node to find a hash that is smaller than the target. There is one value stored in a block that talks about difficulty — `bits`. In order to calculate the `target` value that the hash, when converted to a hex value has to be less than, we use the `bits` field and run it through an equation that returns the target. We then use the `target` to calculate `difficulty`, where `difficulty` is only a number for a human to understand how difficult the proof of work is for that block.
 
 If you read on, *I go through how the blockchain determines what target number the mined block’s hash needs to be less than to be valid, and how that target is calculated.*
