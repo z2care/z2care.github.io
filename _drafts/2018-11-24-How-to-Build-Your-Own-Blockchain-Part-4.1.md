@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "如何构建自己的区块链 第四一部分 - 比特币工作证明难度解释"
-date: 2018-11-13 23:56:00 +0800
+date: 2018-11-24 22:27:00 +0800
 categories: 开发技术
 tag: Blockchain
 ---
@@ -26,12 +26,12 @@ tag: Blockchain
 6. Final Questions//最后的问题
 
 # 长话短说
-The overall term of difficulty refers to how much work has to be done for a node to find a hash that is smaller than the target. There is one value stored in a block that talks about difficulty — `bits`. In order to calculate the `target` value that the hash, when converted to a hex value has to be less than, we use the `bits` field and run it through an equation that returns the target. We then use the `target` to calculate `difficulty`, where `difficulty` is only a number for a human to understand how difficult the proof of work is for that block.
+难度的总称是指一个节点需要做多少工作才能找到比target小的hash值。在一个块中有一个值是关于难度的——它就是`bits`。为了计算散列转换为十六进制值时必须小于`target`的值，我们使用`bits`字段并通过一个返回target的方程运行它。然后，我们使用`target`来计算`difficulty`，其中`difficulty`只是一个数字，人类可以通过这个数字来理解该块的工作证明有多困难。
 
-If you read on, *I go through how the blockchain determines what target number the mined block’s hash needs to be less than to be valid, and how that target is calculated.*
+如果您继续阅读，*我将介绍区块链如何确定挖掘块的散列需要小于什么样的target数才能有效，以及如何计算该taget值*
 
-# Calculate Target from Bits
-In order to go through Bitcoin’s PoW, I need to use the values on actual blocks and explain the calculations, so a reader can verify all this code themselves. To start, I’m going to grab a random block number to work with and go through the calculations using that.
+# 从Bits计算Target值
+为了完成比特币的PoW，我需要使用实际块上的值并解释其计算，这样读者就可以自己验证所有这些代码。首先，我要取一个随机的块号然后用它进行计算。
 
 ```
 >>>import random
@@ -39,9 +39,8 @@ In order to go through Bitcoin’s PoW, I need to use the values on actual block
 111388
 ```
 
-[Block number 11138](https://blockchain.info/block/00000000000019c6573a179d385f6b15f4b0645764c4960ee02b33a3c7117d1e) it is! Back in time to March of 2011 we go.
-
-We’re going to start with assigning variables with the `bits` and `difficulty` values from the block, as well as the `hash`, so we can test its validity at the end.
+[块号11138](https://blockchain.info/block/00000000000019c6573a179d385f6b15f4b0645764c4960ee02b33a3c7117d1e) 就是它! 时间追溯到2011年3月.
+我们将使用块中的`bits`和`difficulty`值以及`hash`来分配变量，这样我们可以在最后测试它的有效性。
 
 ```
 >>> bits = '453062093'
@@ -49,11 +48,11 @@ We’re going to start with assigning variables with the `bits` and `difficulty`
 >>> block_hash = '00000000000019c6573a179d385f6b15f4b0645764c4960ee02b33a3c7117d1e'
 ```
 
-Next part shows how to go from the bits field to the target. There are at least two different ways to do this — *the first involves string manipulation and string to integer conversion, and the other uses bit manipulation.*
+下一部分将展示如何从bits字段到target。至少有两种不同的方法可以做到这一点—*第一种涉及字符串操作和字符串到整数的转换，另一种使用位操作*
 
-For the first string manipulation part, we convert the bits string to an integer and then to a hex string. The first two characters of the hex_bits string are in one variable, which I call `shift`, and the remaining six are called the `value`.  From there, we use those values in the integer equation that will calculate the integer value of the `target`, which we can convert to a hex string to look at how pretty it is!
+对于第一个字符串操作部分，我们将位字符串转换为整数，然后转换为十六进制字符串。hex_bits字符串的前两个字符在一个变量中，我称之为`shift`，其余六个称为`value`。然后，我们在整数方程中使用这些值来计算`target`的整数值，我们可以将其转换为十六进制字符串，看看它有多漂亮!
 
-Note that ‘L’ on the back of the `target` and `hex(target)` is only Python telling you that the numbexr is too long to be stored as an int, and that it’s stored as a [long](https://docs.python.org/2/library/functions.html#long).
+请注意，`target`和`hex(target)`后面的`L`只是Python告诉您，numbexr太长，不能作为int存储，它是存储为[long](https://docs.python.org/2/library/functions.html#long)。
 
 ```
 >>> hex_bits = hex(int(bits))
@@ -77,11 +76,12 @@ Note that ‘L’ on the back of the `target` and `hex(target)` is only Python t
 '0x12dcd000000000000000000000000000000000000000000000000L'
 ```
 
-It seems a little fake when we slice a string to calculate the target like we do above. When looking through the [c++ bitcoin implementation](https://github.com/bitcoin/bitcoin/blob/87e69c2549c44b862558f1c025dc0c4449fca272/src/arith_uint256.cpp#L206), it shows the other, more technical, main method of using `bits` to calculate `target`. Here’s the Python implementation.
+当我们像上面那样分割字符串来计算target值时，这看起来有点假。当查看[c++ bitcoin实现](https://github.com/bitcoin/bitcoin/blob/87e69c2549c44b862558f1c025dc0c4449fca272/src/_uint256.cpp#L206)时，它显示了使用`bits`计算`target`的另一种更技术的主要方法。但这里是Python实现。
 
-I’ll go through the lines and print values here to show a little better what’s going on. One thing to know before reading is that a character in a hex string represents 4 bits. So when we shift the bits variable by 24 bits with `bits >> 24` that affectively removes the last 6 characters of the hex string leaving the first two. To get the value variable, we use the bitwise and operator &  to have the final 23 bits be the value. The 23 bits is usually (defined by the number of bits in 0x7fffff) the final 6 characters of the hex string,
+我将逐行打印这里的值，以便更好地显示发生了什么。在阅读之前需要知道的一件事是十六进制字符串中的一个字符表示4位。因此，当我们用`bits >> 24`将位变量移位24位时，有效地删除了十六进制字符串的最后6个字符，只留下前两个。为了得到值变量，我们使用位和运算符&取得最后23位的值。这23位通常是十六进制字符串的最后6个字符(由0x7fffff中的位数定义)，
 
-Now, the `8 * (shift - 3)` value determines how many bits we’re going to shift value over. In this case, it’s determined to be 192 bits. If we divide the 192 by 4, we’ll have the number of zeros characters that will be behind the value in the hex string representation of the target number. You’ll see that it’s 48 zeros. Another thing to think of if this is confusing is that `value << y` is the same as `value * 2**y`. That’s how the equations are related.
+现在，`8 * (shift - 3)`的值决定了我们要移位多少位。在这种情况下，它被确定为192位。如果我们把192除以4，我们就会得到target数的十六进制字符串表示的值后面的零字符个数。你会看到它是48个0。另一件让人困惑的事情是`value << y`和`value * 2**y`是一样的。这就是方程之间的关系。
+
 
 ```
 >>> bits = '453062093'
@@ -106,7 +106,7 @@ Now, the `8 * (shift - 3)` value determines how many bits we’re going to shift
 48
 ```
 
-The full function version of this is only a few lines long.
+完整的函数版本只有几行。
 
 ```
 >>> def get_target_from_bits(bits):
@@ -120,11 +120,11 @@ The full function version of this is only a few lines long.
 '0x12dcd000000000000000000000000000000000000000000000000L'
 ```
 
-So nice. If you look way above to see the string manipulation code it’s way more confusing and has so many extra lines than the function above. It’s great to go through both to really understand the meaning, but then stick with the simple one. Moving on.
+太好了。如果您查看上面的字符串操作代码，会发现它比上面的函数更令人困惑，而且还有许多额外的行。通过这两种方法来真正理解它的含义是很好的，但是要坚持使用简单的方法。前进吧。
 
-# Determining if a Hash is less than the Target
+# 确定hash是否小于target
 
-As always it seems, there are two simple ways to see if a block’s hash is valid according to the target. The first way is to use full, 64 character, 256 bit, hex strings and compare those. This works great since we’ll be able to see this easily eye to eye. To show this is the case, we’re going to pad the hex_target with the zeros to fill all 64 characters.
+通常，有两种简单的方法可以查看块的哈希是否对于target有效。第一种方法是使用完整的，64个字符，256位，十六进制字符串并比较它们。这很有用，因为我们可以很容易地看到这一点。为了说明这种情况，我们将用0填充hex_target来填满所有64个字符。
 
 ```
 >>> hex_target = hex(target)
@@ -141,8 +141,7 @@ As always it seems, there are two simple ways to see if a block’s hash is vali
 
 ```
 
-Finally, we want to verify that the block’s hash is less than the target. And also, since strings can be considered less than or greater than, we’ll go with that.
-
+最后，我们希望验证块的散列是否小于target。而且，因为字符串可以被认为小于或大于，我们就这么做吧。
 
 ```
 >>> len(block_hash)
@@ -156,9 +155,9 @@ Finally, we want to verify that the block’s hash is less than the target. And 
 >>>
 ```
 
-In this case, you’ll see the hex target is larger than the block’s hash. Comparing which string is larger is as simple as either < or >. If you’re wondering how Python can determine that the characters like `'f' > '1'`, see  the questions below.
+在这种情况下，您将看到十六进制target大于块的hash。比较哪个字符串更大就像<或>一样简单。如果您想知道Python如何确定`'f' > '1'`之类的字符，请参见下面的问题。
 
-The other way to confirm is by using the integers for both values. But as you’ll see, it’s very difficult, if not impossible, to eyeball which is value larger, and how much larger one value is to than the other.
+另一种确认方法是对两个值都使用整数。但是你会看到，很难，如果不是不可能的话，观察哪个值更大，一个值比另一个大多少。
 
 ```
 >>> block_hash_int = int(block_hash, 16)
@@ -170,12 +169,11 @@ The other way to confirm is by using the integers for both values. But as you’
 >>> target - block_hash_int
 443556701129704702629742687736175665277878911964584244046365410L
 ```
+这些整数是如此之大，以至于单独看一个整数几乎不可能知道对比它是容易的还是困难的。但是由于block_hash_int比target整数少一个字符，您可以看到这种情况。当你减去这两个大数时，你得到另一个大数。
 
-Those ints are so huge that looking at one by itself is pretty much impossible to know if it’s easy or difficult to be lower than. But since block_hash_int is lower than target int by one character, you can see that’s the case. When you subtract those two giant numbers you get another giant number.
+这两个方法都是有效的，但是能够查看十六进制字符串比查看整数要好。但实际上，当代码运行时，选择其中一个并没有真正的好处。
 
-Both are valid methods, but being able to look at the hex strings is better than looking at the integers. But really, when the code is running, there’s no real benefit to pick one over the other.
-
-# Calculating Difficulty
+# 计算难度
 The most important part of `difficulty` is to remember from above that `difficulty` is simply a human representation of the `target`. I talked about how integer values of `targets` are pointless since it’s hard to humanly compare two values that are giant integer. Likewise, it’s tough to compare two targets to each other using the hex strings. The `difficulty` values in a block are to make that easier.
 
 Below, `difficulty_one_target` is defined as the easiest allowed target value. To calculate the difficulty of another block, we simply divide the `difficulty_one_target` by the `target` we’ve calculated using `bits`. You’ll see that `difficulty_one_target` will be larger than any other `target` number since `targets` go lower with more difficulty. When you divide the larger numerator by a smaller denominator, you’ll have a greater than one value.
