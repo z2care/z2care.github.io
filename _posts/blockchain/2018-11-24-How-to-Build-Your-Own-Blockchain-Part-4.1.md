@@ -2,7 +2,7 @@
 layout: post
 title: "如何构建自己的区块链 第四一部分 - 比特币工作证明难度解释"
 date: 2018-11-24 22:27:00 +0800
-categories: 开发技术
+categories: 开发与技术
 tag: Blockchain
 ---
 独立翻译自:[How to Build Your Own Blockchain Part 4.1 — Bitcoin Proof of Work Difficulty Explained](https://bigishdata.com/2017/11/13/how-to-build-a-blockchain-part-4-1-bitcoin-proof-of-work-difficulty-explained/)
