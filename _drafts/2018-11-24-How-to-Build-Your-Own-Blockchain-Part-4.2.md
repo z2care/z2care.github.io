@@ -303,40 +303,57 @@ There are a couple edge cases here not mentioned in the code above.
 -Smallest sign = -99. Imagine a situation where, for some reason, the sign for calculating the next block is -1000. The sign for the next block’s difficulty will drop by an incredible amount which would mean it’d take something like 1000 blocks to get back to the desired `~14` second mining time since the largest difficulty increasing sign is 1 (or two if it includes an uncle). Odds are very very very unlikely that any thing lower than -99 would happen, but still needs to covered.
 
 ## Final Questions
+和以前一样，这是我在写这篇文章时遇到的一些问题，这些问题并没有放在主要的帖子里。
 Like before, here’s a list of questions I had when writing this that didn’t get put in the main post.
 
+*头部里有什么？*
 *What’s in the header?*
 
+我相信当我们只讨论工作难度的证明时，这个问题会经常出现。我们知道如何计算难度是很好的，但是如何验证一个块有一个有效的头部超出了这篇文章范围。
 I’m sure this question will come up a lot when only talking about Proof of Work difficulty. It’s great that we know how difficulty is calculated, but how to validate a block has a valid header is beyond this post.
 
+我不会在这里解释它，但可能会在以后的文章中决定如何在实现事务之后计算jbc的头。
 I’m not going to explain it here, but probably in a future post when I decide how jbc’s header should be calculated after I implement transactions.
 
+我要指出的是，比特币的头部非常简单，在这里值被集合在一起(确保比特的组合方式有正确的尾端)。以太坊的方法要复杂得多，它使用现金方法而不是默克尔树来处理交易。
 I will note that Bitcoin’s header is incredibly simple where the values are smashed together (making sure that the way the bits are combined have the right endian). Ethereum’s is much more complicated by dealing with transactions using a cash method rather than a Merkel tree.
 
+*你是怎么搞清楚的?*
 *How do you go through and figure this out?*
 
+像这样的帖子有很多，但坦白地说，大多数都是非常高级的描述，以及数据，但没有多少显示计算这些数据的代码。我的目标是做到所有这些。
 There are tons of posts out there like this one, but frankly, most are very high level with either descriptions, numbers, but not many showing code that calculates those numbers. My goal is to do all of those.
 
+这意味着为了完全理解并讨论它们，我将翻看介绍并查看源代码。这是来自Python repo的`calc_difficult`函数，来自c++的calcdifficult函数，以及来自Go的calcdifficult函数。我一直在讨论的另一个更重要的问题是，查看代码并不能做什么，您需要做的是自己实现类似的代码。
 That means that to get to complete understanding to talk about them all, I go through and look at the code bases. Here’s the calc_difficulty function from the Python repo, calcDifficulty from c++, and calcDifficulty from Go. Another bigger point that I keep talking about is that looking at the code doesn’t do much at all, what you need to do is implement similar code yourself.
 
+*所有这些时间估计都包含一个数字前的`~`。为什么需要这样做？*
 *All of those time estimations include a ~ before a number. Why is that necessary?*
 
-That’s a really good question. And the main answer is uncertainty in how many nodes are trying to mine blocks, as well as randomness. If you look at the difficulty chart and zoom in to a timespan of a couple days, you’ll see how random it gets. It’s the same with the average mining time for a specific day. They fluctuate, and so we can’t say exactly what time we expect.
+这个问题问得很好。最主要的答案是不确定有多少节点试图挖掘块，以及随机性。如果你看一下[难度表](https://www.coinwarz.com/difficulty-charts/ethereum-difficulty-chart)，放大到几天的时间跨度，你会发现它是多么随机。这与特定一天的[平均挖掘时间](https://bitinfocharts.com/comparison/ethereum-confirmationtime.html#3m)相同。它们是波动的，所以我们不能准确地说出我们预计的时间。
+That’s a really good question. And the main answer is uncertainty in how many nodes are trying to mine blocks, as well as randomness. If you look at the [difficulty chart](https://www.coinwarz.com/difficulty-charts/ethereum-difficulty-chart) and zoom in to a timespan of a couple days, you’ll see how random it gets. It’s the same with [the average mining time](https://bitinfocharts.com/comparison/ethereum-confirmationtime.html#3m) for a specific day. They fluctuate, and so we can’t say exactly what time we expect.
 
+*工作证明是我经常听到人们谈论到的，但它不是通用的，对吗？*
 *Proof of Work is all I hear people talk about, but it isn’t universal, right?*
 
-Correct! I mentioned it above, and I’m betting that if you’re reading this much about Ethereum and you’re all the way at the bottom of this post that you’ve heard of the term Proof of Stake. This is the new option that a major cryptocurrency blockchain hasn’t implemented yet. There are other types of block validation out there. The big upcoming Enterprise versions of blockchains probably won’t be completely based in Proof of Work at all.
+正确的!我在上面提到过，我敢打赌，如果你读了这么多关于以太坊的文章，而且你一直把这篇文章读到底，你一定听说过[股票证明](https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ#what-are-the-benefits-of-proof-of-stake-as-opposed-to-proof-of-work)这个词。这是一个主要加密货币区块链尚未实现的新选项。还有其他类型的块验证。区块链即将推出的大型企业版本可能根本不会完全基于工作证明。
+Correct! I mentioned it above, and I’m betting that if you’re reading this much about Ethereum and you’re all the way at the bottom of this post that you’ve heard of the term [Proof of Stake](https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ#what-are-the-benefits-of-proof-of-stake-as-opposed-to-proof-of-work). This is the new option that a major cryptocurrency blockchain hasn’t implemented yet. There are other types of block validation out there. The big upcoming Enterprise versions of blockchains probably won’t be completely based in Proof of Work at all.
 
+验证区块链将使用哪种类型的最大指示器取决于用例。加密货币需要一些完全不可欺骗的东西。区块链也一样，它可能存储关于谁拥有哪块土地的信息。我们不希望人们能够改变所有权。但是一个用来存储不那么值钱的东西的区块链不需要浪费所有的能量。我知道，在今后几年内，一些其他证明其有效性方法将发挥作用。
 The biggest indicator of what type of validation blockchains will use depends on the use cases. Cryptocurrencies need something completely un-fraudable. Same with a blockchain that might store information on who owns what piece of land. We don’t want people to be able to change ownership. But a blockchain that’s used to store something less insanely valuable doesn’t need to waste all that energy. I know some of these other Proofs of validity will come into play in the next few years.
 
+*你写了一些令人困惑的东西/解释得不够好。我该怎么办？*
 *You wrote something confusing / didn’t explain it well enough. What should I do?*
 
+联系上我。说真的，有很多帖子都在谈论结果，但却没有说明他们是如何计算结果的，并假定每个人都和他们一样聪明，知道发生了什么。我试着做相反的事情，在没有充分解释的情况下，我不会说什么。所以，如果有什么困惑或错误，请联系我，我保证搞定它。
 Get in freaking contact. Seriously, tons of posts out there that talk about results but don’t say how they calculated it and assume that everyone is as smart as them and know what’s going on. I’m trying to be the opposite where I don’t say something without fully explaining. So if there’s something confusing or wrong, contact me and I’ll make sure to fix the issue.
 
+*我可以在Twitter上和你聊天吗*
 *Can I DM you on Twitter?*
 
 [@jack_schultz](https://twitter.com/jack_schultz)
 
+*你更喜欢奸臣还是忠臣？*
 *Do you like cats or dogs better?*
-
+跟你没关系
 Cats.
