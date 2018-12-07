@@ -275,16 +275,16 @@ New bits from block: 0x180696f4
 
 如果你能走到这一步，那就太棒了!这是我在学习和写作时遇到的一系列问题。如果你还有其他问题，请与我联系，我马上回答。
 
-*为什么十六进制值只是字符串?*
-*Why are the hex values only strings?*
+**为什么十六进制值只是字符串?**  
+**Why are the hex values only strings?**
 
-因为十六进制值只是整数的表示。如果您想查看整数的十六进制值，我们需要一个字符串来查看不同的以16为底的值。看看[Python对hex()的定义](https://docs.python.org/2/library/functions.html#hex)稍微多一些信息。
+因为十六进制值只是整数的表示。如果您想查看整数的十六进制值，我们需要一个字符串来查看不同的以16为底的值。看看[Python对hex()的定义](https://docs.python.org/2/library/functions.html#hex)稍微多一些信息。  
 Because hex values are only representations of integers. If you’re looking to see the hex value of an integer, we need a string to look at the different base 16 values. Look at the [Python definition of hex()](https://docs.python.org/2/library/functions.html#hex) slightly more info.
 
-*通过字符串比较如何知道'f' > '9'?*
-*How can a string comparison know that 'f' > '9'?*
+**通过字符串比较如何知道'f' > '9'?**  
+**How can a string comparison know that 'f' > '9'?**
 
-在内存中，字符存储为unicode值。因此，当比较两个字符时，unicode值较大的字符显示为最大的字符。注意ASCII对于0-127也具有与unicode相同的值。在比较字符串时，它们逐个遍历每个字符，最先获得最大值的字符获胜。
+在内存中，字符存储为unicode值。因此，当比较两个字符时，unicode值较大的字符显示为最大的字符。注意ASCII对于0-127也具有与unicode相同的值。在比较字符串时，它们逐个遍历每个字符，最先获得最大值的字符获胜。  
 In memory, characters are stored as unicode values. So when you compare two characters, the one with the larger unicode value is shown as being the biggest. Note that ASCII also has the same values as unicode for 0-127. When comparing strings, they go through each character one by one and whichever has the largest value first wins the race.
 
 ```
@@ -311,74 +311,74 @@ True
 >>> 'a' > '1'
 True
 ```
-*比特币的难度是如何随着时间变化的?*
-*How has Bitcoin difficulty changed over time?*
+**比特币的难度是如何随着时间变化的?**  
+**How has Bitcoin difficulty changed over time?**
 
-有很多网站都有交互式图表显示了随时间发生的变化;快速的谷歌搜索会找到一个。但是，这里有一张来自[比特币实际维基百科页面](https://en.wikipedia.org/wiki/Bitcoin_network)的图片，展示了这个难度数字是如何随着时间变化的。
+有很多网站都有交互式图表显示了随时间发生的变化;快速的谷歌搜索会找到一个。但是，这里有一张来自[比特币实际维基百科页面](https://en.wikipedia.org/wiki/Bitcoin_network)的图片，展示了这个难度数字是如何随着时间变化的。  
 There are a bunch of sites that have interactive graphs showing the change over time; quick google will find one. But, here’s the pic from [Bitcoin’s actual Wikipedia page](https://en.wikipedia.org/wiki/Bitcoin_network) that shows how that difficulty number has changed over time.
 
 ![image](https://bigishdata.files.wordpress.com/2017/11/history-bitcoin-difficulty.png)
 线性很好，中间有一个平点。有人应该做个记录。
 
-*2011年中期到的2013年初持平的遇到困难是什么?*
-*What’s the deal with mid 2011 to beginning of 2013 difficulty being flat?*
+**2011年中期到的2013年初持平的遇到困难是什么?**  
+**What’s the deal with mid 2011 to beginning of 2013 difficulty being flat?**
 
-看看这个截图来自[Bitcoin.com](https://charts.bitcoin.com/chart/price)针对2011年到2013年期间。
+看看这个截图来自[Bitcoin.com](https://charts.bitcoin.com/chart/price)针对2011年到2013年期间。  
 Look at this screenshot from [Bitcoin.com](https://charts.bitcoin.com/chart/price) for the time period of 2011 and 2013.
 
 ![image](https://bigishdata.files.wordpress.com/2017/11/bitcoin-price-chart-2011-2013.png)
 
 嗯
 
-一枚硬币的价格一路飙升，达到了惊人的29美元一枚，但在2013年初之前，这枚硬币崩溃了，并再次开始飞升。我想说的是，这是一个很好的相关性，矿工们看到了崩溃，并说去它的，停止他们的开采，留下更少的节点试图开采一个新的区块。节点越少，就意味着找到一个有效的散列所需的时间越长，因此我们必须降低难度。
+一枚硬币的价格一路飙升，达到了惊人的29美元一枚，但在2013年初之前，这枚硬币崩溃了，并再次开始飞升。我想说的是，这是一个很好的相关性，矿工们看到了崩溃，并说去它的，停止他们的开采，留下更少的节点试图开采一个新的区块。节点越少，就意味着找到一个有效的散列所需的时间越长，因此我们必须降低难度。  
 A giant spike in price all the way up to an astonishing $29 a coin that crashed until the beginning of 2013 where it starts flying up again. I’ll go ahead and say there’s a nice correlation there where miners saw the crash and said screw it, stopped their mining, and left fewer nodes trying to mine a new block. Fewer nodes means the longer it takes to find a valid hash so we had to keep difficulty down.
 
-*bit值越大，难度越大吗?*
-*Does a larger bit value imply a larger difficulty?*
+**bit值越大，难度越大吗?**  
+**Does a larger bit value imply a larger difficulty?**
 
-不是的。记住，位值是存储的，所以我们可以把它分成两个数字来计算target。当把它看作一个整数时，它肯定是不可比较的。
+不是的。记住，位值是存储的，所以我们可以把它分成两个数字来计算target。当把它看作一个整数时，它肯定是不可比较的。  
 Nope. Remember, bit values are stored so we can split it into two numbers used to calculate the target. When looked at as an integer, it’s definitely not comparable.
 
-如果需要示例，请查看上面代码中列出的两个块。比较块0和块32256，你将看到位和难度的相反差异。
+如果需要示例，请查看上面代码中列出的两个块。比较块0和块32256，你将看到位和难度的相反差异。  
 If you want examples, look at the couple blocks listed in the code above. Comparing blocks 0 and 32256, you’ll see opposite difference in bits and difficulty.
 
-*头部哈希是如何计算的?*
-*How is the header hash calculated?*
+**头部哈希是如何计算的?**  
+**How is the header hash calculated?**
 
-通过将值打碎在一起。[看这里](https://en.bitcoin.it/wiki/Block_hashing_algorithm)，您将看到更多关于它的信息。
+通过将值打碎在一起。[看这里](https://en.bitcoin.it/wiki/Block_hashing_algorithm)，您将看到更多关于它的信息。  
 By smashing values together. [Take a look here](https://en.bitcoin.it/wiki/Block_hashing_algorithm) and you’ll see more about it.
 
-*我看到有人提到我们只计算2015块的新比特，而不是2016块。那是什么意思?*
-*I see people mentioning we only calculate new bits from 2015 blocks and not 2016. What’s that mean?*
+**我看到有人提到我们只计算2015块的新比特，而不是2016块。那是什么意思?**  
+**I see people mentioning we only calculate new bits from 2015 blocks and not 2016. What’s that mean?**
 
-在阅读其他文章时，你会经常看到这一点。这意味着如果我们将2016个块的所有块包含在一个集合中，我们将在新的2016个块集合开始之前以时间戳开始，因为这表示节点开始尝试寻找下一个块。
+在阅读其他文章时，你会经常看到这一点。这意味着如果我们将2016个块的所有块包含在一个集合中，我们将在新的2016个块集合开始之前以时间戳开始，因为这表示节点开始尝试寻找下一个块。  
 You’ll see that a lot when looking at other posts. What this means is if we included all 2016 blocks in a set, we’d start with the timestamp before the start of a new 2016 set of blocks since that’s says when nodes started trying to find the next block.
 
-当你想要计算块实际2017块的bits数时，这是行不通的。如果我们考虑到第一个2016块挖掘时间，我们就不会知道这一点，因为我们不知道第一批矿工是什么时候开始运营的。
+当你想要计算块实际2017块的bits数时，这是行不通的。如果我们考虑到第一个2016块挖掘时间，我们就不会知道这一点，因为我们不知道第一批矿工是什么时候开始运营的。  
 This doesn’t work out when you think of calculating the new bits for actual block 2017. If we took into account how long it took to mine the first 2016, we wouldn’t know that since we didn’t know when we started running the first miners.
 
-*为什么不讨论一下找到一个有效的散列需要多少时间?*
-*Why didn’t you talk about how much time it takes to find a valid hash?*
+**为什么不讨论一下找到一个有效的散列需要多少时间?**  
+**Why didn’t you talk about how much time it takes to find a valid hash?**
 
-那是另一个话题。有[一些资料](https://en.bitcoin.it/wiki/Difficulty#what_network_hash_rate_results_in_a_given_tough.3F)计算如果有一个节点在进行挖掘，但是很难计算出来，除非有更多的节点。当我写jbc困难的部分时，我将有测试来显示时间。
+那是另一个话题。有[一些资料](https://en.bitcoin.it/wiki/Difficulty#what_network_hash_rate_results_in_a_given_tough.3F)计算如果有一个节点在进行挖掘，但是很难计算出来，除非有更多的节点。当我写jbc困难的部分时，我将有测试来显示时间。  
 That’s a different topic. There’s [some material](https://en.bitcoin.it/wiki/Difficulty#What_network_hash_rate_results_in_a_given_difficulty.3F) on calculating that if there’s a single node doing the mining, but that’s tough to figure out unless you have a bigger amount of nodes. When I write the part for jbc’s difficulty, I’ll have tests to show time.
 
-*你的推特账号是什么，这样我才能关注你？？*
-*What’s your Twitter handle so I can follow you??*
+**你的推特账号是什么，这样我才能关注你？？**  
+**What’s your Twitter handle so I can follow you??**
 
 [@jack_schultz](https://twitter.com/jack_schultz)
 
-*如果我只想问你一个问题呢？*
-*What if I only want to ask you a question?*
+**如果我只想问你一个问题呢？**  
+**What if I only want to ask you a question?**
 
-[联络](https://bigishdata.com/contact/)是一个很好的方法。只要确保你的电子邮件输入正确;我之前收到过一些邮件，由于那个邮件地址不存在，我无法回复。你也可以自由评论这篇文章。
+[联络](https://bigishdata.com/contact/)是一个很好的方法。只要确保你的电子邮件输入正确;我之前收到过一些邮件，由于那个邮件地址不存在，我无法回复。你也可以自由评论这篇文章。  
 [Contact](https://bigishdata.com/contact/) is a great way to do this. Just make sure you type your email correctly; I’ve gotten some emails before that I couldn’t reply to since that email address didn’t exist. Also feel free to comment on this post as well.
 
-*接下来是什么?*
-*What’s next?*
+**接下来是什么?**  
+**What’s next?**
 
-第4.2部分关于以太坊工作难度证明!这有点类似，但是目标的计算方法不同。而且，困难改变的时间也是不同的。[查看图表](https://www.coinwarz.com/difficulty-charts/ethere-difficulty-chart)显示了我所表达的随着时间的推移难度的变化。
+第4.2部分关于以太坊工作难度证明!这有点类似，但是目标的计算方法不同。而且，困难改变的时间也是不同的。[查看图表](https://www.coinwarz.com/difficulty-charts/ethere-difficulty-chart)显示了我所表达的随着时间的推移难度的变化。  
 Part 4.2 about the Ethereum proof of work difficulty! It’s somewhat similar, but the target is calculated in a different way. Also, the time when difficulties change is different as well. [Check out the chart](https://www.coinwarz.com/difficulty-charts/ethereum-difficulty-chart) that show difficulty over time to see what I mean.
 
-在此之后，4.3部分将介绍如何计算jbc的难度。
+在此之后，4.3部分将介绍如何计算jbc的难度。  
 After that, part 4.3 will be about how I want to calculate difficulty for jbc.
