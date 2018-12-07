@@ -10,28 +10,29 @@ tag: Blockchain
 * content
 {:toc}
 
-We’re back at it in the Proof of Work difficulty spectrum, this time going through how Ethereum’s difficulty changes over time. This is part 4.2 of the part 4 series, where part 4.1 was about Bitcoin’s PoW difficulty, and the following 4.3 will be about jbc’s PoW difficulty.
+我们又回到了工作困难范围的证明，这一次是通过以太坊的困难是如何随时间变化的。这是第4部分系列的第4.2部分，第4.1部分是关于比特币的PoW难度，接下来4.3部分是关于jbc的PoW难度。
 
-## TL;DR
+## 长话短说
 
-To calculate the difficulty for the next Ethereum block, you calculate the time it took to mine the previous block, and if that time difference was greater than the goal time, then the difficulty goes down to make mining the next block quicker. If it was less than the time goal, then difficulty goes up to attempt to mine the next block quicker.
+为了计算下一个以太坊块的难度，你需要计算开采前一个块所花费的时间，如果这个时间差大于目标时间，那么难度就会下降，从而使开采下一个块更快。如果它小于时间目标，那么难度就会上升，将会更快地开采下一个区块。
 
-There are three parts to determining the new difficulty: offset, which determines the standard amount of change from one difficulty to the next; sign, which determines if the difficulty should go up or down; and bomb, which adds on extra difficulty depending on the block’s number.
+确定新难度有三个部分:偏移量，它决定了从一个难度到下一个难度的标准更改量;符号，决定难度是上升还是下降;和炸弹，这增加了额外的难度取决于块的数量。
 
-These numbers are calculated slightly differently for the different forks, Frontier, Homestead, and Metropolis, but the overall formula for calculating the next difficulty is
+对于不同的分叉、Frontier, Homestead, 和 Metropolis，这些数字的计算略有不同，但计算下一个困难的总体公式是
 
 ```
 target = parent.difficulty + (offset * sign) + bomb
 ```
 
-## Other Posts in This Series
+## 本文其他系列文
 - [Part 1 — Creating, Storing, Syncing, Displaying, Mining, and Proving Work](https://bigishdata.com/2017/10/17/write-your-own-blockchain-part-1-creating-storing-syncing-displaying-mining-and-proving-work/)
 - [Part 2 — Syncing Chains From Different Nodes](https://bigishdata.com/2017/10/27/build-your-own-blockchain-part-2-syncing-chains-from-different-nodes/)
 - [Part 3 — Nodes that Mine](https://bigishdata.com/2017/11/02/build-your-own-blockchain-part-3-writing-nodes-that-mine/)
-- [Part 4.1 — Bitcoin Proof of Work Difficulty Explained](https://bigishdata.com/2017/11/13/how-to-build-a-blockchain-part-4-1-bitcoin-proof-of-work-difficulty-explained/)
+- [Part 4.1 — Bitcoin Proof of Work Difficulty Explained](https://bigishdata.com/2017/11/02/build-your-own-blockchain-part-3-writing-nodes-that-mine/)
 
-## Pre notes
-For the following code examples, this will be the class of the block.
+## 预注
+对于下面的代码示例，这将是块的类。
+
 ```
 class Block():
   def __init__(self, number, timestamp, difficulty, uncles=None):
@@ -41,35 +42,35 @@ class Block():
     self.uncles = uncles
 
 ```
+我用来显示代码正确的数据是从[Etherscan](https://etherscan.io/)获取的。
 
-The data I use to show the code is correct was grabbed from [Etherscan](https://etherscan.io/).
+该代码在计算难度时也不包括边缘情况。在大多数情况下，边缘情况不涉及计算难度目标。通过不包含它们的方式，可以使下面的代码更容易理解。我将在最后讨论边缘情况以确保它们没有被完全忽略。
+
+最后，对于开始的分叉，我将讨论不同的变量和函数执行什么。对于后来的分叉，Homestead和Metropolis，我只谈变化。
+
+此外，[这是我在Github repo中添加的所有代码](https://github.com/jackschultz/ethana)!如果不想自己编写所有代码，至少应该在本地克隆并运行它。如果你想添加更多的部分，或者认为我把代码格式化错了，你可以随时pull request。
+
+## 起点-Frontier
+
+一开始，有Frontier。我将通过一个要点部分介绍配置变量来直接开始。
+
+- `DIFF_ADJUSTMENT_CUTOFF` — 表示以太坊挖掘一个区块的目标秒数。
+- `BLOCK_DIFF_FACTOR` — 帮助计算当前难度可以更改多少。
+- `EXPDIFF_PERIOD` — 表示炸弹数量更新后的块数。
+- `EXPDIFF_FREE_PERIODS` — 在引入bomb到难度计算之前有多少个`EXPDIFF_PERIODS`被忽略了。
+
+如下是函数的描述。
 
 
-The code doesn’t include edge cases in calculating the difficulty either. For the most part, edge cases aren’t involved in calculating the difficulty target. By not including them, it makes the following code much easier to understand. I’ll talk about the edge cases at the end to make sure they’re not completely ignored.
+`calc_frontier_sign` — 计算下一个难度值应该上升还是下降。在Frontier的情况下，如果前一个block被挖掘的速度快于13秒的`DIFF_ADJUSTMENT_CUTOFF`，那么符号将是1，这意味着我们希望难度更大，从而使得下一个block被挖掘的速度更慢。如果前一个块被挖掘的时间超过13秒，那么符号将是-1，下一个难度将降低。总的来说，块挖掘时间的目标是`~12.5`秒。 看看Vitalik Buterin的文章[他谈到了在最小平均块挖掘时间选择12秒](https://blog.ethereum.org/2014/07/11/towa-12second块时间/)。
 
-Finally, for the beginning fork, I talk about what the different variables and functions perform. For later forks, Homestead and Metropolis, I only talk about the changes.
+`calc_frontier_offset` — 偏移量是决定难度变化多少的值。 在Frontier的情况下，这是除以`BLOCK_DIFF_FACTOR`得到的父级困难整数。因为它被2018除尽，即2^11，如果你想要按照移位查看它的话，`offset`也能通过`parent_difficulty >> 11`计算得到。由于`1.0 / 2048 == 0.00048828125`， 它意味着offset每次变化将仅仅改变`0.0488%`的难度。没有太大，这很好，因为我们不希望每个不同的挖掘区块有很大的难度变化。但是如果时间持续低于13秒，时间就会慢慢增加。
 
-Also, [here’s all the code I threw in a Github repo](https://github.com/jackschultz/ethana)! If you don’t want to write all the code yourself, you should at least clone it locally and run it yourself. 1000% feel free to make pull requests if you want to add more parts to it or think I formatted the code wrong.
+`calc_frontier_bomb` — 即bomb. 每`EXPDIFF_PERIOD`个块被挖掘后，bomb增加的难度增大了一倍。在Frontier的世界里，这个值增加的很小。例如，一个1500000的块，bomb值是`2 ** ((1500000 // 100000) - 2) == 2 ** 15 == 32768`。块的难度是34982465665323. 这是一个巨大的差异，意味着bomb没有任何影响。这将在后面发生改变。
 
-## The Beginning — Frontier
-In the beginning, there was Frontier. I’ll jump right in by giving a bullet point section going over the config variables.
+`calc_frontier_difficulty` — 一旦你得到了sign,offset,和bomb的值, 新的难度就是`(parent.difficulty + offset * sign) + bomb`. 假设挖掘父结点的block花费的时间是15秒。在这种情况下，难度将下降`offset * -1`, 然后在最后加入少量的bomb。如果在父级区块上开采的时间是8秒，难度将增加`offset + bomb`。
 
-- `DIFF_ADJUSTMENT_CUTOFF` — Represents the seconds that Ethereum is aiming to mine a block at.
-- `BLOCK_DIFF_FACTOR` — Helps calculate how much the current difficulty can change.
-- `EXPDIFF_PERIOD` — Denotes after how many blocks the bomb amount is updated.
-- `EXPDIFF_FREE_PERIODS` — How many `EXPDIFF_PERIODS` are ignored before including the bomb in difficulty calculation.
-
-And now descriptions of the functions.
-
-`calc_frontier_sign` — Calculates whether the next difficulty value should go up or down. In the case of Frontier, if the previous block was mined quicker than the 13 seconds `DIFF_ADJUSTMENT_CUTOFF`, then the sign will be 1, meaning we want the difficulty to be higher to make it more difficult with the goal that the next block be mined more slow. If the previous block was mined longer than 13 seconds, then the sign will be -1 and the next difficulty will be lower. The overall point of this is that the goal for block mining time is `~12.5` seconds. Take a look at Vitalik Buterin’s [post where he talks about choosing 12 seconds at the minimum average block mining time](https://blog.ethereum.org/2014/07/11/toward-a-12-second-block-time/).
-
-`calc_frontier_offset` — Offset is the value that determines how much or how little the difficulty will change. In the Frontier, this is the parent’s difficulty integer devided by the `BLOCK_DIFF_FACTOR`. Since it’s devided by 2048, which is 2^11, `offset` can also be calculated by `parent_difficulty >> 11` if you want to look at it in terms of shifting bits. Since `1.0 / 2048 == 0.00048828125`, it means that the offset will only change the difficulty by `0.0488%` per change. Not that much, which is good because we don’t want the difficulty to change a ton with each different mined block. But if the time becomes consistently under the 13 seconds cutoff, the difficulty will slowly grow to compensate.
-
-`calc_frontier_bomb` — The bomb. The bomb adds an amount of difficulty that doubles after every `EXPDIFF_PERIOD` block is mined. In the Frontier world, this value is incredibly small. For example, at block 1500000, the bomb is `2 ** ((1500000 // 100000) - 2) == 2 ** 15 == 32768`. The difficulty of the block is 34982465665323. That’s a huge difference meaning that the bomb took on zero affect. This will change later.
-
-`calc_frontier_difficulty` — Once you have the values for sign, offset, and bomb, the new difficulty is `(parent.difficulty + offset * sign) + bomb`. Let’s say that the the time it took to mine the parent’s block was 15 seconds. In this case, the difficulty will go down by `offset * -1`, and then add the small amount of the bomb at the end. If the time to mine the parent’s block was 8 seconds, the difficulty will increase by `offset + bomb`.
-
-In order to understand it fully, go through the code that follows and look at the calculations.
+为了完全理解它，请通读下面的代码并查看计算过程。
 
 ```
 config = dict(
@@ -105,13 +106,14 @@ def calc_frontier_difficulty(parent, child_timestamp):
   return offset, sign, bomb, target
 ```
 
-## The Middle — Homestead
+## 中场 — Homestead
 
-The Homestead fork, which took place at [block number 1150000](https://etherscan.io/block/1150000) in March of 2016, has a couple big changes with calculating the `sign`.
+这个Homestead分叉, 是在[块号1150000](https://etherscan.io/block/1150000) 于2016年3月, 在计算`sign`上面有几个大的变化。
 
-`calc_homestead_sign` — Instead of having a single number, `DIFF_ADJUSTMENT_CUTOFF` which is different for the Homestead fork, that makes the difficulty go up or down, Homestead takes a slightly different approach. If you look at the code, you’ll see that that there are groupings of the sign rather than either 1 or -1. If the time_diff between grandparent and parent is in [0,9],  sign will be 1, meaning that difficulty needs to increase. If the time_diff is [10,19], the sign will be 0 meaning that the difficulty should stay as it is. If the time_diff is in the range [20, 29], then the sign becomes -1. If time_diff is in the range [30,39], then the sign is -2, etc.
 
-This does two things. First, Homestead doesn’t want to equate a block that took 50 seconds to mine as being the same as a block that took 15 seconds to mine. If it took a block 50 seconds, then the next difficulty in fact does need to be easier. Secondly, instead of `DIFF_ADJUSTMENT_CUTOFF` representing the goal time, this switches the aim point to be the mid point of the range of `time_diffs` with a sign of 0. [10, 11, 12, 13, 14, 15, 16, 17, 18, 19]. Meaning `~14.5` seconds, not including the bomb.
+`calc_homestead_sign` — Homestead分叉不同之处是使用`DIFF_ADJUSTMENT_CUTOFF`，而不是一个单独的数字，它会增加或减少难度，Homestead采用了一种稍微不同的方法。 如果你看一下代码，你会发现符号有分组，而不只是1或-1。如果祖父级和父级之间的time_diff在[0,9]之间，则符号将为1，这意味着需要增加难度。如果time_diff是在[10,19]之间, 则符号将为0，这意味着难度应该保持不变。 如果time_diff在[20,29]范围内，则符号变为-1。如果time_diff在[30,39]范围内，则符号为-2，以此类推。
+
+这有两种作用。首先，Homestead不想把一个50秒挖的区块和一个15秒挖的区块等同起来。如果它挖了一个块用50秒，那么下一个困难实际上需要更容易一些。其次，与表示目标时间的`DIFF_ADJUSTMENT_CUTOFF`不同，它将目标点转换为`time_diffs`范围的中点，符号为0。[10, 11, 12, 13, 14, 15, 16, 17, 18, 19]。意味着大概是 `~14.5`秒，不包括bomb。
 
 ```
 config = dict(
@@ -144,12 +146,12 @@ def calc_homestead_difficulty(parent, child_timestamp):
   return offset, sign, bomb, target
 ```
 
-## The Current — Metropolis
-There are a couple differences from Homestead. First is that the `DIFF_ADJUSTMENT_CUTOFF` is now 9, which means that, without uncles, the target block time is midpoint of [9, 10, 11, 12, 13, 14, 15, 16, 17] or `~13` seconds.
+## 当前 — Metropolis
+Homestead有几个不同之处。首先，`DIFF_ADJUSTMENT_CUTOFF`现在是9，这意味着，如果没有叔节点，目标块时间是[9、10、11、12、13、14、15、16、17]的中点或即`~13`秒。
 
-The second takes into account whether or not there are uncles included in the block. And uncle in Ethereum language refers to a point in time where two nodes mine a child block from the same grandparent. So if you’re mining a child block from a parent that has a “sibling”, you’re able to pick one of the siblings to mine from, but also include that you noticed the other block. In that case, Ethereum wants to make the new difficulty larger, buy another offset, to make sure that there is a less likely chance for two natural forks to get much longer.
+第二种考虑是否有叔节点包含在块中。在以太坊语言中，叔节点指的是两个节点从同一个祖父级处挖掘出一个子节点的时间点。所以，如果你从一个有“兄弟姐妹”的父级节点那里挖掘一个子块，你可以从中选择兄弟姐妹中的一个进行挖掘，但也包括你通知到的其他块。在这种情况下，以太坊想要加大新的难度，买入另一个offset，以确保两个天然叉获得更长时间的可能性更小。
 
-Now the biggest difference is dissolving the impact of the bombs. Check out the code for `calc_metropolis_bomb` where not only do we subtract the value of `EXPDIFF_FREE_PERIODS`, but also `METROPOLIS_DELAY_PERIODS` which is 30 time periods. A huge number. Instead of talking about the bombs here, I’ll have a section devoted to that after this.
+现在最大的不同是如何消除bomb值的影响。查看`calc_metropolis_bomb`的代码，在这里我们不仅要减去`EXPDIFF_FREE_PERIODS`的值，还要减去`METROPOLIS_DELAY_PERIODS`的值，后者是30个时间段。一个巨大的数字。这里不讨论bombs，在这之后我会有一个专门的章节。
 
 ```
 config = dict(
@@ -188,31 +190,33 @@ def calc_metropolis_difficulty(parent, child_timestamp):
   return offset, sign, bomb, target
 ```
 
-## Going Deeper with the Bombs
-If you look at [one of the difficulty charts](https://www.coinwarz.com/difficulty-charts/ethereum-difficulty-chart) from online, you’ll see a recent amount of huge increasing jumps every 100000 blocks, and then a giant drop off about a month ago. Screenshot time for those not wanting to click the link:
+## 深入研究Bombs
+如果你在线查看[一个难度图表](https://www.coinwarz.com/difficulty-charts/ethereum-difficulty-chart)，你会看到最近每100000个区块就有一个巨大的增长，然后在一个月前就有一个巨大的下降。不想点击链接的用户看看截屏:
 
 ![image](https://bigishdata.files.wordpress.com/2017/11/ethereum_time_screenshot.png)
-Each horizontal line indicates a 3 second change in time it takes to mine a block.
 
-What’s the point of having a bomb like this? A big goal of Ethereum is to get rid of Proof of Work, which requires energy and time to create and validate a new block, into Proof of Stake, which is [described in the Ethereum Wiki](https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ). In order to force nodes to move to the Proof of Stake implementation, a `“bomb”` that doubles its impact on the difficulty every 100000 blocks would soon make it take so long to mine a new block, the nodes running on the old fork won’t be able to run anymore. This is where the term “Ice Age” comes from; the block chain would be frozen in time.
+每条水平线表示挖掘一个块每3秒的时间变化。
 
-This is a good way to manage future changes, but also we run into the issue that the new Proof of Stake implementation, called Casper, wasn’t ready in time before the giant difficulty spikes seen in that graph. That’s where the Metropolis fork came into play — it eliminated the effect the `bomb` has on the difficulty, but in a few years it will come back into play, where the switch to Casper will (hopefully) be ready to roll. That being said, predicting when features like this fork are ready for production and adoption is difficult, so if Casper isn’t ready to be pushed quick enough, you can create another fork that moves the bomb back in time again.
+拥有这样一个bomb值有什么意义?以太坊的一个大目标是摆脱工作证明，它需要精力和时间来创建和验证一个新的块，进入[在Ethereum Wiki中描述的](https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ中]的股份证明。为了迫使节点移动到股份实现的证明，每100000个块中就会有一颗“炸弹”，它对难度的影响会翻倍，很快就会使挖掘新块花费很长时间，在旧分支上运行的节点将无法再运行。这就是“冰河世纪”一词的由来;区块链会及时冻结。
 
-### Bomb Math
+这是管理未来变化的一种好方法，但我们也遇到了一个问题，即称为Casper的新股份证明的实现，在图表中显示的巨大困难出现之前没有及时准备好。这就是Metropolis分叉发挥作用的地方——它消除了`bomb`对难度的影响，但几年后它将再次发挥作用，在这里，切换到Casper(希望如此)将做好准备。话虽如此，要预测诸如此类的功能何时准备好投入生产和采用是很困难的，所以如果Casper还没有准备好足够快地推出，您可以创建另一个分支，再次将bomb移动回过去。
 
-Besides the description of what the bombs do to the difficulty as seen on those graphs, it’s worth it to show the math behind why the difficulty is rising to those levels, and what that means for how long it takes to mine a block.
+### Bomb数学
 
-Going back, remember that `offset` is an indicator of how much it takes a node to mine a block.
+除了这些图表中所示的bombs对难度的影响，我们还应该说明为什么难度会上升到这些水平，以及这意味着挖掘一个区块需要多长时间。
 
-For example, if the previous time difference between blocks was [18-26], we say that if we decrease difficulty by an `offset`, we’ll be able to move the time to mine a block back to the [9-17] range, or `DIFF_ADJUSTMENT_CUTOFF` seconds lower.
+回顾过去，请记住`offset`是一个指示节点挖掘一个块需要多少时间的指标。
 
-So if we increase the difficulty by `offset`, we expect the time it takes to mine a block to increase by `DIFF_ADJUSTMENT_CUTOFF`. If we increase the difficulty by half of an `offset`, the mining time should increase by about `DIFF_ADJUSTMENT_CUTOFF / 2`.
+例如，如果之前块之间的时间差是[18-26]，我们说如果我们将难度减少一个`offset`，我们将能够将挖掘块的时间移动回[9-17]范围，或者将`DIFF_ADJUSTMENT_CUTOFF`秒数降低。
 
-So if we want to see how much a bomb will influence the change in mining time, we want the ratio of bomb and offset.
+所以如果我们通过`offset`增加难度，万恶们希望
+So if we increase the difficulty by `offset`, 我们期望通过`DIFF_ADJUSTMENT_CUTOFF`来增加挖掘一个块的时间。如果我们将难度增加`offset`的一半，则挖掘时间应该增加大约`DIFF_ADJUSTMENT_CUTOFF / 2`。
+
+如果我们想知道一个bomb值对挖掘时间的影响有多大，我们需要bomb和offset的比值。
 
 `(bomb / offset) * DIFF_ADJUSTMENT_CUTOFF`
 
-Here’s the code that shows how we can calculate the time it takes to mine and compare to the actual average time, where actual average mining time was gathered from [this chart](https://bitinfocharts.com/comparison/ethereum-confirmationtime.html) by hovering the cursor around where in time these blocks were mined.
+下面的代码展示了我们如何计算挖掘时间并与实际平均时间进行比较，实际平均时间是从[这个图表](https://bitinfocharts.com/compare on/ethere-confirmationtime .html)中收集的，方法是将光标悬停在这些块被挖掘的时间点附近。
 
 ```
 def calc_mining_time(block_number, difficulty, actual_average_mining_time, calc_bomb, calc_offset):
@@ -284,23 +288,23 @@ Actual Avg Mining Time: 13.8
 Calculated Mining Time: 14.5000001168
 ```
 
-Look how large the bomb offset ratio is for the later Homestead blocks, and how tiny it becomes after the Metropolis block! With the loss of the bomb’s impact, the time difference drops a crap ton.
+看看后来的Homestead区块的bomb offset率有多大，Metropolis区块之后的bomb offset率又有多小!由于炸弹的冲击力减弱，时间差异下降了一大截。
 
-As of now, the bomb doesn’t affect the difficulty by pretty much any amount. It’ll be back though. If Ethereum continues to mine blocks at the rate of `~14.5` seconds, they’ll have 100,000 mine blocks in around 17 days. Multiply that time by 30, which accounts for the `METROPOLIS_DELAY_PERIODS`, we’ll be back in a state where the bomb makes a difference in around a year and a half, no matter how much the hash power increases.
+到目前为止，bomb对难度影响不大。不过它会回来的。如果以太坊继续以`~14.5`秒的速度开采矿块，他们将在17天内开采出10万个矿块。将这段时间乘以30，也就是所谓的`METROPOLIS_DELAY_PERIODS`，我们将回到这样一种状态:无论哈希功率增加多少，bomb都会在大约一年半的时间内产生影响。
 
-### Bomb Equilibrium
+### Bomb平衡
 
-The last part of bomb dealing is to quickly explain why a slight increase in the `bomb` will make the overall difficulty be raised to a much higher value compared to how large the `bomb` value is.
+Bomb的最后一部分是快速解释一下为什么`bomb`的轻微增加会使整体难度比`bomb`的价值大得多。
 
-The thought on how this works is by taking the calculated expecting mining time and from there calculating the difficulty required by the current hash rate to mine blocks in that time period. When the bomb amount changes, the difficulty will continue to rise or fall to get to the difficulty for that time, and then hover in that equilibrium. If you look at the blocks right after the `bomb` change, you’ll see it takes more than a few blocks to get to the new level.
+这种方法的工作原理是通过计算期望挖掘时间，并由此计算出当前哈希率在该时间段内对挖掘块所需的难度。当bomb数量发生变化时，难度会继续上升或下降，达到那个时候的难度，然后在那个平衡点上徘徊。如果您在`bomb`更改之后查看这些块，您将看到需要多个块才能达到新的级别。
 
-## The Edge Cases
+## 边界情况
 
-There are a couple edge cases here not mentioned in the code above.
+这里有一些在上面的代码中没有提到的边缘情况。
 
--MIN_DIFF=131072, which is the minimum difficulty a block can have. Considering the difficulty is incredibly larger than that, it’s pointless to think about that. But when Ethereum was gerenerated, it was probably useful to have a minimum difficulty. Also can be refered to as 2 ** 17.
+-MIN_DIFF=131072, 一个块可以有的最小难度值。考虑到难度比这要大得多，考虑这个问题是没有意义的。但是当以太坊产生后，有一个最小的难度可能是有用的。也可以参考 2 ** 17.
 
--Smallest sign = -99. Imagine a situation where, for some reason, the sign for calculating the next block is -1000. The sign for the next block’s difficulty will drop by an incredible amount which would mean it’d take something like 1000 blocks to get back to the desired `~14` second mining time since the largest difficulty increasing sign is 1 (or two if it includes an uncle). Odds are very very very unlikely that any thing lower than -99 would happen, but still needs to covered.
+-最小的sign值 = -99. 假设有一种情况，由于某种原因，计算下一个块的sign值是-1000。下一个方块难度的符号将以难以置信的速度下降，这意味着大约需要1000个方块才能回到所需的`~14` 秒的开采时间，因为增加难度最大的sign是1(如果包括叔叔节点，则是2)。低于-99的概率非常非常小，但仍然需要涵盖。
 
 ## Final Questions
 和以前一样，这是我在写这篇文章时遇到的一些问题，这些问题并没有放在主要的帖子里。
