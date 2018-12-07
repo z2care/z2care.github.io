@@ -353,11 +353,13 @@ The biggest indicator of what type of validation blockchains will use depends on
 Get in freaking contact. Seriously, tons of posts out there that talk about results but don’t say how they calculated it and assume that everyone is as smart as them and know what’s going on. I’m trying to be the opposite where I don’t say something without fully explaining. So if there’s something confusing or wrong, contact me and I’ll make sure to fix the issue.
 
 *我可以在Twitter上和你聊天吗*
+
 *Can I DM you on Twitter?*
 
 [@jack_schultz](https://twitter.com/jack_schultz)
 
-*你更喜欢奸臣还是忠臣？*
-*Do you like cats or dogs better?*
-跟你没关系
+**你更喜欢奸臣还是忠臣？**</br>
+**Do you like cats or dogs better?**
+
+跟你没关系  
 Cats.
