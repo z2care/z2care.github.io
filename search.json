@@ -4,8 +4,8 @@
 "title"    : "如何构建自己的区块链 第四二部分 - 以太坊工作证明难度解释",
 "category" : "",
 "tags"     : "Blockchain",
-"url"      : "/2018/11/24/How-to-Build-Your-Own-Blockchain-Part-4.2/",
-"date"     : "2018-11-24 14:27:00 +0000"
+"url"      : "/2018/12/01/How-to-Build-Your-Own-Blockchain-Part-4.2/",
+"date"     : "2018-12-01 14:27:00 +0000"
 } ,
 
 {
@@ -65,6 +65,16 @@
 "tags"     : "",
 "url"      : "/projects/demo/ds4py/2018-12-03-ds4py/",
 "date"     : "2018-12-03 15:51:00 +0000"
+
+} ,
+
+{
+
+"title"    : "Design patterns in Python",
+"category" : "",
+"tags"     : "",
+"url"      : "/projects/demo/dp4py/2018-12-08-dp4py/",
+"date"     : "2018-12-08 07:11:00 +0000"
 
 } ,
 
