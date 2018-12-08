@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "如何构建自己的区块链 第四二部分 - 以太坊工作证明难度解释"
-date: 2018-11-24 22:27:00 +0800
+date: 2018-12-01 22:27:00 +0800
 categories: 开发与技术
 tag: Blockchain
 ---
