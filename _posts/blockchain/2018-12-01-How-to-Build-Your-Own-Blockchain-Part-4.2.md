@@ -313,10 +313,10 @@ Like before, here’s a list of questions I had when writing this that didn’t 
 **头部里有什么？**  
 **What’s in the header?**
 
-我相信当我们只讨论工作难度的证明时，这个问题会经常出现。我们知道如何计算难度是很好的，但是如何验证一个块有一个有效的头部超出了这篇文章范围。  
+我相信当我们只讨论工作难度的证明时，这个问题会经常出现。我们知道如何计算难度是很好的，但是如何验证一个块有一个有效的头部超出了这篇文章范围。
 I’m sure this question will come up a lot when only talking about Proof of Work difficulty. It’s great that we know how difficulty is calculated, but how to validate a block has a valid header is beyond this post.
 
-我不会在这里解释它，但可能会在以后的文章中决定如何在实现事务之后计算jbc的头。  
+我不会在这里解释它，但可能会在以后的文章中决定如何在实现交易之后计算jbc的头。
 I’m not going to explain it here, but probably in a future post when I decide how jbc’s header should be calculated after I implement transactions.
 
 我要指出的是，比特币的头部非常简单，在这里值被集合在一起(确保比特的组合方式有正确的尾端)。以太坊的方法要复杂得多，它使用现金方法而不是默克尔树来处理交易。  
