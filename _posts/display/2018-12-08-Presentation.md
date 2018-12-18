@@ -1,7 +1,7 @@
 ---
 layout: original
 title: "Presentation 演示"
-date: 2018-10-06 23:58:00 +0800
+date: 2018-12-08 21:36:00 +0800
 categories: 分析与探索
 tag: Display
 ---
@@ -866,117 +866,7 @@ public class PresentationActivity extends Activity
 ```
 
 See also:
+
 [for information on about live video routes and how to obtain the preferred presentation display for the current media route.](https://developer.android.com/reference/android/media/MediaRouter.html#ROUTE_TYPE_LIVE_VIDEO)
 
 [for information on how to enumerate displays and receive notifications when displays are added or removed.](https://developer.android.com/reference/android/hardware/display/DisplayManager.html)
-
-### Summary
-
-Inherited constants|
----|
-From interface android.content.DialogInterface|
-
-Public constructors
-Presentation(Context outerContext, Display display)
-Creates a new presentation that is attached to the specified display using the default theme.
-
-Presentation(Context outerContext, Display display, int theme)
-Creates a new presentation that is attached to the specified display using the optionally specified theme.
-
-Public methods
-Display
-getDisplay()
-Gets the Display that this presentation appears on.
-Resources
-getResources()
-Gets the Resources that should be used to inflate the layout of this presentation.
-void
-onDisplayChanged()
-Called by the system when the properties of the Display to which the presentation is attached have changed.
-void
-onDisplayRemoved()
-Called by the system when the Display to which the presentation is attached has been removed.
-void
-show()
-Inherited from Dialog.show().
-
-Protected methods
-void
-onStart()
-Called when the dialog is starting.
-void
-onStop()
-Called to tell you that you're stopping.
-
-Inherited methods
-
-From class android.app.Dialog
-From class java.lang.Object
-From interface android.content.DialogInterface
-From interface android.view.Window.Callback
-From interface android.view.KeyEvent.Callback
-From interface android.view.View.OnCreateContextMenuListener
-Public constructors
-Presentation
-added in API level 17
-public Presentation (Context outerContext, 
-                Display display)
-Creates a new presentation that is attached to the specified display using the default theme.
-Parameters
-outerContext
-Context: The context of the application that is showing the presentation. The presentation will create its own context (see Dialog.) based on this context and information about the associated display.
-display
-Display: The display to which the presentation should be attached.
-Presentation
-added in API level 17
-public Presentation (Context outerContext, 
-                Display display, 
-                int theme)
-Creates a new presentation that is attached to the specified display using the optionally specified theme.
-Parameters
-outerContext
-Context: The context of the application that is showing the presentation. The presentation will create its own context (see Dialog.) based on this context and information about the associated display.
-display
-Display: The display to which the presentation should be attached.
-theme
-int: A style resource describing the theme to use for the window. See Style and Theme Resourcesfor more information about defining and using styles. This theme is applied on top of the current theme in outerContext. If 0, the default presentation theme will be used.
-Public methods
-getDisplay
-added in API level 17
-public Display getDisplay ()
-Gets the Display that this presentation appears on.
-Returns
-Display
-The display.
-getResources
-added in API level 17
-public Resources getResources ()
-Gets the Resources that should be used to inflate the layout of this presentation. This resources object has been configured according to the metrics of the display that the presentation appears on.
-Returns
-Resources
-The presentation resources object.
-onDisplayChanged
-added in API level 17
-public void onDisplayChanged ()
-Called by the system when the properties of the Display to which the presentation is attached have changed. If the display metrics have changed (for example, if the display has been resized or rotated), then the system automatically calls Dialog.cancel() to dismiss the presentation.
-See also:
-getDisplay()
-onDisplayRemoved
-added in API level 17
-public void onDisplayRemoved ()
-Called by the system when the Display to which the presentation is attached has been removed. The system automatically calls Dialog.cancel() to dismiss the presentation after sending this event.
-See also:
-getDisplay()
-show
-added in API level 17
-public void show ()
-Inherited from Dialog.show(). Will throw WindowManager.InvalidDisplayException if the specified secondaryDisplay can't be found.
-Protected methods
-onStart
-added in API level 17
-protected void onStart ()
-Called when the dialog is starting.
-onStop
-added in API level 17
-protected void onStop ()
-Called to tell you that you're stopping.
