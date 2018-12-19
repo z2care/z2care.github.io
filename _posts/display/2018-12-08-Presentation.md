@@ -1,5 +1,5 @@
 ---
-layout: original
+layout: post
 title: "Presentation 演示"
 date: 2018-12-08 21:36:00 +0800
 categories: 分析与探索
