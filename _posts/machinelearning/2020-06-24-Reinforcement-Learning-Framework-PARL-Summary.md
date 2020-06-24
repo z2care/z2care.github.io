@@ -6,12 +6,13 @@ categories: 学习与总结
 tag: MachineLearning
 ---
 
-<!-- more -->
 * content
 {:toc}
 
 
 这门课算是普及知识的课程，并不能算作算法研究和提高编程技能的课程，而且更多的是理解什么是RL，PARL如何使用，做fine-tuning和dnn修改的工作。其实如果能理解PL和熟悉PARL使用，已经足够这门课的价值了。
+
+<!-- more -->
 
 在人工智能火热发展的时代，机器学习作为有效的实现方式，其分支也在百家争鸣百花齐放。曾经的BAT在经过www、web2.0、mobile的洗礼后，来到新的战场——AI。
 
