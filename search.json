@@ -1,6 +1,14 @@
 [
 
 {
+"title"    : "强化学习框架PARL总结",
+"category" : "",
+"tags"     : "MachineLearning",
+"url"      : "/2020/06/24/Reinforcement-Learning-Framework-PARL-Summary/",
+"date"     : "2020-06-24 08:05:00 +0000"
+} ,
+
+{
 "title"    : "Presentation 演示",
 "category" : "",
 "tags"     : "Display",
@@ -98,11 +106,11 @@
 
 {
 
-"title"    : "标签目录",
+"title"    : "PROJECTS",
 "category" : "",
 "tags"     : "",
-"url"      : "/tag/",
-"date"     : ""
+"url"      : "/projects/",
+"date"     : "2018-12-03 14:43:00 +0000"
 
 } ,
 
@@ -118,11 +126,11 @@
 
 {
 
-"title"    : "PROJECTS",
+"title"    : "标签目录",
 "category" : "",
 "tags"     : "",
-"url"      : "/projects/",
-"date"     : "2018-12-03 14:43:00 +0000"
+"url"      : "/tag/",
+"date"     : ""
 
 } ,
 
@@ -161,6 +169,16 @@
 } ,
 
 {
+
+} ,
+
+{
+
+"title"    : "Z2CARE PAGE",
+"category" : "",
+"tags"     : "",
+"url"      : "/page2/",
+"date"     : ""
 
 } 
 
