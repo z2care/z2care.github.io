@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-	<title>Design patterns in Java</title>
+	<title>机器学习的数学基础</title>
 	<meta name="description" content="z2care的个人博客、Android、Telephony、Java、CPP、Tensorflow">
 	<meta name="keywords" content="z2care的个人博客、Android、Telephony、Java、CPP、Tensorflow" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -77,8 +77,8 @@
 <div class="banner">
   <div class="container lh30">
   	
-    	<a href="/categories/#专案演示-ref">专案演示</a>	/
-    	<a href="/tag/#Projects-ref">Projects</a>
+    	<a href="/categories/#学习与总结-ref">学习与总结</a>	/
+    	<a href="/tag/#MachineLearning-ref">MachineLearning</a>
     
       <div id="search-container" class="pull-right">
           <input type="text" id="search-input" placeholder=" 试试直接搜索吧...">
@@ -248,58 +248,83 @@
       <div class="panel docs-content">
         <div class="wrapper">
             <header class="post-header">
-              <h1 class="post-title">Design patterns in Java</h1>
+              <h1 class="post-title">机器学习的数学基础</h1>
               <!--
-                <p class="post-meta">Dec 13, 2018</p>
+                <p class="post-meta">Jun 28, 2020</p>
               -->
-              <div class="meta">Date： <span class="postdate">Dec 13, 2018</span> Author： <a target="_blank" href="https://z2care.github.io">Zarey C.Y. Chang</a></div>
-              <br />  
-              <blockquote><p>本文章属原创文章，未经作者许可，禁止转载，复制，下载，以及用作商业用途。原作者保留所有解释权。</p></blockquote>            
+              <div class="meta">Date： <span class="postdate">Jun 28, 2020</span> Author： <a target="_blank" href="https://z2care.github.io">Zarey C.Y. Chang</a></div>
+              <br />
+              <blockquote><p>本文章采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh"> 知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 </a>进行许可。转载请注明来自<a href="http://z2care.github.io">Z2CARE的博客</a></p></blockquote>
             </header>
             <article class="post-content">
               <ul id="markdown-toc">
-  <li><a href="#标题1" id="markdown-toc-标题1">标题1</a>    <ul>
-      <li><a href="#标题2" id="markdown-toc-标题2">标题2</a>        <ul>
-          <li><a href="#标题3" id="markdown-toc-标题3">标题3</a>            <ul>
-              <li><a href="#标题4" id="markdown-toc-标题4">标题4</a>                <ul>
-                  <li><a href="#标题5" id="markdown-toc-标题5">标题5</a>                    <ul>
-                      <li><a href="#标题6" id="markdown-toc-标题6">标题6</a></li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </li>
+  <li><a href="#数学基础试视图" id="markdown-toc-数学基础试视图">数学基础试视图</a>    <ul>
+      <li><a href="#微积分" id="markdown-toc-微积分">微积分</a>        <ul>
+          <li><a href="#极限与积分" id="markdown-toc-极限与积分">极限与积分</a></li>
+          <li><a href="#导数和二阶导数" id="markdown-toc-导数和二阶导数">导数和二阶导数</a></li>
+          <li><a href="#方向导数和梯度" id="markdown-toc-方向导数和梯度">方向导数和梯度</a></li>
+          <li><a href="#凸函数和极值" id="markdown-toc-凸函数和极值">凸函数和极值</a></li>
+          <li><a href="#最优化方法" id="markdown-toc-最优化方法">最优化方法</a></li>
+        </ul>
+      </li>
+      <li><a href="#概率与统计" id="markdown-toc-概率与统计">概率与统计</a>        <ul>
+          <li><a href="#古典概率" id="markdown-toc-古典概率">古典概率</a></li>
+          <li><a href="#常用概率分布" id="markdown-toc-常用概率分布">常用概率分布</a></li>
+          <li><a href="#贝叶斯公式" id="markdown-toc-贝叶斯公式">贝叶斯公式</a></li>
+          <li><a href="#假设检验" id="markdown-toc-假设检验">假设检验</a></li>
+        </ul>
+      </li>
+      <li><a href="#线性代数" id="markdown-toc-线性代数">线性代数</a>        <ul>
+          <li><a href="#矩阵向量" id="markdown-toc-矩阵向量">矩阵向量</a></li>
+          <li><a href="#矩阵乘法" id="markdown-toc-矩阵乘法">矩阵乘法</a></li>
+          <li><a href="#矩阵的特征值和特征向量" id="markdown-toc-矩阵的特征值和特征向量">矩阵的特征值和特征向量</a></li>
         </ul>
       </li>
     </ul>
   </li>
 </ul>
 
+<p>在学习机器学习这门课程中，往往需要一定的数学理论基础才能很好的理解和探究，但数学又是一门博大精深的学科，那么常用的一些理论知识就需要重点掌握。</p>
+
 <!-- more -->
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
-<span class="k">print</span> <span class="n">abc</span>
-<span class="n">__main__</span>
-</code></pre></div></div>
+<h2 id="数学基础试视图">数学基础试视图</h2>
 
-<h1 id="标题1">标题1</h1>
+<p>文档参考：</p>
 
-<h2 id="标题2">标题2</h2>
+<p>https://aistudio.baidu.com/aistudio/education/preview/441140</p>
 
-<h3 id="标题3">标题3</h3>
+<p><img src="https://i.loli.net/2020/06/28/QH2owNJugYablT9.png" alt="数学基础.png" /></p>
 
-<h4 id="标题4">标题4</h4>
+<h3 id="微积分">微积分</h3>
 
-<h5 id="标题5">标题5</h5>
+<h4 id="极限与积分">极限与积分</h4>
 
-<h6 id="标题6">标题6</h6>
+<h4 id="导数和二阶导数">导数和二阶导数</h4>
 
-<hr />
+<h4 id="方向导数和梯度">方向导数和梯度</h4>
 
-<p><a href="https://github.com/z2care/DP4Java">DP4Java</a></p>
+<h4 id="凸函数和极值">凸函数和极值</h4>
 
-<hr />
+<h4 id="最优化方法">最优化方法</h4>
+
+<h3 id="概率与统计">概率与统计</h3>
+
+<h4 id="古典概率">古典概率</h4>
+
+<h4 id="常用概率分布">常用概率分布</h4>
+
+<h4 id="贝叶斯公式">贝叶斯公式</h4>
+
+<h4 id="假设检验">假设检验</h4>
+
+<h3 id="线性代数">线性代数</h3>
+
+<h4 id="矩阵向量">矩阵向量</h4>
+
+<h4 id="矩阵乘法">矩阵乘法</h4>
+
+<h4 id="矩阵的特征值和特征向量">矩阵的特征值和特征向量</h4>
 
             </article>
           <hr>
@@ -309,41 +334,43 @@
           </div>
         </div>
       </div>
-      <div class="panel docs-content">
-        <article class="post-content">
-          <div class="wrapper">
-            
-
-
-  <div id="disqus_thread"></div>
-<script>
-
-/**
-*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-/*
-var disqus_config = function () {
-this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-};
-*/
-(function() { // DON'T EDIT BELOW THIS LINE
-var d = document, s = d.createElement('script');
-s.src = 'https://.disqus.com/embed.js';
-s.setAttribute('data-timestamp', +new Date());
-(d.head || d.body).appendChild(s);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-
- 
-          </div>
-        </article>
-      </div>
+      <!--Gitment-->
+      <!--
+      <div id="container"></div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <script>
+        var gitment = new Gitment({
+          id: window.location.pathname, 
+          owner: 'z2care',
+          repo: 'z2care.github.io',
+          oauth: {
+          client_id: '3b962d46bab20f713630',
+          client_secret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          },
+        })
+        gitment.render('container')
+      </script>
+      -->
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+      <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+      <script>
+        const gitalk = new Gitalk({
+          clientID: '3b962d46bab20f713630',
+          clientSecret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          repo: 'z2care.github.io',
+          owner: 'z2care',
+          admin: ['z2care'],
+          id: md5(location.pathname)
+        })
+        gitalk.render('gitalk-container')
+      </script>
     </div>
   </div>
 </div>
+
 
     <footer class="footer" role="contentinfo">
 	<!--不蒜子pv/uv统计-->

@@ -1,6 +1,14 @@
 [
 
 {
+"title"    : "机器学习的数学基础",
+"category" : "",
+"tags"     : "MachineLearning",
+"url"      : "/2020/06/28/The-Mathematical-Basics-Of-Machine-Learning/",
+"date"     : "2020-06-28 15:16:00 +0000"
+} ,
+
+{
 "title"    : "强化学习框架PARL总结",
 "category" : "",
 "tags"     : "MachineLearning",
