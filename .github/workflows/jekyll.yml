@@ -2,7 +2,7 @@ name: Jekyll site CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ jekyll ]
   pull_request:
     branches: [ jekyll ]
   watch:
@@ -15,8 +15,39 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Build the site in the jekyll/builder container
+      with: 
+        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+
+    - name: Setup Ruby
+      uses: ruby/setup-ruby@v1
+    - name: Ruby gem cache
+      uses: actions/cache@v1
+      with:
+        path: vendor/bundle
+        key: ${{ runner.os }}-gems-${{ hashFiles('**/Gemfile.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-gems-
+    - name: Install gems
       run: |
-        docker run \
-        -v ${{ github.workspace }}:/srv/jekyll -v ${{ github.workspace }}/_site:/srv/jekyll/_site \
-        jekyll/builder:latest /bin/bash -c "chmod -R 777 /srv/jekyll && jekyll build --future"
+        bundle config path vendor/bundle
+        bundle install --jobs 4 --retry 3
+    
+    - name: Build Jekyll site
+      run: JEKYLL_ENV=production bundle exec jekyll build
+
+    - name: Commit files
+      run: |
+        cd ./_site
+        git init
+        git config --local user.name "z2care"
+        git config --local user.email "z2care@gmail.com"
+        git add .
+        git commit -m "jekyll build at $(date)"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        directory: ./_site
+        repository: z2care/z2care.github.io
+        branch: master
+        github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        force: true
