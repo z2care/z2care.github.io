@@ -14,9 +14,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
-      with: 
-        persist-credentials: false # otherwise, the token used is the GITHUB_TOKEN, instead of your personal token
+    - name: Clone repository
+      uses: actions/checkout@v2
 
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
@@ -49,5 +48,5 @@ jobs:
         directory: ./_site
         repository: z2care/z2care.github.io
         branch: master
-        github_token: ${{ secrets.PERSONAL_ACCESS_TOKEN }}
+        github_token: ${{ secrets.GITHUB_TOKEN }}
         force: true
