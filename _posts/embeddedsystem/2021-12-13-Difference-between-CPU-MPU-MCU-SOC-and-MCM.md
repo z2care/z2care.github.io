@@ -3,7 +3,7 @@ layout: post
 title: "辨析CPU, MPU, MCU, SOC, and MCM"
 date: 2021-12-13 23:56:00 +0800
 categories: 学习与总结
-tag: Telephony
+tag: EmbeddedSystem
 ---
 * content
 {:toc}
