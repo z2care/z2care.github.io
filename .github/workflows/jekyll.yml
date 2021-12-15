@@ -44,7 +44,7 @@ jobs:
         git commit -m "jekyll build at $(date)"
 
     - name: Run with dest path
-      uses: helaili/jekyll-build@v2
+      uses: helaili/jekyll-action@v2
       with:
         target_branch: master
         target_path: /        
