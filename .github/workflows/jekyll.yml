@@ -42,10 +42,11 @@ jobs:
         git config --local user.email "z2care@gmail.com"
         git add .
         git commit -m "jekyll build at $(date)"
-    - name: Push changes
-      uses: ad-m/github-push-action@master
+
+    - name: Run with dest path
+      uses: helaili/jekyll-build@v2
       with:
-        directory: ./_site
-        repository: z2care/z2care.github.io
-        branch: master
-        github_token: ${{ secrets.GITHUB_TOKEN }}
+        target_branch: master
+        target_path: /        
+        keep_history: true
+        token: ${{ secrets.GITHUB_TOKEN }}
