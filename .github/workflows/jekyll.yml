@@ -47,5 +47,5 @@ jobs:
       uses: helaili/jekyll-action@master
       with:
         target_branch: master
-        keep-history: true
+        keep_history: true
         token: ${{ secrets.GITHUB_TOKEN }}
