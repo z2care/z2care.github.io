@@ -44,7 +44,8 @@ jobs:
         git commit -m "jekyll build at $(date)"
 
     - name: Run with dest path
-      uses: helaili/jekyll-action@v2
+      uses: helaili/jekyll-action@master
       with:
         target_branch: master
+        keep-history: true
         token: ${{ secrets.GITHUB_TOKEN }}
