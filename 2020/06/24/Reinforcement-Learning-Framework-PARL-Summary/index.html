@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+	<title>强化学习框架PARL总结</title>
+	<meta name="description" content="z2care的个人博客、Android、Telephony、Java、CPP、Tensorflow">
+	<meta name="keywords" content="z2care的个人博客、Android、Telephony、Java、CPP、Tensorflow" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="msapplication-tap-highlight" content="no">
+	<meta name="author" contect="z2care, z2care@gmail.com">
+	<meta name="robots" content="index,follow">
+	<link rel="shortcut icon" href="/styles/images/favicon.png">
+	<link rel="icon" href="/styles/images/favicon.png">
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<!--[if lte IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7/html5shiv.min.js"></script>
+  	<![endif]-->
+	<!--[if lt IE 9]>
+    	<script>window.location.href='/upgrade-your-browser.html';</script>
+    <![endif]-->
+	<!-- TODO use google analysis instead of baidu -->
+</head>
+
+  <body class="index">
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.png" alt="松子的个人博客">
+      </a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li></li>
+        <li>
+          <a href="/">首页</a>
+        </li>
+        <li>
+          <a href="/categories/">博文分类</a>
+        </li>
+        <li>
+          <a href="/tag">标签目录</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a rel="nofollow" href="/reference">外域链接</a></li>
+        <li><a href="/projects">专案</a></li>
+        <li><a href="/donate">赞助</a></li>
+        <li><a rel="nofollow" href="/me">关于我</a></li> 
+        <!--
+        <li><a rel="nofollow" target="_blank" href="https://z2care.github.io/me/">关于我</a></li> 
+        -->
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header pa" id="content">
+    <canvas id="mycanvas">你的浏览器不支持canvas</canvas>
+    <div class="container" >
+        <h1>松子的博客</h1>
+        <p>当你有了责任感，就值得被托付</p>
+    </div>
+</div>
+
+    
+      
+<div class="banner">
+  <div class="container lh30">
+  	
+    	<a href="/categories/#学习与总结-ref">学习与总结</a>	/
+    	<a href="/tag/#MachineLearning-ref">MachineLearning</a>
+    
+      <div id="search-container" class="pull-right">
+          <input type="text" id="search-input" placeholder=" 试试直接搜索吧...">
+          <label class="searchIcon glyphicon glyphicon-search" for="search-input"></label>
+          <ul id="results-container"></ul>
+      </div>
+  </div>
+</div>
+
+    
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2021">2021</a>
+          <ul class="nav">
+            <li><a href="#month_2021_December">December</a></li>
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2020">2020</a>
+            <ul class="nav">
+              <li><a href="#month_2020_June">June</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2018">2018</a>
+            <ul class="nav">
+              <li><a href="#month_2018_December">December</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2018_November">November</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2018_October">October</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">强化学习框架PARL总结</h1>
+              <!--
+                <p class="post-meta">Jun 24, 2020</p>
+              -->
+              <div class="meta">Date： <span class="postdate">Jun 24, 2020</span> Author： <a target="_blank" href="https://z2care.github.io">Zarey C.Y. Chang</a></div>
+              <br />
+              <blockquote><p>本文章采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh"> 知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 </a>进行许可。转载请注明来自<a href="http://z2care.github.io">Z2CARE的博客</a></p></blockquote>
+            </header>
+            <article class="post-content">
+              <ul id="markdown-toc">
+  <li><a href="#一课程预习中的知识点" id="markdown-toc-一课程预习中的知识点">一、课程预习中的知识点</a>    <ul>
+      <li><a href="#1-新手入门第一课-什么是深度学习" id="markdown-toc-1-新手入门第一课-什么是深度学习">1. 新手入门第一课-什么是深度学习？</a></li>
+      <li><a href="#2新手入门第二课-必备数学知识" id="markdown-toc-2新手入门第二课-必备数学知识">2.新手入门第二课-必备数学知识</a></li>
+      <li><a href="#3新手入门第三课-python快速入门" id="markdown-toc-3新手入门第三课-python快速入门">3.新手入门第三课-Python快速入门</a></li>
+      <li><a href="#4新手入门第四课-paddlepaddle快速入门" id="markdown-toc-4新手入门第四课-paddlepaddle快速入门">4.新手入门第四课-PaddlePaddle快速入门</a></li>
+      <li><a href="#5-ai-studio基本操作-notebook篇" id="markdown-toc-5-ai-studio基本操作-notebook篇">5. AI Studio基本操作-Notebook篇</a></li>
+    </ul>
+  </li>
+  <li><a href="#二parl强化学习公开课lesson1" id="markdown-toc-二parl强化学习公开课lesson1">二、PARL强化学习公开课Lesson1</a></li>
+  <li><a href="#三基于表格型方法求解rl" id="markdown-toc-三基于表格型方法求解rl">三、基于表格型方法求解RL</a></li>
+  <li><a href="#四基于神经网络方法求解rl" id="markdown-toc-四基于神经网络方法求解rl">四、基于神经网络方法求解RL</a></li>
+  <li><a href="#五基于策略梯度求解rl" id="markdown-toc-五基于策略梯度求解rl">五、基于策略梯度求解RL</a>    <ul>
+      <li><a href="#1-policy-gradient简介" id="markdown-toc-1-policy-gradient简介">1. Policy Gradient简介</a></li>
+      <li><a href="#2-policy-gradient实践reinforce算法" id="markdown-toc-2-policy-gradient实践reinforce算法">2. Policy Gradient实践——REINFORCE算法</a></li>
+    </ul>
+  </li>
+  <li><a href="#六连续动作空间上求解rl" id="markdown-toc-六连续动作空间上求解rl">六、连续动作空间上求解RL</a>    <ul>
+      <li><a href="#1-ddpg简介" id="markdown-toc-1-ddpg简介">1. DDPG简介</a></li>
+      <li><a href="#2-ddpg实践" id="markdown-toc-2-ddpg实践">2. DDPG实践</a></li>
+    </ul>
+  </li>
+</ul>
+
+<p>这门课算是普及知识的课程，并不能算作算法研究和提高编程技能的课程，而且更多的是理解什么是RL，PARL如何使用，做fine-tuning和dnn修改的工作。其实如果能理解PL和熟悉PARL使用，已经足够这门课的价值了。</p>
+
+<!-- more -->
+
+<p>在人工智能火热发展的时代，机器学习作为有效的实现方式，其分支也在百家争鸣百花齐放。曾经的BAT在经过www、web2.0、mobile的洗礼后，来到新的战场——AI。</p>
+
+<p>Baidu作为曾经的B，在www、web2.0时代曾拔得头筹，但在mobile时代一蹶不振，未能突破AT的包围，被ByteDance替代。在AI如火如荼的今天，Baidu顺势发力，希望能借AI的东风重新回高光时刻。</p>
+
+<p>因此Baidu开发了一系列机器学习的项目，包括核心库PaddlePaddle（飞桨）、学习系统AIStudio、以及数据集和模型库等等。当然，官方文档和培训课程也是必不可少的，99.9%的（只有一个企业级培训是收费的）课程是免费的，还有丰富的物质奖励。</p>
+
+<p>偶然的机会（我也忘了是怎么知道的）获得PARL强化学习的免费学习机会，于是开始了知道我不知道PARL的历程。</p>
+
+<h2 id="一课程预习中的知识点">一、课程预习中的知识点</h2>
+
+<h3 id="1-新手入门第一课-什么是深度学习">1. 新手入门第一课-什么是深度学习？</h3>
+
+<p><img src="https://ai-studio-static-online.cdn.bcebos.com/60ba91a3d2c4427d82b933b25e490275e993d3e75f3149269a6d07efd3ff2067" alt="image" /></p>
+
+<ul>
+  <li>人工智能是计算机科学的一个分支，研究计算机中智能行为的仿真。</li>
+  <li>机器学习是实现人工智能的一种手段，也是目前被认为比较有效的实现人工智能的手段</li>
+  <li>深度学习是一种机器学习方法 ， 它允许我们训练人工智能来预测输出，给定一组输入(指传入或传出计算机的信息)</li>
+</ul>
+
+<ol>
+  <li>神经网络结构</li>
+  <li>梯度下降法</li>
+  <li>神经网络的小例子</li>
+</ol>
+
+<h3 id="2新手入门第二课-必备数学知识">2.新手入门第二课-必备数学知识</h3>
+
+<p>理论是武器，没有武器怎么打仗</p>
+
+<h3 id="3新手入门第三课-python快速入门">3.新手入门第三课-Python快速入门</h3>
+
+<p>Python是门非常容易学的语言，但不是最佳编程入门语言，却是实现机器学习的最佳语言</p>
+
+<h3 id="4新手入门第四课-paddlepaddle快速入门">4.新手入门第四课-PaddlePaddle快速入门</h3>
+
+<p>PaddlePaddle是Baidu的深度学习框架，核心框架，类似Tensorflow/Pytorch</p>
+
+<h3 id="5-ai-studio基本操作-notebook篇">5. AI Studio基本操作-Notebook篇</h3>
+
+<p>AI Studio Notebook蛮强大的，后端有服务器支持，免费的GPU可以薅</p>
+
+<h2 id="二parl强化学习公开课lesson1">二、PARL强化学习公开课Lesson1</h2>
+
+<p>强化学习（英语：Reinforcement learning，简称RL）是机器学习中的一个领域，强调如何基于环境而行动，以取得最大化的预期利益。</p>
+
+<p>核心思想：智能体agent在环境environment中学习，根据环境的状态state（或观测到的observation），执行动作action，并根据环境的反馈 reward（奖励）来指导更好的动作。</p>
+
+<p>下面这个图是RL的精髓，最后有个小例子，真的很有意思。</p>
+
+<p><img src="https://ai-studio-static-online.cdn.bcebos.com/992844ad9a8e478b8a4490e7eb6d3a6398b6e2b8fd5c40998a02eef5fceb9fc3" alt="image" /></p>
+
+<p>强化学习与监督学习的区别：</p>
+<ul>
+  <li>强化学习、监督学习、非监督学习是机器学习里的三个不同的领域，都跟深度学习有交集。</li>
+  <li>监督学习寻找输入到输出之间的映射，比如分类和回归问题。</li>
+  <li>非监督学习主要寻找数据之间的隐藏关系，比如聚类问题。</li>
+  <li>强化学习则需要在与环境的交互中学习和寻找最佳决策方案。</li>
+  <li>监督学习处理认知问题，强化学习处理决策问题。</li>
+</ul>
+
+<h2 id="三基于表格型方法求解rl">三、基于表格型方法求解RL</h2>
+
+<p>PARL强化学习公开课 Lesson2_Sarsa</p>
+
+<blockquote>
+  <p>Sarsa全称是state-action-reward-state’-action’，目的是学习特定的state下，特定action的价值Q，最终建立和优化一个Q表格，以state为行，action为列，根据与环境交互得到的reward来更新Q表格，更新公式为：</p>
+</blockquote>
+
+<p><img src="https://ai-studio-static-online.cdn.bcebos.com/776b473b7f994702a3e05c5eac1156a7ce03b9e6bdb5453085fa9cbb86979715" alt="image" /></p>
+
+<p>Sarsa在训练中为了更好的探索环境，采用ε-greedy方式来训练，有一定概率随机选择动作输出。</p>
+
+<p>PARL强化学习公开课Lesson2_Q_learning</p>
+
+<ol>
+  <li>Q-learning也是采用Q表格的方式存储Q值（状态动作价值），决策部分与Sarsa是一样的，采用ε-greedy方式增加探索。</li>
+  <li>Q-learning跟Sarsa不一样的地方是更新Q表格的方式。</li>
+  <li>Sarsa是on-policy的更新方式，先做出动作再更新。</li>
+  <li>Q-learning是off-policy的更新方式，更新learn()时无需获取下一步实际做出的动作next_action，并假设下一步动作是取最大Q值的动作。</li>
+</ol>
+
+<p>Q-learning的更新公式为：
+<img src="https://ai-studio-static-online.cdn.bcebos.com/38158582039041edad0a5a704ba792d0e464f2eb8a394577bf88051cc52d6b66" alt="image" /></p>
+
+<h2 id="四基于神经网络方法求解rl">四、基于神经网络方法求解RL</h2>
+
+<p>PARL强化学习公开课Lesson3_DQN</p>
+
+<p>上节课介绍的表格型方法存储的状态数量有限，当面对围棋或机器人控制这类有数不清的状态的环境时，表格型方法在存储和查找效率上都受局限，DQN的提出解决了这一局限，使用神经网络来近似替代Q表格。</p>
+
+<blockquote>
+  <p>本质上DQN还是一个Q-learning算法，更新方式一致。为了更好的探索环境，同样的也采用ε-greedy方法训练。</p>
+</blockquote>
+
+<p>在Q-learning的基础上，DQN提出了两个技巧使得Q网络的更新迭代更稳定。</p>
+
+<ul>
+  <li>经验回放 Experience Replay：主要解决样本关联性和利用效率的问题。使用一个经验池存储多条经验s,a,r,s’，再从中随机抽取一批数据送去训练。</li>
+  <li>固定Q目标 Fixed-Q-Target：主要解决算法训练不稳定的问题。复制一个和原来Q网络结构一样的Target Q网络，用于计算Q目标值。</li>
+</ul>
+
+<h2 id="五基于策略梯度求解rl">五、基于策略梯度求解RL</h2>
+
+<p>策略梯度方法求解RL——Policy Gradient</p>
+
+<h3 id="1-policy-gradient简介">1. Policy Gradient简介</h3>
+
+<p>在强化学习中，有两大类方法，一种基于值（Value-based），一种基于策略（Policy-based）</p>
+<ul>
+  <li>Value-based的算法的典型代表为Q-learning和SARSA，将Q函数优化到最优，再根据Q函数取最优策略。</li>
+  <li>Policy-based的算法的典型代表为Policy Gradient，直接优化策略函数。</li>
+</ul>
+
+<p>采用神经网络拟合策略函数，需计算策略梯度用于优化策略网络。</p>
+
+<p>优化的目标是在策略π(s,a)的期望回报：所有的轨迹获得的回报R与对应的轨迹发生概率p的加权和，当N足够大时，可通过采样N个Episode求平均的方式近似表达。</p>
+
+<p><img src="https://ai-studio-static-online.cdn.bcebos.com/eb184ddf8dcc4dc3b528a105f8d8e3ea6487d4905bc04cdebd7725f2d6a2752f" alt="image" /></p>
+
+<p>优化目标对参数θ求导后得到策略梯度：</p>
+
+<p><img src="https://ai-studio-static-online.cdn.bcebos.com/326d8abe040347cea25e4c0be3e09015e85cb818a02c445483381540ab1d238c" alt="image" /></p>
+
+<h3 id="2-policy-gradient实践reinforce算法">2. Policy Gradient实践——REINFORCE算法</h3>
+
+<p>使用REINFORCE解决 连续控制版本的CartPole问题，向小车提供推力使得车上的摆杆倒立起来。</p>
+
+<h2 id="六连续动作空间上求解rl">六、连续动作空间上求解RL</h2>
+
+<p>PARL强化学习公开课Lesson5_DDPG</p>
+
+<h3 id="1-ddpg简介">1. DDPG简介</h3>
+
+<ul>
+  <li>DDPG的提出动机其实是为了让DQN可以扩展到连续的动作空间。</li>
+  <li>DDPG借鉴了DQN的两个技巧：经验回放 和 固定Q网络。</li>
+  <li>DDPG使用策略网络直接输出确定性动作。</li>
+  <li>DDPG使用了Actor-Critic的架构。</li>
+</ul>
+
+<h3 id="2-ddpg实践">2. DDPG实践</h3>
+
+<p>使用DDPG解决连续控制版本的CartPole问题，给小车一个力（连续量）使得车上的摆杆倒立起来。</p>
+
+            </article>
+          <hr>
+          <blockquote><p>对于本文内容有问题或建议的小伙伴，欢迎在文章底部留言交流讨论。</p></blockquote>
+          <div class="text-center">
+            <a href="/donate/" target="_blank" style="text-decoration: none"><button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> 您的支持是将是我写作最大的动力!</button></a>
+          </div>
+        </div>
+      </div>
+      <!--Gitment-->
+      <!--
+      <div id="container"></div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <script>
+        var gitment = new Gitment({
+          id: window.location.pathname, 
+          owner: 'z2care',
+          repo: 'z2care.github.io',
+          oauth: {
+          client_id: '3b962d46bab20f713630',
+          client_secret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          },
+        })
+        gitment.render('container')
+      </script>
+      -->
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+      <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+      <script>
+        const gitalk = new Gitalk({
+          clientID: '3b962d46bab20f713630',
+          clientSecret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          repo: 'z2care.github.io',
+          owner: 'z2care',
+          admin: ['z2care'],
+          id: md5(location.pathname)
+        })
+        gitalk.render('gitalk-container')
+      </script>
+    </div>
+  </div>
+</div>
+
+
+    <footer class="footer" role="contentinfo">
+	<!--不蒜子pv/uv统计-->
+	<div class="post-meta">
+            <p>Total <span id="busuanzi_value_site_pv"></span> views，您是本站的第<span id="busuanzi_value_site_uv"></span>个小伙伴，<span id="busuanzi_value_page_pv"></span> Hits</p><br/>
+    </div>
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2021 <a href="https://z2care.github.io/me/" target="_blank"><code>Zarey C.Y. Chang</code></a>. All rights reserved. </p>
+		<p>Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>， Data by <a href="https://analytics.google.com/analytics/web/" target="_blank">Google Analytics</a>.</p>
+	</div>
+	<ul id="gotop"><li><span>TOP</span></li></ul>
+</footer>
+<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128576901-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-128576901-1');
+</script>
+<script src="/styles/js/function.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.min.js"></script>
+
+  </body>
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+	<title>如何构建自己的区块链 第四一部分 - 比特币工作证明难度解释</title>
+	<meta name="description" content="z2care的个人博客、Android、Telephony、Java、CPP、Tensorflow">
+	<meta name="keywords" content="z2care的个人博客、Android、Telephony、Java、CPP、Tensorflow" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="msapplication-tap-highlight" content="no">
+	<meta name="author" contect="z2care, z2care@gmail.com">
+	<meta name="robots" content="index,follow">
+	<link rel="shortcut icon" href="/styles/images/favicon.png">
+	<link rel="icon" href="/styles/images/favicon.png">
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<!--[if lte IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7/html5shiv.min.js"></script>
+  	<![endif]-->
+	<!--[if lt IE 9]>
+    	<script>window.location.href='/upgrade-your-browser.html';</script>
+    <![endif]-->
+	<!-- TODO use google analysis instead of baidu -->
+</head>
+
+  <body class="index">
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.png" alt="松子的个人博客">
+      </a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li></li>
+        <li>
+          <a href="/">首页</a>
+        </li>
+        <li>
+          <a href="/categories/">博文分类</a>
+        </li>
+        <li>
+          <a href="/tag">标签目录</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a rel="nofollow" href="/reference">外域链接</a></li>
+        <li><a href="/projects">专案</a></li>
+        <li><a href="/donate">赞助</a></li>
+        <li><a rel="nofollow" href="/me">关于我</a></li> 
+        <!--
+        <li><a rel="nofollow" target="_blank" href="https://z2care.github.io/me/">关于我</a></li> 
+        -->
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header pa" id="content">
+    <canvas id="mycanvas">你的浏览器不支持canvas</canvas>
+    <div class="container" >
+        <h1>松子的博客</h1>
+        <p>当你有了责任感，就值得被托付</p>
+    </div>
+</div>
+
+    
+      
+<div class="banner">
+  <div class="container lh30">
+  	
+    	<a href="/categories/#开发与技术-ref">开发与技术</a>	/
+    	<a href="/tag/#Blockchain-ref">Blockchain</a>
+    
+      <div id="search-container" class="pull-right">
+          <input type="text" id="search-input" placeholder=" 试试直接搜索吧...">
+          <label class="searchIcon glyphicon glyphicon-search" for="search-input"></label>
+          <ul id="results-container"></ul>
+      </div>
+  </div>
+</div>
+
+    
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2021">2021</a>
+          <ul class="nav">
+            <li><a href="#month_2021_December">December</a></li>
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2020">2020</a>
+            <ul class="nav">
+              <li><a href="#month_2020_June">June</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2018">2018</a>
+            <ul class="nav">
+              <li><a href="#month_2018_December">December</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2018_November">November</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2018_October">October</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">如何构建自己的区块链 第四一部分 - 比特币工作证明难度解释</h1>
+              <!--
+                <p class="post-meta">Nov 24, 2018</p>
+              -->
+              <div class="meta">Date： <span class="postdate">Nov 24, 2018</span> Author： <a target="_blank" href="https://z2care.github.io">Zarey C.Y. Chang</a></div>
+              <br />
+              <blockquote><p>本文章采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh"> 知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 </a>进行许可。转载请注明来自<a href="http://z2care.github.io">Z2CARE的博客</a></p></blockquote>
+            </header>
+            <article class="post-content">
+              <p>独立翻译自:<a href="https://bigishdata.com/2017/11/13/how-to-build-a-blockchain-part-4-1-bitcoin-proof-of-work-difficulty-explained/">How to Build Your Own Blockchain Part 4.1 — Bitcoin Proof of Work Difficulty Explained</a>
+<!-- more --></p>
+<ul id="markdown-toc">
+  <li><a href="#长话短说" id="markdown-toc-长话短说">长话短说</a></li>
+  <li><a href="#从bits计算target值" id="markdown-toc-从bits计算target值">从Bits计算Target值</a></li>
+  <li><a href="#确定hash是否小于target" id="markdown-toc-确定hash是否小于target">确定hash是否小于target</a></li>
+  <li><a href="#计算难度" id="markdown-toc-计算难度">计算难度</a></li>
+  <li><a href="#如何以及何时更新块难度" id="markdown-toc-如何以及何时更新块难度">如何以及何时更新块难度</a></li>
+  <li><a href="#完整代码" id="markdown-toc-完整代码">完整代码</a></li>
+  <li><a href="#最后的问题" id="markdown-toc-最后的问题">最后的问题</a></li>
+</ul>
+
+<p>如果您想知道为什么这是第4.1部分而不是第4部分，以及为什么我不讨论继续构建本地jbc，那是因为在较低的层次上解释比特币的工作困难证明需要大量篇幅。所以不像这个标题说的，这篇文章在第4部分不是如何建立一个区块链。它是关于现有的区块链是如何构建。</p>
+
+<p>我在这个第4篇文章的主要目标是有一个关于比特币的部分，下一个是关于Ethereum的部分，最后讨论jbc将如何运行和验证工作量证明。在写完第1部分的全部内容来解释比特币的PoW难度之后，它不适合放在一个单独的部分中。人们，包括我在内，在阅读一篇冗长的文章时，往往会感到无聊而无法完成。</p>
+
+<p>因此，第4.1部分将介绍比特币的PoW难度计算。第4.2部分将通过以太坊的工作量证明来计算。然后第4.3部分将是我决定我想要的jbc PoW如何做以及做时间计算来看看挖掘将花费多长时间。</p>
+
+<p>本文分为以下几个部分：</p>
+
+<ol>
+  <li>Calculate Target from Bits//从位计算目标</li>
+  <li>Determining if a Hash is less than the Target//确定哈希是否小于目标</li>
+  <li>Calculating Difficulty//计算难度</li>
+  <li>How and when block difficulty is updated//如何以及何时更新块难度</li>
+  <li>Full code//完整代码</li>
+  <li>Final Questions//最后的问题</li>
+</ol>
+
+<h1 id="长话短说">长话短说</h1>
+<p>难度的总称是指一个节点需要做多少工作才能找到比target小的hash值。在一个块中有一个值是关于难度的——它就是<code class="language-plaintext highlighter-rouge">bits</code>。为了计算散列转换为十六进制值时必须小于<code class="language-plaintext highlighter-rouge">target</code>的值，我们使用<code class="language-plaintext highlighter-rouge">bits</code>字段并通过一个返回target的方程运行它。然后，我们使用<code class="language-plaintext highlighter-rouge">target</code>来计算<code class="language-plaintext highlighter-rouge">difficulty</code>，其中<code class="language-plaintext highlighter-rouge">difficulty</code>只是一个数字，人类可以通过这个数字来理解该块的工作证明有多困难。</p>
+
+<p>如果您继续阅读，<em>我将介绍区块链如何确定挖掘块的散列需要小于什么样的target数才能有效，以及如何计算该taget值</em></p>
+
+<h1 id="从bits计算target值">从Bits计算Target值</h1>
+<p>为了完成比特币的PoW，我需要使用实际块上的值并解释其计算，这样读者就可以自己验证所有这些代码。首先，我要取一个随机的块号然后用它进行计算。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt;import random
+&gt;&gt;&gt; random.randint(0, 493928)
+111388
+</code></pre></div></div>
+
+<p><a href="https://blockchain.info/block/00000000000019c6573a179d385f6b15f4b0645764c4960ee02b33a3c7117d1e">块号11138</a> 就是它! 时间追溯到2011年3月.
+我们将使用块中的<code class="language-plaintext highlighter-rouge">bits</code>和<code class="language-plaintext highlighter-rouge">difficulty</code>值以及<code class="language-plaintext highlighter-rouge">hash</code>来分配变量，这样我们可以在最后测试它的有效性。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; bits = '453062093'
+&gt;&gt;&gt; difficulty = float('55,589.52'.replace(',',''))
+&gt;&gt;&gt; block_hash = '00000000000019c6573a179d385f6b15f4b0645764c4960ee02b33a3c7117d1e'
+</code></pre></div></div>
+
+<p>下一部分将展示如何从bits字段到target。至少有两种不同的方法可以做到这一点—<em>第一种涉及字符串操作和字符串到整数的转换，另一种使用位操作</em></p>
+
+<p>对于第一个字符串操作部分，我们将位字符串转换为整数，然后转换为十六进制字符串。hex_bits字符串的前两个字符在一个变量中，我称之为<code class="language-plaintext highlighter-rouge">shift</code>，其余六个称为<code class="language-plaintext highlighter-rouge">value</code>。然后，我们在整数方程中使用这些值来计算<code class="language-plaintext highlighter-rouge">target</code>的整数值，我们可以将其转换为十六进制字符串，看看它有多漂亮!</p>
+
+<p>请注意，<code class="language-plaintext highlighter-rouge">target</code>和<code class="language-plaintext highlighter-rouge">hex(target)</code>后面的<code class="language-plaintext highlighter-rouge">L</code>只是Python告诉您，numbexr太长，不能作为int存储，它是存储为<a href="https://docs.python.org/2/library/functions.html#long">long</a>。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; hex_bits = hex(int(bits))
+&gt;&gt;&gt; hex_bits
+'0x1b012dcd'
+&gt;&gt;&gt; shift = '0x%s' % hex_bits[2:4]
+&gt;&gt;&gt; shift
+'0x1b'
+&gt;&gt;&gt; shift_int = int(exponent, 16)
+27
+&gt;&gt;&gt; value = '0x%s' % hex_bits[4:]
+&gt;&gt;&gt; value
+'0x012dcd'
+&gt;&gt;&gt; value_int = int(coefficient, 16)
+77261
+&gt;&gt;&gt; target = value_int * 2 ** (8 * (shift_int - 3))
+&gt;&gt;&gt; target
+484975157177710342494716926626447514974484083994735770500857856L
+&gt;&gt;&gt; hex_target = hex(target)
+&gt;&gt;&gt; hex_target
+'0x12dcd000000000000000000000000000000000000000000000000L'
+</code></pre></div></div>
+
+<p>当我们像上面那样分割字符串来计算target值时，这看起来有点假。当查看<a href="https://github.com/bitcoin/bitcoin/blob/87e69c2549c44b862558f1c025dc0c4449fca272/src/_uint256.cpp#L206">c++ bitcoin实现</a>时，它显示了使用<code class="language-plaintext highlighter-rouge">bits</code>计算<code class="language-plaintext highlighter-rouge">target</code>的另一种更技术的主要方法。但这里是Python实现。</p>
+
+<p>我将逐行打印这里的值，以便更好地显示发生了什么。在阅读之前需要知道的一件事是十六进制字符串中的一个字符表示4位。因此，当我们用<code class="language-plaintext highlighter-rouge">bits &gt;&gt; 24</code>将位变量移位24位时，有效地删除了十六进制字符串的最后6个字符，只留下前两个。为了得到值变量，我们使用位和运算符&amp;取得最后23位的值。这23位通常是十六进制字符串的最后6个字符(由0x7fffff中的位数定义)，</p>
+
+<p>现在，<code class="language-plaintext highlighter-rouge">8 * (shift - 3)</code>的值决定了我们要移位多少位。在这种情况下，它被确定为192位。如果我们把192除以4，我们就会得到target数的十六进制字符串表示的值后面的零字符个数。你会看到它是48个0。另一件让人困惑的事情是<code class="language-plaintext highlighter-rouge">value &lt;&lt; y</code>和<code class="language-plaintext highlighter-rouge">value * 2**y</code>是一样的。这就是方程之间的关系。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; bits = '453062093'
+&gt;&gt;&gt; hex(int(bits))
+'0x1b012dcd'
+&gt;&gt;&gt; shift = bits &gt;&gt; 24
+&gt;&gt;&gt; shift
+27
+&gt;&gt;&gt; hex(shift)
+'0x1b'
+&gt;&gt;&gt; value = bits &amp; 0x007fffff
+&gt;&gt;&gt; hex(value)
+'0x12dcd'
+&gt;&gt;&gt; 8 * (shift - 3)
+192
+&gt;&gt;&gt; 192 / 4 #each character in a hex string represents 4 bits
+48
+&gt;&gt;&gt; value &lt;&lt;= 8 * (shift - 3)
+&gt;&gt;&gt; hex(value)
+'0x12dcd000000000000000000000000000000000000000000000000L'
+&gt;&gt;&gt; hex(value).count('0') - 1 #don't count the leading zero
+48
+</code></pre></div></div>
+
+<p>完整的函数版本只有几行。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; def get_target_from_bits(bits):
+...   shift = bits &gt;&gt; 24
+...   value = bits &amp; 0x007fffff
+...   value &lt;&lt;= 8 * (shift - 3)
+...   return value
+...
+&gt;&gt;&gt; target = def get_target_from_bits(int(bits))
+&gt;&gt;&gt; hex(target)
+'0x12dcd000000000000000000000000000000000000000000000000L'
+</code></pre></div></div>
+
+<p>太好了。如果您查看上面的字符串操作代码，会发现它比上面的函数更令人困惑，而且还有许多额外的行。通过这两种方法来真正理解它的含义是很好的，但是要坚持使用简单的方法。前进吧。</p>
+
+<h1 id="确定hash是否小于target">确定hash是否小于target</h1>
+
+<p>通常，有两种简单的方法可以查看块的哈希是否对于target有效。第一种方法是使用完整的，64个字符，256位，十六进制字符串并比较它们。这很有用，因为我们可以很容易地看到这一点。为了说明这种情况，我们将用0填充hex_target来填满所有64个字符。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; hex_target = hex(target)
+&gt;&gt;&gt; len(hex_target)
+56
+&gt;&gt;&gt; len(hex_target[2:-1]) #[2:-1] removes the leading '0x' and ending 'L'
+53
+&gt;&gt;&gt; num_padded_zeros = 64 - hex_target_len
+&gt;&gt;&gt; num_padded_zeros
+11
+&gt;&gt;&gt; padded_hex_target = "0x%s%sL" % ('0' * (64-num_padded_zeros), hex_target[2:-1])
+&gt;&gt;&gt; padded_hex_target
+'0x0000000000012dcd000000000000000000000000000000000000000000000000L'
+
+</code></pre></div></div>
+
+<p>最后，我们希望验证块的散列是否小于target。而且，因为字符串可以被认为小于或大于，我们就这么做吧。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; len(block_hash)
+64
+&gt;&gt;&gt; padded_block_hash = '0x%sL' % block_hash
+&gt;&gt;&gt; padded_block_hash
+0x00000000000019c6573a179d385f6b15f4b0645764c4960ee02b33a3c7117d1eL
+&gt;&gt;&gt; padded_hex_target
+0x0000000000012dcd000000000000000000000000000000000000000000000000L
+&gt;&gt;&gt; assert padded_block_hash &lt; padded_hex_target
+&gt;&gt;&gt;
+</code></pre></div></div>
+
+<p>在这种情况下，您将看到十六进制target大于块的hash。比较哪个字符串更大就像<或>一样简单。如果您想知道Python如何确定`'f' &gt; '1'`之类的字符，请参见下面的问题。</或></p>
+
+<p>另一种确认方法是对两个值都使用整数。但是你会看到，很难，如果不是不可能的话，观察哪个值更大，一个值比另一个大多少。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; block_hash_int = int(block_hash, 16)
+&gt;&gt;&gt; block_hash_int
+41418456048005639864974238890271849696605172030151526454492446L
+&gt;&gt;&gt; target
+484975157177710342494716926626447514974484083994735770500857856L
+&gt;&gt;&gt; assert(block_hash_int &lt; target)
+&gt;&gt;&gt; target - block_hash_int
+443556701129704702629742687736175665277878911964584244046365410L
+</code></pre></div></div>
+<p>这些整数是如此之大，以至于单独看一个整数几乎不可能知道对比它是容易的还是困难的。但是由于block_hash_int比target整数少一个字符，您可以看到这种情况。当你减去这两个大数时，你得到另一个大数。</p>
+
+<p>这两个方法都是有效的，但是能够查看十六进制字符串比查看整数要好。但实际上，当代码运行时，选择其中一个并没有真正的好处。</p>
+
+<h1 id="计算难度">计算难度</h1>
+<p><code class="language-plaintext highlighter-rouge">difficulty</code>最重要的部分是从上问记住<code class="language-plaintext highlighter-rouge">difficulty</code>只是<code class="language-plaintext highlighter-rouge">target</code>的人类可见的表达。我说过<code class="language-plaintext highlighter-rouge">target</code>的整数值是没有意义的，因为很难比较两个巨大的整数值。同样，使用十六进制字符串很难比较两个target。块中的<code class="language-plaintext highlighter-rouge">difficulty</code>值是为了使其更容易。</p>
+
+<p>下面，将<code class="language-plaintext highlighter-rouge">difficult ty_one_target</code>定义为最容易允许的目标值。要计算另一个块的难度，我们只需将<code class="language-plaintext highlighter-rouge">difficult ty_one_target</code>除以使用<code class="language-plaintext highlighter-rouge">bits</code>计算出来的<code class="language-plaintext highlighter-rouge">target</code>。您将看到，<code class="language-plaintext highlighter-rouge">difficult ty_one_target</code>将比任何其他<code class="language-plaintext highlighter-rouge">target</code>数字都大，因为其他<code class="language-plaintext highlighter-rouge">targets</code>的难度更小。当你用较大的分子除以较小的分母时，你会得到一个大于1的值。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; difficulty_one_target = 0x00ffff * 2**(8*(0x1d - 3))
+&gt;&gt;&gt; difficulty_one_target
+26959535291011309493156476344723991336010898738574164086137773096960L #calculated using 
+&gt;&gt;&gt; pad_leading_zeros(hex(difficulty_one_target)) #pad_leading_zeros is function defined below
+'0x00000000ffff0000000000000000000000000000000000000000000000000000'
+&gt;&gt;&gt; calculated_difficulty = difficulty_one_target / float(target) #float() to make it decimal devision
+55589.518126868665 #this is the same as the difficulty on the block.
+&gt;&gt;&gt; allowed_error = 0.01
+&gt;&gt;&gt; assert abs(float(block_difficulty) - calculated_difficulty) &lt;= allowed_error
+&gt;&gt;&gt;
+</code></pre></div></div>
+
+<p>请随意回头慢慢地读一遍。我花了很长时间才弄清楚<code class="language-plaintext highlighter-rouge">bits</code>、<code class="language-plaintext highlighter-rouge">difficulty</code>和<code class="language-plaintext highlighter-rouge">target</code>之间的关系。是否需要int、十六进制值或字符串来验证。有很多方法可以做到这一点，希望我已经把它们都列出来了。</p>
+
+<h1 id="如何以及何时更新块难度">如何以及何时更新块难度</h1>
+<p>比特币工作量证明的最后一个重要部分是，它展示了如何以及何时改变了难度。几乎每一篇关于这个主题的文章都会说，每一个2016个区块，该链都会重新计算所需的新难度。但是他们并没有深入探讨这个话题。这就是我要做的。</p>
+
+<p>第一部分我必须从如何从一个<code class="language-plaintext highlighter-rouge">target</code>开始，然后回到<code class="language-plaintext highlighter-rouge">bits</code>。<code class="language-plaintext highlighter-rouge">get_bits_from_target</code>函数获取一个target参数，计算所设置的最高排名位，并使用它来计算大小。知道了大小后，我们将target一直向下移位，去掉不再需要的零，最后将大小的值放在位的前面，这样就可以保存它了。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; bits = '403088579'
+&gt;&gt;&gt; hex(int(bits))
+'0x1806a4c3'
+&gt;&gt;&gt; target = get_target_from_bits(int(bits))
+&gt;&gt;&gt; hex(target)
+'0x6a4c3000000000000000000000000000000000000000000L'
+&gt;&gt;&gt; def get_bits_from_target(target):
+...   bitlength = target.bit_length() + 1 #look on bitcoin cpp for info
+...   size = (bitlength + 7) / 8
+...   value = target &gt;&gt; 8 * (size - 3)
+...   value |= size &lt;&lt; 24 #shift size 24 bits to the left, and taks those on the front of compact
+...   return value
+...
+&gt;&gt;&gt; bits = get_bits_from_target(target)
+&gt;&gt;&gt; bits
+403088579L
+&gt;&gt;&gt; hex(bits)
+'0x1806a4c3L
+</code></pre></div></div>
+
+<p>它们匹配，所以我们知道代码正确地将<code class="language-plaintext highlighter-rouge">target</code>返回到<code class="language-plaintext highlighter-rouge">bits</code>。</p>
+
+<p>现在介绍如何为区块链上的实际块集计算下一个块的位。例如这里，我要说我们刚刚收到了块#<a href="https://blockchain.info/block/00000000000000034656c96781091b5fbc799c88b41cba0b88128eff7">405215</a>，并且正在挖的块#<a href="https://blockchain.info/block/000000000000000006969473ee3a2126d9a95ad00eee4d2d2e0881fc07">405216</a>。回看2016个区块，<a href="https://blockchain.info/block/00000000000000c4272a5c68b4f55e5af734e88ceab09abf73e9ac3b6d01">403200</a>将被视为起始区块。</p>
+
+<p>我们有一个从块的<code class="language-plaintext highlighter-rouge">bits</code>计算出来的起始<code class="language-plaintext highlighter-rouge">target</code>。在接下来的2016个块，我们将使用这个难度。当我们经过第一个块来到第2017个块时，我们计算了从第一个块到第2016个块所花费的秒数。我们用它除以以秒为单位的2016块，用当前target乘以该值，然后计算该target的新bits值。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>TARGET_TIMESPAN = 1209600
+
+def change_target(prev_bits, starting_time_secs, prev_time_secs):
+  old_target = get_target_from_bits(int(prev_bits))
+  time_span = prev_time_secs - starting_time_secs
+  time_span_seconds = int(time_span.total_seconds())
+  new_target = old_target
+  new_target *= time_span_seconds
+  new_target /= TARGET_TIMESPAN
+  return new_target
+
+#starting_block is the initial block on this 2016 block runtime #403200
+starting_block_timestamp = '2016-03-18 09:07:48' #timestamp on block
+starting_block_time_seconds = datetime.datetime.strptime(starting_block_timestamp, '%Y-%m-%d %H:%M:%S')
+
+#prev_block is the block right before the difficulty conversion #405215
+prev_block_bits = '403088579' #bits on block
+prev_block_timestamp = '2016-04-01 06:24:09' #timestamp on block
+prev_block_time_seconds = datetime.datetime.strptime(prev_block_timestamp, '%Y-%m-%d %H:%M:%S')
+
+calculated_new_target = change_target(prev_block_bits, starting_block_time_seconds, prev_block_time_seconds)
+calculated_new_bits = get_bits_from_target(calculated_new_target)
+
+#new_block is the first block of the next block #405216
+new_bits = '403085044'
+new_target = get_target_from_bits(new_bits)
+
+print hex(calculated_new_target)
+print hex(new_target)
+
+print hex(calculated_new_bits)
+print hex(int(new_bits))
+</code></pre></div></div>
+<p>就得出</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Calculated new target: 0x696f4a7b94b94b94b94b94b94b94b94b94b94b94b94b94bL
+New target from block: 0x696f4000000000000000000000000000000000000000000L
+Calculated new bits: 0x180696f4L
+New bits from block: 0x180696f4
+</code></pre></div></div>
+<p>计算出的新目标非常具体。但是我们并不关心块的哈希是特定的保证。他们只需要知道前23位。移除掉剩下的部分，向下移位，把移位后的放到前面。</p>
+
+<h1 id="完整代码">完整代码</h1>
+<p>我打算复制粘贴我上面写的大量代码，这样你就可以复制粘贴并自己运行它。但是那会占用太多的篇幅。所以<a href="https://gist.github.com/jackschultz/19cbb54b8637f854c3d99571b34bf4a7">这里有一个仓库</a>在这里你可以看到所有的东西。</p>
+
+<h1 id="最后的问题">最后的问题</h1>
+
+<p>如果你能走到这一步，那就太棒了!这是我在学习和写作时遇到的一系列问题。如果你还有其他问题，请与我联系，我马上回答。</p>
+
+<p><strong>为什么十六进制值只是字符串?</strong><br />
+<strong>Why are the hex values only strings?</strong></p>
+
+<p>因为十六进制值只是整数的表示。如果您想查看整数的十六进制值，我们需要一个字符串来查看不同的以16为底的值。看看<a href="https://docs.python.org/2/library/functions.html#hex">Python对hex()的定义</a>稍微多一些信息。<br />
+Because hex values are only representations of integers. If you’re looking to see the hex value of an integer, we need a string to look at the different base 16 values. Look at the <a href="https://docs.python.org/2/library/functions.html#hex">Python definition of hex()</a> slightly more info.</p>
+
+<p><strong>通过字符串比较如何知道’f’ &gt; ‘9’?</strong><br />
+<strong>How can a string comparison know that ‘f’ &gt; ‘9’?</strong></p>
+
+<p>在内存中，字符存储为unicode值。因此，当比较两个字符时，unicode值较大的字符显示为最大的字符。注意ASCII对于0-127也具有与unicode相同的值。在比较字符串时，它们逐个遍历每个字符，最先获得最大值的字符获胜。<br />
+In memory, characters are stored as unicode values. So when you compare two characters, the one with the larger unicode value is shown as being the biggest. Note that ASCII also has the same values as unicode for 0-127. When comparing strings, they go through each character one by one and whichever has the largest value first wins the race.</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&gt;&gt;&gt; ord('f')
+102
+&gt;&gt;&gt; ord('a')
+97
+&gt;&gt;&gt; ord('b')
+98
+&gt;&gt;&gt; ord('9')
+57
+&gt;&gt;&gt; ord('1')
+49
+&gt;&gt;&gt; ord('2')
+50
+&gt;&gt;&gt; ord('a')
+97
+&gt;&gt;&gt; ord('b')
+98
+&gt;&gt;&gt; ord('f')
+102
+&gt;&gt;&gt; 'f' &gt; 'a'
+True
+&gt;&gt;&gt; 'a' &gt; '1'
+True
+</code></pre></div></div>
+<p><strong>比特币的难度是如何随着时间变化的?</strong><br />
+<strong>How has Bitcoin difficulty changed over time?</strong></p>
+
+<p>有很多网站都有交互式图表显示了随时间发生的变化;快速的谷歌搜索会找到一个。但是，这里有一张来自<a href="https://en.wikipedia.org/wiki/Bitcoin_network">比特币实际维基百科页面</a>的图片，展示了这个难度数字是如何随着时间变化的。<br />
+There are a bunch of sites that have interactive graphs showing the change over time; quick google will find one. But, here’s the pic from <a href="https://en.wikipedia.org/wiki/Bitcoin_network">Bitcoin’s actual Wikipedia page</a> that shows how that difficulty number has changed over time.</p>
+
+<p><img src="https://bigishdata.files.wordpress.com/2017/11/history-bitcoin-difficulty.png" alt="image" />
+线性很好，中间有一个平点。有人应该做个记录。</p>
+
+<p><strong>2011年中期到的2013年初持平的遇到困难是什么?</strong><br />
+<strong>What’s the deal with mid 2011 to beginning of 2013 difficulty being flat?</strong></p>
+
+<p>看看这个截图来自<a href="https://charts.bitcoin.com/chart/price">Bitcoin.com</a>针对2011年到2013年期间。<br />
+Look at this screenshot from <a href="https://charts.bitcoin.com/chart/price">Bitcoin.com</a> for the time period of 2011 and 2013.</p>
+
+<p><img src="https://bigishdata.files.wordpress.com/2017/11/bitcoin-price-chart-2011-2013.png" alt="image" /></p>
+
+<p>嗯</p>
+
+<p>一枚硬币的价格一路飙升，达到了惊人的29美元一枚，但在2013年初之前，这枚硬币崩溃了，并再次开始飞升。我想说的是，这是一个很好的相关性，矿工们看到了崩溃，并说去它的，停止他们的开采，留下更少的节点试图开采一个新的区块。节点越少，就意味着找到一个有效的散列所需的时间越长，因此我们必须降低难度。<br />
+A giant spike in price all the way up to an astonishing $29 a coin that crashed until the beginning of 2013 where it starts flying up again. I’ll go ahead and say there’s a nice correlation there where miners saw the crash and said screw it, stopped their mining, and left fewer nodes trying to mine a new block. Fewer nodes means the longer it takes to find a valid hash so we had to keep difficulty down.</p>
+
+<p><strong>bit值越大，难度越大吗?</strong><br />
+<strong>Does a larger bit value imply a larger difficulty?</strong></p>
+
+<p>不是的。记住，位值是存储的，所以我们可以把它分成两个数字来计算target。当把它看作一个整数时，它肯定是不可比较的。<br />
+Nope. Remember, bit values are stored so we can split it into two numbers used to calculate the target. When looked at as an integer, it’s definitely not comparable.</p>
+
+<p>如果需要示例，请查看上面代码中列出的两个块。比较块0和块32256，你将看到位和难度的相反差异。<br />
+If you want examples, look at the couple blocks listed in the code above. Comparing blocks 0 and 32256, you’ll see opposite difference in bits and difficulty.</p>
+
+<p><strong>头部哈希是如何计算的?</strong><br />
+<strong>How is the header hash calculated?</strong></p>
+
+<p>通过将值打碎在一起。<a href="https://en.bitcoin.it/wiki/Block_hashing_algorithm">看这里</a>，您将看到更多关于它的信息。<br />
+By smashing values together. <a href="https://en.bitcoin.it/wiki/Block_hashing_algorithm">Take a look here</a> and you’ll see more about it.</p>
+
+<p><strong>我看到有人提到我们只计算2015块的新比特，而不是2016块。那是什么意思?</strong><br />
+<strong>I see people mentioning we only calculate new bits from 2015 blocks and not 2016. What’s that mean?</strong></p>
+
+<p>在阅读其他文章时，你会经常看到这一点。这意味着如果我们将2016个块的所有块包含在一个集合中，我们将在新的2016个块集合开始之前以时间戳开始，因为这表示节点开始尝试寻找下一个块。<br />
+You’ll see that a lot when looking at other posts. What this means is if we included all 2016 blocks in a set, we’d start with the timestamp before the start of a new 2016 set of blocks since that’s says when nodes started trying to find the next block.</p>
+
+<p>当你想要计算块实际2017块的bits数时，这是行不通的。如果我们考虑到第一个2016块挖掘时间，我们就不会知道这一点，因为我们不知道第一批矿工是什么时候开始运营的。<br />
+This doesn’t work out when you think of calculating the new bits for actual block 2017. If we took into account how long it took to mine the first 2016, we wouldn’t know that since we didn’t know when we started running the first miners.</p>
+
+<p><strong>为什么不讨论一下找到一个有效的散列需要多少时间?</strong><br />
+<strong>Why didn’t you talk about how much time it takes to find a valid hash?</strong></p>
+
+<p>那是另一个话题。有<a href="https://en.bitcoin.it/wiki/Difficulty#what_network_hash_rate_results_in_a_given_tough.3F">一些资料</a>计算如果有一个节点在进行挖掘，但是很难计算出来，除非有更多的节点。当我写jbc困难的部分时，我将有测试来显示时间。<br />
+That’s a different topic. There’s <a href="https://en.bitcoin.it/wiki/Difficulty#What_network_hash_rate_results_in_a_given_difficulty.3F">some material</a> on calculating that if there’s a single node doing the mining, but that’s tough to figure out unless you have a bigger amount of nodes. When I write the part for jbc’s difficulty, I’ll have tests to show time.</p>
+
+<p><strong>你的推特账号是什么，这样我才能关注你？？</strong><br />
+<strong>What’s your Twitter handle so I can follow you??</strong></p>
+
+<p><a href="https://twitter.com/jack_schultz">@jack_schultz</a></p>
+
+<p><strong>如果我只想问你一个问题呢？</strong><br />
+<strong>What if I only want to ask you a question?</strong></p>
+
+<p><a href="https://bigishdata.com/contact/">联络</a>是一个很好的方法。只要确保你的电子邮件输入正确;我之前收到过一些邮件，由于那个邮件地址不存在，我无法回复。你也可以自由评论这篇文章。<br />
+<a href="https://bigishdata.com/contact/">Contact</a> is a great way to do this. Just make sure you type your email correctly; I’ve gotten some emails before that I couldn’t reply to since that email address didn’t exist. Also feel free to comment on this post as well.</p>
+
+<p><strong>接下来是什么?</strong><br />
+<strong>What’s next?</strong></p>
+
+<p>第4.2部分关于以太坊工作难度证明!这有点类似，但是目标的计算方法不同。而且，困难改变的时间也是不同的。<a href="https://www.coinwarz.com/difficulty-charts/ethere-difficulty-chart">查看图表</a>显示了我所表达的随着时间的推移难度的变化。<br />
+Part 4.2 about the Ethereum proof of work difficulty! It’s somewhat similar, but the target is calculated in a different way. Also, the time when difficulties change is different as well. <a href="https://www.coinwarz.com/difficulty-charts/ethereum-difficulty-chart">Check out the chart</a> that show difficulty over time to see what I mean.</p>
+
+<p>在此之后，4.3部分将介绍如何计算jbc的难度。<br />
+After that, part 4.3 will be about how I want to calculate difficulty for jbc.</p>
+
+            </article>
+          <hr>
+          <blockquote><p>对于本文内容有问题或建议的小伙伴，欢迎在文章底部留言交流讨论。</p></blockquote>
+          <div class="text-center">
+            <a href="/donate/" target="_blank" style="text-decoration: none"><button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> 您的支持是将是我写作最大的动力!</button></a>
+          </div>
+        </div>
+      </div>
+      <!--Gitment-->
+      <!--
+      <div id="container"></div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <script>
+        var gitment = new Gitment({
+          id: window.location.pathname, 
+          owner: 'z2care',
+          repo: 'z2care.github.io',
+          oauth: {
+          client_id: '3b962d46bab20f713630',
+          client_secret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          },
+        })
+        gitment.render('container')
+      </script>
+      -->
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+      <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+      <script>
+        const gitalk = new Gitalk({
+          clientID: '3b962d46bab20f713630',
+          clientSecret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          repo: 'z2care.github.io',
+          owner: 'z2care',
+          admin: ['z2care'],
+          id: md5(location.pathname)
+        })
+        gitalk.render('gitalk-container')
+      </script>
+    </div>
+  </div>
+</div>
+
+
+    <footer class="footer" role="contentinfo">
+	<!--不蒜子pv/uv统计-->
+	<div class="post-meta">
+            <p>Total <span id="busuanzi_value_site_pv"></span> views，您是本站的第<span id="busuanzi_value_site_uv"></span>个小伙伴，<span id="busuanzi_value_page_pv"></span> Hits</p><br/>
+    </div>
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2021 <a href="https://z2care.github.io/me/" target="_blank"><code>Zarey C.Y. Chang</code></a>. All rights reserved. </p>
+		<p>Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>， Data by <a href="https://analytics.google.com/analytics/web/" target="_blank">Google Analytics</a>.</p>
+	</div>
+	<ul id="gotop"><li><span>TOP</span></li></ul>
+</footer>
+<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128576901-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-128576901-1');
+</script>
+<script src="/styles/js/function.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.min.js"></script>
+
+  </body>
+</html>

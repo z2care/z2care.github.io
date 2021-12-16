@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html>
+  <head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
+	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
+	<title>如何构建自己的区块链 第四二部分 - 以太坊工作证明难度解释</title>
+	<meta name="description" content="z2care的个人博客、Android、Telephony、Java、CPP、Tensorflow">
+	<meta name="keywords" content="z2care的个人博客、Android、Telephony、Java、CPP、Tensorflow" />
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="msapplication-tap-highlight" content="no">
+	<meta name="author" contect="z2care, z2care@gmail.com">
+	<meta name="robots" content="index,follow">
+	<link rel="shortcut icon" href="/styles/images/favicon.png">
+	<link rel="icon" href="/styles/images/favicon.png">
+	<link rel="stylesheet" href="/styles/css/index.css">
+	<link rel="stylesheet" href="/styles/css/fontawesome/css/font-awesome.min.css">
+	<!--[if lte IE 9]>
+    <script src="https://cdn.bootcss.com/html5shiv/3.7/html5shiv.min.js"></script>
+  	<![endif]-->
+	<!--[if lt IE 9]>
+    	<script>window.location.href='/upgrade-your-browser.html';</script>
+    <![endif]-->
+	<!-- TODO use google analysis instead of baidu -->
+</head>
+
+  <body class="index">
+    <header class="navbar navbar-inverse navbar-fixed-top docs-nav" role="banner">
+  <div class="container">
+    <div class="navbar-header">
+      <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-navbar-collapse">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a href="/" class="navbar-brand">
+        <img src="/styles/images/logo.png" alt="松子的个人博客">
+      </a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        <li></li>
+        <li>
+          <a href="/">首页</a>
+        </li>
+        <li>
+          <a href="/categories/">博文分类</a>
+        </li>
+        <li>
+          <a href="/tag">标签目录</a>
+        </li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        <li><a rel="nofollow" href="/reference">外域链接</a></li>
+        <li><a href="/projects">专案</a></li>
+        <li><a href="/donate">赞助</a></li>
+        <li><a rel="nofollow" href="/me">关于我</a></li> 
+        <!--
+        <li><a rel="nofollow" target="_blank" href="https://z2care.github.io/me/">关于我</a></li> 
+        -->
+      </ul>
+    </nav>
+  </div>
+</header>
+
+    <div class="docs-header pa" id="content">
+    <canvas id="mycanvas">你的浏览器不支持canvas</canvas>
+    <div class="container" >
+        <h1>松子的博客</h1>
+        <p>当你有了责任感，就值得被托付</p>
+    </div>
+</div>
+
+    
+      
+<div class="banner">
+  <div class="container lh30">
+  	
+    	<a href="/categories/#开发与技术-ref">开发与技术</a>	/
+    	<a href="/tag/#Blockchain-ref">Blockchain</a>
+    
+      <div id="search-container" class="pull-right">
+          <input type="text" id="search-input" placeholder=" 试试直接搜索吧...">
+          <label class="searchIcon glyphicon glyphicon-search" for="search-input"></label>
+          <ul id="results-container"></ul>
+      </div>
+  </div>
+</div>
+
+    
+    <div class="container docs-container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="sidebar hidden-print" role="complementary">
+        <div id="navigation">
+  <h1>目录</h1>
+  <ul class="nav sidenav">
+<!--
+    
+      
+      
+      
+      
+
+      
+        <li><a href="#year_2021">2021</a>
+          <ul class="nav">
+            <li><a href="#month_2021_December">December</a></li>
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2020">2020</a>
+            <ul class="nav">
+              <li><a href="#month_2020_June">June</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+        
+            </ul>
+          </li>
+          <li><a href="#year_2018">2018</a>
+            <ul class="nav">
+              <li><a href="#month_2018_December">December</a></li>
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2018_November">November</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+              <li><a href="#month_2018_October">October</a></li>
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            
+          
+        
+      
+    
+      
+      
+      
+      
+
+      
+
+      
+            </ul>
+          </li>
+      
+    
+-->
+  </ul>
+</div> 
+      </div>
+    </div>
+    <div class="col-md-9" role="main">
+      <div class="panel docs-content">
+        <div class="wrapper">
+            <header class="post-header">
+              <h1 class="post-title">如何构建自己的区块链 第四二部分 - 以太坊工作证明难度解释</h1>
+              <!--
+                <p class="post-meta">Dec 1, 2018</p>
+              -->
+              <div class="meta">Date： <span class="postdate">Dec 01, 2018</span> Author： <a target="_blank" href="https://z2care.github.io">Zarey C.Y. Chang</a></div>
+              <br />
+              <blockquote><p>本文章采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh"> 知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 </a>进行许可。转载请注明来自<a href="http://z2care.github.io">Z2CARE的博客</a></p></blockquote>
+            </header>
+            <article class="post-content">
+              <p>独立翻译自:<a href="https://bigishdata.com/2017/11/21/how-to-build-your-own-blockchain-part-4-2-ethereum-proof-of-work-difficulty-explained/">How to Build Your Own Blockchain Part 4.2 — Ethereum Proof of Work Difficulty Explained</a>
+<!-- more --></p>
+<ul id="markdown-toc">
+  <li><a href="#长话短说" id="markdown-toc-长话短说">长话短说</a></li>
+  <li><a href="#本文其他系列文" id="markdown-toc-本文其他系列文">本文其他系列文</a></li>
+  <li><a href="#预注" id="markdown-toc-预注">预注</a></li>
+  <li><a href="#起点-frontier" id="markdown-toc-起点-frontier">起点-Frontier</a></li>
+  <li><a href="#中场--homestead" id="markdown-toc-中场--homestead">中场 — Homestead</a></li>
+  <li><a href="#当前--metropolis" id="markdown-toc-当前--metropolis">当前 — Metropolis</a></li>
+  <li><a href="#深入研究bombs" id="markdown-toc-深入研究bombs">深入研究Bombs</a>    <ul>
+      <li><a href="#bomb数学" id="markdown-toc-bomb数学">Bomb数学</a></li>
+      <li><a href="#bomb平衡" id="markdown-toc-bomb平衡">Bomb平衡</a></li>
+    </ul>
+  </li>
+  <li><a href="#边界情况" id="markdown-toc-边界情况">边界情况</a></li>
+  <li><a href="#final-questions" id="markdown-toc-final-questions">Final Questions</a></li>
+</ul>
+
+<p>我们又回到了工作困难范围的证明，这一次是通过以太坊的困难是如何随时间变化的。这是第4部分系列的第4.2部分，第4.1部分是关于比特币的PoW难度，接下来4.3部分是关于jbc的PoW难度。</p>
+
+<h2 id="长话短说">长话短说</h2>
+
+<p>为了计算下一个以太坊块的难度，你需要计算开采前一个块所花费的时间，如果这个时间差大于目标时间，那么难度就会下降，从而使开采下一个块更快。如果它小于时间目标，那么难度就会上升，将会更快地开采下一个区块。</p>
+
+<p>确定新难度有三个部分:偏移量，它决定了从一个难度到下一个难度的标准更改量;符号，决定难度是上升还是下降;和炸弹，这增加了额外的难度取决于块的数量。</p>
+
+<p>对于不同的分叉、Frontier, Homestead, 和 Metropolis，这些数字的计算略有不同，但计算下一个困难的总体公式是</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>target = parent.difficulty + (offset * sign) + bomb
+</code></pre></div></div>
+
+<h2 id="本文其他系列文">本文其他系列文</h2>
+<ul>
+  <li><a href="https://bigishdata.com/2017/10/17/write-your-own-blockchain-part-1-creating-storing-syncing-displaying-mining-and-proving-work/">Part 1 — Creating, Storing, Syncing, Displaying, Mining, and Proving Work</a></li>
+  <li><a href="https://bigishdata.com/2017/10/27/build-your-own-blockchain-part-2-syncing-chains-from-different-nodes/">Part 2 — Syncing Chains From Different Nodes</a></li>
+  <li><a href="https://bigishdata.com/2017/11/02/build-your-own-blockchain-part-3-writing-nodes-that-mine/">Part 3 — Nodes that Mine</a></li>
+  <li><a href="https://bigishdata.com/2017/11/02/build-your-own-blockchain-part-3-writing-nodes-that-mine/">Part 4.1 — Bitcoin Proof of Work Difficulty Explained</a></li>
+</ul>
+
+<h2 id="预注">预注</h2>
+<p>对于下面的代码示例，这将是块的类。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class Block():
+  def __init__(self, number, timestamp, difficulty, uncles=None):
+    self.number = number
+    self.timestamp = timestamp
+    self.difficulty = difficulty
+    self.uncles = uncles
+
+</code></pre></div></div>
+<p>我用来显示代码正确的数据是从<a href="https://etherscan.io/">Etherscan</a>获取的。</p>
+
+<p>该代码在计算难度时也不包括边缘情况。在大多数情况下，边缘情况不涉及计算难度目标。通过不包含它们的方式，可以使下面的代码更容易理解。我将在最后讨论边缘情况以确保它们没有被完全忽略。</p>
+
+<p>最后，对于开始的分叉，我将讨论不同的变量和函数执行什么。对于后来的分叉，Homestead和Metropolis，我只谈变化。</p>
+
+<p>此外，<a href="https://github.com/jackschultz/ethana">这是我在Github repo中添加的所有代码</a>!如果不想自己编写所有代码，至少应该在本地克隆并运行它。如果你想添加更多的部分，或者认为我把代码格式化错了，你可以随时pull request。</p>
+
+<h2 id="起点-frontier">起点-Frontier</h2>
+
+<p>一开始，有Frontier。我将通过一个要点部分介绍配置变量来直接开始。</p>
+
+<ul>
+  <li><code class="language-plaintext highlighter-rouge">DIFF_ADJUSTMENT_CUTOFF</code> — 表示以太坊挖掘一个区块的目标秒数。</li>
+  <li><code class="language-plaintext highlighter-rouge">BLOCK_DIFF_FACTOR</code> — 帮助计算当前难度可以更改多少。</li>
+  <li><code class="language-plaintext highlighter-rouge">EXPDIFF_PERIOD</code> — 表示炸弹数量更新后的块数。</li>
+  <li><code class="language-plaintext highlighter-rouge">EXPDIFF_FREE_PERIODS</code> — 在引入bomb到难度计算之前有多少个<code class="language-plaintext highlighter-rouge">EXPDIFF_PERIODS</code>被忽略了。</li>
+</ul>
+
+<p>如下是函数的描述。</p>
+
+<p><code class="language-plaintext highlighter-rouge">calc_frontier_sign</code> — 计算下一个难度值应该上升还是下降。在Frontier的情况下，如果前一个block被挖掘的速度快于13秒的<code class="language-plaintext highlighter-rouge">DIFF_ADJUSTMENT_CUTOFF</code>，那么符号将是1，这意味着我们希望难度更大，从而使得下一个block被挖掘的速度更慢。如果前一个块被挖掘的时间超过13秒，那么符号将是-1，下一个难度将降低。总的来说，块挖掘时间的目标是<code class="language-plaintext highlighter-rouge">~12.5</code>秒。 看看Vitalik Buterin的文章<a href="https://blog.ethereum.org/2014/07/11/towa-12second块时间/">他谈到了在最小平均块挖掘时间选择12秒</a>。</p>
+
+<p><code class="language-plaintext highlighter-rouge">calc_frontier_offset</code> — 偏移量是决定难度变化多少的值。 在Frontier的情况下，这是除以<code class="language-plaintext highlighter-rouge">BLOCK_DIFF_FACTOR</code>得到的父级困难整数。因为它被2018除尽，即2^11，如果你想要按照移位查看它的话，<code class="language-plaintext highlighter-rouge">offset</code>也能通过<code class="language-plaintext highlighter-rouge">parent_difficulty &gt;&gt; 11</code>计算得到。由于<code class="language-plaintext highlighter-rouge">1.0 / 2048 == 0.00048828125</code>， 它意味着offset每次变化将仅仅改变<code class="language-plaintext highlighter-rouge">0.0488%</code>的难度。没有太大，这很好，因为我们不希望每个不同的挖掘区块有很大的难度变化。但是如果时间持续低于13秒，时间就会慢慢增加。</p>
+
+<p><code class="language-plaintext highlighter-rouge">calc_frontier_bomb</code> — 即bomb. 每<code class="language-plaintext highlighter-rouge">EXPDIFF_PERIOD</code>个块被挖掘后，bomb增加的难度增大了一倍。在Frontier的世界里，这个值增加的很小。例如，一个1500000的块，bomb值是<code class="language-plaintext highlighter-rouge">2 ** ((1500000 // 100000) - 2) == 2 ** 15 == 32768</code>。块的难度是34982465665323. 这是一个巨大的差异，意味着bomb没有任何影响。这将在后面发生改变。</p>
+
+<p><code class="language-plaintext highlighter-rouge">calc_frontier_difficulty</code> — 一旦你得到了sign,offset,和bomb的值, 新的难度就是<code class="language-plaintext highlighter-rouge">(parent.difficulty + offset * sign) + bomb</code>. 假设挖掘父结点的block花费的时间是15秒。在这种情况下，难度将下降<code class="language-plaintext highlighter-rouge">offset * -1</code>, 然后在最后加入少量的bomb。如果在父级区块上开采的时间是8秒，难度将增加<code class="language-plaintext highlighter-rouge">offset + bomb</code>。</p>
+
+<p>为了完全理解它，请通读下面的代码并查看计算过程。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>config = dict(
+  DIFF_ADJUSTMENT_CUTOFF=13,
+  BLOCK_DIFF_FACTOR=2048,
+  EXPDIFF_PERIOD=100000,
+  EXPDIFF_FREE_PERIODS=2,
+)
+
+def calc_frontier_offset(parent_difficulty):
+  offset = parent_difficulty // config['BLOCK_DIFF_FACTOR']
+  return offset
+
+def calc_frontier_sign(parent_timestamp, child_timestamp):
+  time_diff = child_timestamp - parent_timestamp
+  if time_diff &lt; config['DIFF_ADJUSTMENT_CUTOFF']:
+    sign = 1
+  else:
+    sign = -1
+  return sign
+
+def calc_frontier_bomb(parent_number):
+  period_count = (parent.number + 1) // config['EXPDIFF_PERIOD']
+  period_count -= config['EXPDIFF_FREE_PERIODS']
+  bomb = 2**(period_count)
+  return bomb
+
+def calc_frontier_difficulty(parent, child_timestamp):
+  offset = calc_frontier_offset(parent.difficulty)
+  sign = calc_frontier_sign(parent.timestamp, child_timestamp)
+  bomb = calc_frontier_bomb(parent.number)
+  target = (parent.difficulty + offset * sign) + bomb
+  return offset, sign, bomb, target
+</code></pre></div></div>
+
+<h2 id="中场--homestead">中场 — Homestead</h2>
+
+<p>这个Homestead分叉, 是在<a href="https://etherscan.io/block/1150000">块号1150000</a> 于2016年3月, 在计算<code class="language-plaintext highlighter-rouge">sign</code>上面有几个大的变化。</p>
+
+<p><code class="language-plaintext highlighter-rouge">calc_homestead_sign</code> — Homestead分叉不同之处是使用<code class="language-plaintext highlighter-rouge">DIFF_ADJUSTMENT_CUTOFF</code>，而不是一个单独的数字，它会增加或减少难度，Homestead采用了一种稍微不同的方法。 如果你看一下代码，你会发现符号有分组，而不只是1或-1。如果祖父级和父级之间的time_diff在[0,9]之间，则符号将为1，这意味着需要增加难度。如果time_diff是在[10,19]之间, 则符号将为0，这意味着难度应该保持不变。 如果time_diff在[20,29]范围内，则符号变为-1。如果time_diff在[30,39]范围内，则符号为-2，以此类推。</p>
+
+<p>这有两种作用。首先，Homestead不想把一个50秒挖的区块和一个15秒挖的区块等同起来。如果它挖了一个块用50秒，那么下一个困难实际上需要更容易一些。其次，与表示目标时间的<code class="language-plaintext highlighter-rouge">DIFF_ADJUSTMENT_CUTOFF</code>不同，它将目标点转换为<code class="language-plaintext highlighter-rouge">time_diffs</code>范围的中点，符号为0。[10, 11, 12, 13, 14, 15, 16, 17, 18, 19]。意味着大概是 <code class="language-plaintext highlighter-rouge">~14.5</code>秒，不包括bomb。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>config = dict(
+  HOMESTEAD_DIFF_ADJUSTMENT_CUTOFF=10,
+  BLOCK_DIFF_FACTOR=2048,
+  EXPDIFF_PERIOD=100000,
+  EXPDIFF_FREE_PERIODS=2,
+)
+
+def calc_homestead_offset(parent_difficulty):
+  offset = parent_difficulty // config['BLOCK_DIFF_FACTOR']
+  return offset
+
+def calc_homestead_sign(parent_timestamp, child_timestamp):
+  time_diff = child_timestamp - parent_timestamp
+  sign = 1 - (time_diff // config['HOMESTEAD_DIFF_ADJUSTMENT_CUTOFF'])
+  return sign
+
+def calc_homestead_bomb(parent_number):
+  period_count = (parent_number + 1) // config['EXPDIFF_PERIOD'] # or parent.number + 1 &gt;&gt; 11 if you like bit notation
+  period_count -= config['EXPDIFF_FREE_PERIODS']
+  bomb = 2**(period_count)
+  return bomb
+
+def calc_homestead_difficulty(parent, child_timestamp):
+  offset = calc_homestead_offset(parent.difficulty)
+  sign = calc_homestead_sign(parent.timestamp, child_timestamp)
+  bomb = calc_homestead_bomb(parent.number)
+  target = (parent.difficulty + offset * sign) + bomb
+  return offset, sign, bomb, target
+</code></pre></div></div>
+
+<h2 id="当前--metropolis">当前 — Metropolis</h2>
+<p>Homestead有几个不同之处。首先，<code class="language-plaintext highlighter-rouge">DIFF_ADJUSTMENT_CUTOFF</code>现在是9，这意味着，如果没有叔节点，目标块时间是[9、10、11、12、13、14、15、16、17]的中点或即<code class="language-plaintext highlighter-rouge">~13</code>秒。</p>
+
+<p>第二种考虑是否有叔节点包含在块中。在以太坊语言中，叔节点指的是两个节点从同一个祖父级处挖掘出一个子节点的时间点。所以，如果你从一个有“兄弟姐妹”的父级节点那里挖掘一个子块，你可以从中选择兄弟姐妹中的一个进行挖掘，但也包括你通知到的其他块。在这种情况下，以太坊想要加大新的难度，买入另一个offset，以确保两个天然叉获得更长时间的可能性更小。</p>
+
+<p>现在最大的不同是如何消除bomb值的影响。查看<code class="language-plaintext highlighter-rouge">calc_metropolis_bomb</code>的代码，在这里我们不仅要减去<code class="language-plaintext highlighter-rouge">EXPDIFF_FREE_PERIODS</code>的值，还要减去<code class="language-plaintext highlighter-rouge">METROPOLIS_DELAY_PERIODS</code>的值，后者是30个时间段。一个巨大的数字。这里不讨论bombs，在这之后我会有一个专门的章节。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>config = dict(
+  METROPOLIS_DIFF_ADJUSTMENT_CUTOFF=9,
+  BLOCK_DIFF_FACTOR=2048,
+  EXPDIFF_PERIOD=100000,
+  EXPDIFF_FREE_PERIODS=2,
+  METROPOLIS_DELAY_PERIODS=30,
+)
+
+def calc_metropolis_offset(parent_difficulty):
+  offset = parent_difficulty // config['BLOCK_DIFF_FACTOR']
+  return offset
+
+def calc_metropolis_sign(parent_timestamp, child_timestamp):
+  if parent.uncles:
+    uncles = 2
+  else:
+    uncles = 1
+  time_diff = child_timestamp - parent_timestamp
+  sign = uncles - (time_diff // config['METROPOLIS_DIFF_ADJUSTMENT_CUTOFF'])
+  return sign
+
+def calc_metropolis_bomb(parent_number):
+  period_count = (parent_number + 1) // config['EXPDIFF_PERIOD']
+  period_count -= config['METROPOLIS_DELAY_PERIODS'] #chop off 30, meaning go back 3M blocks in time
+  period_count -= config['EXPDIFF_FREE_PERIODS'] #chop off 2 more for good measure
+  bomb = 2**(period_count)
+  return bomb
+
+def calc_metropolis_difficulty(parent, child_timestamp):
+  offset = calc_metropolis_offset(parent.difficulty)
+  sign = calc_metropolis_sign(parent_timestamp, child_timestamp)
+  bomb = calc_metropolis_bomb(parent.number)
+  target = (parent.difficulty + offset * sign) + bomb
+  return offset, sign, bomb, target
+</code></pre></div></div>
+
+<h2 id="深入研究bombs">深入研究Bombs</h2>
+<p>如果你在线查看<a href="https://www.coinwarz.com/difficulty-charts/ethereum-difficulty-chart">一个难度图表</a>，你会看到最近每100000个区块就有一个巨大的增长，然后在一个月前就有一个巨大的下降。不想点击链接的用户看看截屏:</p>
+
+<p><img src="https://bigishdata.files.wordpress.com/2017/11/ethereum_time_screenshot.png" alt="image" /></p>
+
+<p>每条水平线表示挖掘一个块每3秒的时间变化。</p>
+
+<p>拥有这样一个bomb值有什么意义?以太坊的一个大目标是摆脱工作证明，它需要精力和时间来创建和验证一个新的块，进入[在Ethereum Wiki中描述的](https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ中]的股份证明。为了迫使节点移动到股份实现的证明，每100000个块中就会有一颗“炸弹”，它对难度的影响会翻倍，很快就会使挖掘新块花费很长时间，在旧分支上运行的节点将无法再运行。这就是“冰河世纪”一词的由来;区块链会及时冻结。</p>
+
+<p>这是管理未来变化的一种好方法，但我们也遇到了一个问题，即称为Casper的新股份证明的实现，在图表中显示的巨大困难出现之前没有及时准备好。这就是Metropolis分叉发挥作用的地方——它消除了<code class="language-plaintext highlighter-rouge">bomb</code>对难度的影响，但几年后它将再次发挥作用，在这里，切换到Casper(希望如此)将做好准备。话虽如此，要预测诸如此类的功能何时准备好投入生产和采用是很困难的，所以如果Casper还没有准备好足够快地推出，您可以创建另一个分支，再次将bomb移动回过去。</p>
+
+<h3 id="bomb数学">Bomb数学</h3>
+
+<p>除了这些图表中所示的bombs对难度的影响，我们还应该说明为什么难度会上升到这些水平，以及这意味着挖掘一个区块需要多长时间。</p>
+
+<p>回顾过去，请记住<code class="language-plaintext highlighter-rouge">offset</code>是一个指示节点挖掘一个块需要多少时间的指标。</p>
+
+<p>例如，如果之前块之间的时间差是[18-26]，我们说如果我们将难度减少一个<code class="language-plaintext highlighter-rouge">offset</code>，我们将能够将挖掘块的时间移动回[9-17]范围，或者将<code class="language-plaintext highlighter-rouge">DIFF_ADJUSTMENT_CUTOFF</code>秒数降低。</p>
+
+<p>所以如果我们通过<code class="language-plaintext highlighter-rouge">offset</code>增加难度，万恶们希望
+So if we increase the difficulty by <code class="language-plaintext highlighter-rouge">offset</code>, 我们期望通过<code class="language-plaintext highlighter-rouge">DIFF_ADJUSTMENT_CUTOFF</code>来增加挖掘一个块的时间。如果我们将难度增加<code class="language-plaintext highlighter-rouge">offset</code>的一半，则挖掘时间应该增加大约<code class="language-plaintext highlighter-rouge">DIFF_ADJUSTMENT_CUTOFF / 2</code>。</p>
+
+<p>如果我们想知道一个bomb值对挖掘时间的影响有多大，我们需要bomb和offset的比值。</p>
+
+<p><code class="language-plaintext highlighter-rouge">(bomb / offset) * DIFF_ADJUSTMENT_CUTOFF</code></p>
+
+<p>下面的代码展示了我们如何计算挖掘时间并与实际平均时间进行比较，实际平均时间是从<a href="https://bitinfocharts.com/compareon/ethere-confirmationtime.html">这个图表</a>中收集的，方法是将光标悬停在这些块被挖掘的时间点附近。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>def calc_mining_time(block_number, difficulty, actual_average_mining_time, calc_bomb, calc_offset):
+  homestead_goal_mining_time = 14.5 #about that.
+  bomb = calc_bomb(block_number)
+  offset = calc_offset(difficulty)
+  bomb_offset_ratio = bomb / float(offset)
+  seconds_adjustment = bomb_offset_ratio * config['HOMESTEAD_DIFF_ADJUSTMENT_CUTOFF']
+  average_mining_time = 0.4 * 60
+  calculated_average_mining_time = homestead_goal_mining_time + seconds_adjustment
+  print "Bomb: %s" % bomb
+  print "Offset: %s" % offset
+  print "Bomb Offset Ratio: %s" % bomb_offset_ratio
+  print "Seconds Adjustment: %s" % seconds_adjustment
+  print "Actual Avg Mining Time: %s" % actual_average_mining_time
+  print "Calculated Mining Time: %s" % calculated_average_mining_time
+  print
+
+
+block_number = 4150000
+difficulty = 1711391947807191
+actual_average_mining_time = 0.35 * 60
+calc_mining_time(block_number, difficulty, actual_average_mining_time, calc_homestead_bomb, calc_homestead_offset)
+
+block_number = 4250000
+difficulty = 2297313428231280
+actual_average_mining_time = 0.4 * 60
+calc_mining_time(block_number, difficulty, actual_average_mining_time, calc_homestead_bomb, calc_homestead_offset)
+
+block_number = 4350000
+difficulty = 2885956744389112
+actual_average_mining_time = 0.5 * 60
+calc_mining_time(block_number, difficulty, actual_average_mining_time, calc_homestead_bomb, calc_homestead_offset)
+
+block_number = 4546050
+difficulty = 1436507601685486
+actual_average_mining_time = 0.23 * 60
+calc_mining_time(block_number, difficulty, actual_average_mining_time, calc_metropolis_bomb, calc_metropolis_offset)
+</code></pre></div></div>
+<p>When run:</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>Bomb: 549755813888
+Offset: 835640599515
+Bomb Offset Ratio: 0.657885476372
+Seconds Adjustment: 6.57885476372
+Actual Avg Mining Time: 21.0
+Calculated Mining Time: 21.0788547637
+
+Bomb: 1099511627776
+Offset: 1121735072378
+Bomb Offset Ratio: 0.980188330427
+Seconds Adjustment: 9.80188330427
+Actual Avg Mining Time: 24.0
+Calculated Mining Time: 24.3018833043
+
+Bomb: 2199023255552
+Offset: 1409158566596
+Bomb Offset Ratio: 1.56052222062
+Seconds Adjustment: 15.6052222062
+Actual Avg Mining Time: 30.0
+Calculated Mining Time: 30.1052222062
+
+Bomb: 8192
+Offset: 701419727385
+Bomb Offset Ratio: 1.16791696614e-08
+Seconds Adjustment: 1.16791696614e-07
+Actual Avg Mining Time: 13.8
+Calculated Mining Time: 14.5000001168
+</code></pre></div></div>
+
+<p>看看后来的Homestead区块的bomb offset率有多大，Metropolis区块之后的bomb offset率又有多小!由于炸弹的冲击力减弱，时间差异下降了一大截。</p>
+
+<p>到目前为止，bomb对难度影响不大。不过它会回来的。如果以太坊继续以<code class="language-plaintext highlighter-rouge">~14.5</code>秒的速度开采矿块，他们将在17天内开采出10万个矿块。将这段时间乘以30，也就是所谓的<code class="language-plaintext highlighter-rouge">METROPOLIS_DELAY_PERIODS</code>，我们将回到这样一种状态:无论哈希功率增加多少，bomb都会在大约一年半的时间内产生影响。</p>
+
+<h3 id="bomb平衡">Bomb平衡</h3>
+
+<p>Bomb的最后一部分是快速解释一下为什么<code class="language-plaintext highlighter-rouge">bomb</code>的轻微增加会使整体难度比<code class="language-plaintext highlighter-rouge">bomb</code>的价值大得多。</p>
+
+<p>这种方法的工作原理是通过计算期望挖掘时间，并由此计算出当前哈希率在该时间段内对挖掘块所需的难度。当bomb数量发生变化时，难度会继续上升或下降，达到那个时候的难度，然后在那个平衡点上徘徊。如果您在<code class="language-plaintext highlighter-rouge">bomb</code>更改之后查看这些块，您将看到需要多个块才能达到新的级别。</p>
+
+<h2 id="边界情况">边界情况</h2>
+
+<p>这里有一些在上面的代码中没有提到的边缘情况。</p>
+
+<p>-MIN_DIFF=131072, 一个块可以有的最小难度值。考虑到难度比这要大得多，考虑这个问题是没有意义的。但是当以太坊产生后，有一个最小的难度可能是有用的。也可以参考 2 ** 17.</p>
+
+<p>-最小的sign值 = -99. 假设有一种情况，由于某种原因，计算下一个块的sign值是-1000。下一个方块难度的符号将以难以置信的速度下降，这意味着大约需要1000个方块才能回到所需的<code class="language-plaintext highlighter-rouge">~14</code> 秒的开采时间，因为增加难度最大的sign是1(如果包括叔叔节点，则是2)。低于-99的概率非常非常小，但仍然需要涵盖。</p>
+
+<h2 id="final-questions">Final Questions</h2>
+<p>和以前一样，这是我在写这篇文章时遇到的一些问题，这些问题并没有放在主要的帖子里。<br />
+Like before, here’s a list of questions I had when writing this that didn’t get put in the main post.</p>
+
+<p><strong>头部里有什么？</strong><br />
+<strong>What’s in the header?</strong></p>
+
+<p>我相信当我们只讨论工作难度的证明时，这个问题会经常出现。我们知道如何计算难度是很好的，但是如何验证一个块有一个有效的头部超出了这篇文章范围。
+I’m sure this question will come up a lot when only talking about Proof of Work difficulty. It’s great that we know how difficulty is calculated, but how to validate a block has a valid header is beyond this post.</p>
+
+<p>我不会在这里解释它，但可能会在以后的文章中决定如何在实现交易之后计算jbc的头。
+I’m not going to explain it here, but probably in a future post when I decide how jbc’s header should be calculated after I implement transactions.</p>
+
+<p>我要指出的是，比特币的头部非常简单，在这里值被集合在一起(确保比特的组合方式有正确的尾端)。以太坊的方法要复杂得多，它使用现金方法而不是默克尔树来处理交易。<br />
+I will note that Bitcoin’s header is incredibly simple where the values are smashed together (making sure that the way the bits are combined have the right endian). Ethereum’s is much more complicated by dealing with transactions using a cash method rather than a Merkel tree.</p>
+
+<p><strong>你是怎么搞清楚的?</strong><br />
+<strong>How do you go through and figure this out?</strong></p>
+
+<p>像这样的帖子有很多，但坦白地说，大多数都是非常高级的描述，以及数据，但没有多少显示计算这些数据的代码。我的目标是做到所有这些。<br />
+There are tons of posts out there like this one, but frankly, most are very high level with either descriptions, numbers, but not many showing code that calculates those numbers. My goal is to do all of those.</p>
+
+<p>这意味着为了完全理解并讨论它们，我将翻看介绍并查看源代码。这是来自Python repo的<code class="language-plaintext highlighter-rouge">calc_difficult</code>函数，来自c++的calcdifficult函数，以及来自Go的calcdifficult函数。我一直在讨论的另一个更重要的问题是，查看代码并不能做什么，您需要做的是自己实现类似的代码。<br />
+That means that to get to complete understanding to talk about them all, I go through and look at the code bases. Here’s the calc_difficulty function from the Python repo, calcDifficulty from c++, and calcDifficulty from Go. Another bigger point that I keep talking about is that looking at the code doesn’t do much at all, what you need to do is implement similar code yourself.</p>
+
+<p><strong>所有这些时间估计都包含一个数字前的<code class="language-plaintext highlighter-rouge">~</code>。为什么需要这样做？</strong><br />
+<strong>All of those time estimations include a ~ before a number. Why is that necessary?</strong></p>
+
+<p>这个问题问得很好。最主要的答案是不确定有多少节点试图挖掘块，以及随机性。如果你看一下<a href="https://www.coinwarz.com/difficulty-charts/ethereum-difficulty-chart">难度表</a>，放大到几天的时间跨度，你会发现它是多么随机。这与特定一天的<a href="https://bitinfocharts.com/comparison/ethereum-confirmationtime.html#3m">平均挖掘时间</a>相同。它们是波动的，所以我们不能准确地说出我们预计的时间。<br />
+That’s a really good question. And the main answer is uncertainty in how many nodes are trying to mine blocks, as well as randomness. If you look at the <a href="https://www.coinwarz.com/difficulty-charts/ethereum-difficulty-chart">difficulty chart</a> and zoom in to a timespan of a couple days, you’ll see how random it gets. It’s the same with <a href="https://bitinfocharts.com/comparison/ethereum-confirmationtime.html#3m">the average mining time</a> for a specific day. They fluctuate, and so we can’t say exactly what time we expect.</p>
+
+<p><strong>工作证明是我经常听到人们谈论到的，但它不是通用的，对吗？</strong><br />
+<strong>Proof of Work is all I hear people talk about, but it isn’t universal, right?</strong></p>
+
+<p>正确的!我在上面提到过，我敢打赌，如果你读了这么多关于以太坊的文章，而且你一直把这篇文章读到底，你一定听说过<a href="https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ#what-are-the-benefits-of-proof-of-stake-as-opposed-to-proof-of-work">股票证明</a>这个词。这是一个主要加密货币区块链尚未实现的新选项。还有其他类型的块验证。区块链即将推出的大型企业版本可能根本不会完全基于工作证明。<br />
+Correct! I mentioned it above, and I’m betting that if you’re reading this much about Ethereum and you’re all the way at the bottom of this post that you’ve heard of the term <a href="https://github.com/ethereum/wiki/wiki/Proof-of-Stake-FAQ#what-are-the-benefits-of-proof-of-stake-as-opposed-to-proof-of-work">Proof of Stake</a>. This is the new option that a major cryptocurrency blockchain hasn’t implemented yet. There are other types of block validation out there. The big upcoming Enterprise versions of blockchains probably won’t be completely based in Proof of Work at all.</p>
+
+<p>验证区块链将使用哪种类型的最大指示器取决于用例。加密货币需要一些完全不可欺骗的东西。区块链也一样，它可能存储关于谁拥有哪块土地的信息。我们不希望人们能够改变所有权。但是一个用来存储不那么值钱的东西的区块链不需要浪费所有的能量。我知道，在今后几年内，一些其他证明其有效性方法将发挥作用。<br />
+The biggest indicator of what type of validation blockchains will use depends on the use cases. Cryptocurrencies need something completely un-fraudable. Same with a blockchain that might store information on who owns what piece of land. We don’t want people to be able to change ownership. But a blockchain that’s used to store something less insanely valuable doesn’t need to waste all that energy. I know some of these other Proofs of validity will come into play in the next few years.</p>
+
+<p><strong>你写了一些令人困惑的东西/解释得不够好。我该怎么办？</strong><br />
+<strong>You wrote something confusing / didn’t explain it well enough. What should I do?</strong></p>
+
+<p>联系上我。说真的，有很多帖子都在谈论结果，但却没有说明他们是如何计算结果的，并假定每个人都和他们一样聪明，知道发生了什么。我试着做相反的事情，在没有充分解释的情况下，我不会说什么。所以，如果有什么困惑或错误，请联系我，我保证搞定它。<br />
+Get in freaking contact. Seriously, tons of posts out there that talk about results but don’t say how they calculated it and assume that everyone is as smart as them and know what’s going on. I’m trying to be the opposite where I don’t say something without fully explaining. So if there’s something confusing or wrong, contact me and I’ll make sure to fix the issue.</p>
+
+<p><strong>我可以在Twitter上和你聊天吗</strong><br />
+<strong>Can I DM you on Twitter?</strong></p>
+
+<p><a href="https://twitter.com/jack_schultz">@jack_schultz</a></p>
+
+<p><strong>你更喜欢奸臣还是忠臣？</strong><br />
+<strong>Do you like cats or dogs better?</strong></p>
+
+<p>跟你没关系<br />
+Cats.</p>
+
+            </article>
+          <hr>
+          <blockquote><p>对于本文内容有问题或建议的小伙伴，欢迎在文章底部留言交流讨论。</p></blockquote>
+          <div class="text-center">
+            <a href="/donate/" target="_blank" style="text-decoration: none"><button type="button" class="btn btn-danger"><span class="glyphicon glyphicon-usd" aria-hidden="true"></span> 您的支持是将是我写作最大的动力!</button></a>
+          </div>
+        </div>
+      </div>
+      <!--Gitment-->
+      <!--
+      <div id="container"></div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <script>
+        var gitment = new Gitment({
+          id: window.location.pathname, 
+          owner: 'z2care',
+          repo: 'z2care.github.io',
+          oauth: {
+          client_id: '3b962d46bab20f713630',
+          client_secret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          },
+        })
+        gitment.render('container')
+      </script>
+      -->
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+      <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+      <script>
+        const gitalk = new Gitalk({
+          clientID: '3b962d46bab20f713630',
+          clientSecret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          repo: 'z2care.github.io',
+          owner: 'z2care',
+          admin: ['z2care'],
+          id: md5(location.pathname)
+        })
+        gitalk.render('gitalk-container')
+      </script>
+    </div>
+  </div>
+</div>
+
+
+    <footer class="footer" role="contentinfo">
+	<!--不蒜子pv/uv统计-->
+	<div class="post-meta">
+            <p>Total <span id="busuanzi_value_site_pv"></span> views，您是本站的第<span id="busuanzi_value_site_uv"></span>个小伙伴，<span id="busuanzi_value_page_pv"></span> Hits</p><br/>
+    </div>
+	<div class="container">
+		<p class="copyright">Copyright &copy; 2021 <a href="https://z2care.github.io/me/" target="_blank"><code>Zarey C.Y. Chang</code></a>. All rights reserved. </p>
+		<p>Powered by <a href="http://jekyllrb.com" target="_blank">Jekyll</a>， Data by <a href="https://analytics.google.com/analytics/web/" target="_blank">Google Analytics</a>.</p>
+	</div>
+	<ul id="gotop"><li><span>TOP</span></li></ul>
+</footer>
+<script src="https://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128576901-1"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'UA-128576901-1');
+</script>
+<script src="/styles/js/function.min.js"></script>
+<script src="/styles/js/lessismore.js"></script>
+<script src="/styles/js/application.min.js"></script>
+
+  </body>
+</html>
