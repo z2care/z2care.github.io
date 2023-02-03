@@ -122,20 +122,20 @@
 
 {
 
-"title"    : "标签目录",
+"title"    : "博文分类",
 "category" : "",
 "tags"     : "",
-"url"      : "/tag/",
+"url"      : "/categories/",
 "date"     : ""
 
 } ,
 
 {
 
-"title"    : "Z2CARE PAGE",
+"title"    : "标签目录",
 "category" : "",
 "tags"     : "",
-"url"      : "/",
+"url"      : "/tag/",
 "date"     : ""
 
 } ,
@@ -152,10 +152,10 @@
 
 {
 
-"title"    : "博文分类",
+"title"    : "Z2CARE PAGE",
 "category" : "",
 "tags"     : "",
-"url"      : "/categories/",
+"url"      : "/",
 "date"     : ""
 
 } ,
