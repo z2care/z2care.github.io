@@ -15,5 +15,7 @@
 # 2. 用devtool修改recipe并加回meta-xxx
 
 ## 四、最重要的两份参考文档
-# 1. https://docs.yoctoproject.org/singleindex.html，这份文档从使用上介绍
-# 2. https://www.yoctoproject.org/software-overview/，这份文档从宏观上介绍
+# 1. https://docs.yoctoproject.org/singleindex.html
+<br>这份文档从使用上介绍
+# 2. https://www.yoctoproject.org/software-overview/
+<br>这份文档从宏观上介绍
