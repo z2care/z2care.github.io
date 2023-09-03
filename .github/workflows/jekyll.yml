@@ -3,19 +3,15 @@ name: Jekyll site CI
 on:
   push:
     branches: [ jekyll ]
-  pull_request:
-    branches: [ jekyll ]
-  watch:
-    types: [started]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     steps:
     - name: Clone repository
       uses: actions/checkout@v2
+      with:
+        persist-credentials: false
 
     - name: Setup Ruby
       uses: ruby/setup-ruby@v1
