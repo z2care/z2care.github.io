@@ -1,3 +1,17 @@
+---
+layout: original
+title: "Build Your RPB4 Linux With Yocto"
+date: 2023-09-03 23:58:00 +0800
+categories: 系统构建
+tag: Yocto
+---
+* content
+{:toc}
+
+从零开始使用官方环境构建Yocto Linux!
+
+<!-- more -->
+
 ### Build Your Raspbarry 4 Linux With Yocto From Zero 
 ## 一、环境构建
 # 1. 安装和使用官方poky docker即crops/poky
