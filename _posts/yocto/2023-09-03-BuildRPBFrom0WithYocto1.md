@@ -73,3 +73,11 @@ https://github.com/prose/prose
    可以通过github编辑页面拖拽自动生成
    也可以自己加入到/docs/assets/images
    也可以用图床工具https://github.com/topics/image-hosting
+7. 评论系统
+   参考https://hutusi.com/articles/comment-via-giscus
+8. 搜索系统
+   https://cloud.tencent.com/developer/article/1119290
+   https://developer.aliyun.com/article/703581
+   https://zoharandroid.github.io/2019-08-01-jekyll%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E5%AE%9E%E7%8E%B0%E6%90%9C%E7%B4%A2%E5%8A%9F%E8%83%BD/
+   https://www.chenshaowen.com/blog/jekyll-search-option.html
+   https://blog.csdn.net/dliyuedong/article/details/46848155
