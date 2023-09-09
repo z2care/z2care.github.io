@@ -1,5 +1,5 @@
 ---
-layout: original
+layout: post
 title: "Build Your RPB4 Linux With Yocto"
 date: 2023-09-03 23:58:00 +0800
 categories: 系统构建
@@ -65,3 +65,11 @@ https://github.com/gruvw/portfolio/blob/master/.github/workflows/build-jekyll.ym
 
 参考：https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow
 https://github.com/helaili/jekyll-action
+
+5. 后台管理参考
+https://github.com/prose/prose
+
+6. 图片加入方法
+   可以通过github编辑页面拖拽自动生成
+   也可以自己加入到/docs/assets/images
+   也可以用图床工具https://github.com/topics/image-hosting
