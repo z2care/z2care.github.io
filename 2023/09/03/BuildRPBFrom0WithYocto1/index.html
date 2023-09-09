@@ -4,7 +4,7 @@
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1" >
 	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0">
-	<title>test markdown</title>
+	<title>Build Your RPB4 Linux With Yocto</title>
 	<meta name="description" content="z2care的个人博客、Android、Telephony、Java、CPP、Tensorflow">
 	<meta name="keywords" content="z2care的个人博客、Android、Telephony、Java、CPP、Tensorflow" />
 	<meta name="apple-mobile-web-app-capable" content="yes">
@@ -77,8 +77,8 @@
 <div class="banner">
   <div class="container lh30">
   	
-    	<a href="/categories/#测试文章-ref">测试文章</a>	/
-    	<a href="/tag/#Markdown-ref">Markdown</a>
+    	<a href="/categories/#系统构建-ref">系统构建</a>	/
+    	<a href="/tag/#Yocto-ref">Yocto</a>
     
       <div id="search-container" class="pull-right">
           <input type="text" id="search-input" placeholder=" 试试直接搜索吧...">
@@ -282,56 +282,94 @@
       <div class="panel docs-content">
         <div class="wrapper">
             <header class="post-header">
-              <h1 class="post-title">test markdown</h1>
+              <h1 class="post-title">Build Your RPB4 Linux With Yocto</h1>
               <!--
-                <p class="post-meta">Oct 6, 2018</p>
+                <p class="post-meta">Sep 3, 2023</p>
               -->
-              <div class="meta">Date： <span class="postdate">Oct 06, 2018</span> Author： <a target="_blank" href="https://z2care.github.io">Zarey C.Y. Chang</a></div>
+              <div class="meta">Date： <span class="postdate">Sep 03, 2023</span> Author： <a target="_blank" href="https://z2care.github.io">Zarey C.Y. Chang</a></div>
               <br />  
               <blockquote><p>本文章属原创文章，未经作者许可，禁止转载，复制，下载，以及用作商业用途。原作者保留所有解释权。</p></blockquote>            
             </header>
             <article class="post-content">
               <ul id="markdown-toc">
-  <li><a href="#标题1" id="markdown-toc-标题1">标题1</a>    <ul>
-      <li><a href="#标题2" id="markdown-toc-标题2">标题2</a>        <ul>
-          <li><a href="#标题3" id="markdown-toc-标题3">标题3</a>            <ul>
-              <li><a href="#标题4" id="markdown-toc-标题4">标题4</a>                <ul>
-                  <li><a href="#标题5" id="markdown-toc-标题5">标题5</a>                    <ul>
-                      <li><a href="#标题6" id="markdown-toc-标题6">标题6</a></li>
-                    </ul>
-                  </li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-        </ul>
-      </li>
-    </ul>
-  </li>
+  <li><a href="#build-your-raspbarry-4-linux-with-yocto-from-zero" id="markdown-toc-build-your-raspbarry-4-linux-with-yocto-from-zero">Build Your Raspbarry 4 Linux With Yocto From Zero</a></li>
+  <li><a href="#一环境构建" id="markdown-toc-一环境构建">一、环境构建</a></li>
+  <li><a href="#二一些说明" id="markdown-toc-二一些说明">二、一些说明</a></li>
+  <li><a href="#三创建board和修改recipe" id="markdown-toc-三创建board和修改recipe">三、创建board和修改recipe</a></li>
+  <li><a href="#四最重要的两份参考文档" id="markdown-toc-四最重要的两份参考文档">四、最重要的两份参考文档</a></li>
+  <li><a href="#五其它参考" id="markdown-toc-五其它参考">五、其它参考</a></li>
 </ul>
 
-<p>Markdown is a great mark language!</p>
+<p>从零开始使用官方环境构建Yocto Linux!</p>
 
 <!-- more -->
 
-<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">tensorflow</span> <span class="k">as</span> <span class="n">tf</span>
-<span class="k">print</span> <span class="n">abc</span>
-<span class="n">__main__</span>
-</code></pre></div></div>
+<h3 id="build-your-raspbarry-4-linux-with-yocto-from-zero">Build Your Raspbarry 4 Linux With Yocto From Zero</h3>
+<h2 id="一环境构建">一、环境构建</h2>
+<ol>
+  <li>安装和使用官方poky docker即crops/poky</li>
+  <li>sudo docker run –rm -it –mount type=bind,src=/home/xxx/xxx/poky_docker,target=/workdir crops/poky –workdir=/workdir</li>
+  <li>在/home/xxx/xxx/poky_docker下clone yocto代码，最新LTS是4.12，切换到tag上</li>
+  <li>在poky_docker下clone处meta-openembedded，引入包仓库，可以使用bblayer-add增加为一个层</li>
+  <li>meta-openembedded不是必需的，可以此刻就更改local.conf编译core-image-minimal</li>
+</ol>
 
-<h1 id="标题1">标题1</h1>
+<h2 id="二一些说明">二、一些说明</h2>
+<ol>
+  <li>下载的官方poky代码中，meta是一个较完整的qemu、x86等linux系统构建框架，meta-poky中补充了很少一些组件修改，meta-yocto-bsp则提供了实际board bsp支持</li>
+  <li>如果要用其它的board bsp，则需替换meta-yocto-bsp</li>
+</ol>
 
-<h2 id="标题2">标题2</h2>
+<h2 id="三创建board和修改recipe">三、创建board和修改recipe</h2>
+<ol>
+  <li>用bblayer create/add来创建一个meta-xxx</li>
+  <li>用devtool修改recipe并加回meta-xxx</li>
+</ol>
 
-<h3 id="标题3">标题3</h3>
+<h2 id="四最重要的两份参考文档">四、最重要的两份参考文档</h2>
+<ol>
+  <li>https://docs.yoctoproject.org/singleindex.html
+<br />这份文档从使用上介绍</li>
+  <li>https://www.yoctoproject.org/software-overview/
+<br />这份文档从宏观上介绍</li>
+</ol>
 
-<h4 id="标题4">标题4</h4>
+<h2 id="五其它参考">五、其它参考</h2>
+<ol>
+  <li>
+    <p>https://github.com/marketplace/actions/build-jekyll-for-github-pages
+与https://github.com/actions/deploy-pages配合使用
+有范例</p>
+  </li>
+  <li>
+    <p>注意修改Build步骤的action
+Incremental build: disabled. Enable with –incremental</p>
+  </li>
+</ol>
 
-<h5 id="标题5">标题5</h5>
+<p>3.</p>
 
-<h6 id="标题6">标题6</h6>
+<ul>
+  <li>name: Build and deploy
+      uses: helaili/jekyll-action@v2
+      with:
+        pre_build_commands: git config –global http.version HTTP/1.1; apk fetch git-lfs;
+        token: $
+        target_branch: gh-pages</li>
+</ul>
 
-<hr />
+<ol>
+  <li>制作分为两种。
+一种是从jekyll源码制作
+参考：
+https://github.com/Darkade/Darkade.github.io/blob/source/.github/workflows/jekyll.yml</li>
+</ol>
+
+<p>一种是从jekyll blog制作
+https://github.com/gruvw/portfolio/blob/master/.github/workflows/build-jekyll.yml</p>
+
+<p>参考：https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow
+https://github.com/helaili/jekyll-action</p>
 
             </article>
           <hr>

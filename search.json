@@ -1,6 +1,14 @@
 [
 
 {
+"title"    : "Build Your RPB4 Linux With Yocto",
+"category" : "",
+"tags"     : "Yocto",
+"url"      : "/2023/09/03/BuildRPBFrom0WithYocto1/",
+"date"     : "2023-09-03 15:58:00 +0000"
+} ,
+
+{
 "title"    : "辨析CPU, MPU, MCU, SOC, and MCM",
 "category" : "",
 "tags"     : "EmbeddedSystem",
