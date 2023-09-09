@@ -287,8 +287,8 @@
                 <p class="post-meta">Sep 3, 2023</p>
               -->
               <div class="meta">Date： <span class="postdate">Sep 03, 2023</span> Author： <a target="_blank" href="https://z2care.github.io">Zarey C.Y. Chang</a></div>
-              <br />  
-              <blockquote><p>本文章属原创文章，未经作者许可，禁止转载，复制，下载，以及用作商业用途。原作者保留所有解释权。</p></blockquote>            
+              <br />
+              <blockquote><p>本文章采用<a rel="license" href="https://creativecommons.org/licenses/by-nc-nd/4.0/deed.zh"> 知识共享署名-非商业性使用-禁止演绎 4.0 国际许可协议 </a>进行许可。转载请注明来自<a href="http://z2care.github.io">Z2CARE的博客</a></p></blockquote>
             </header>
             <article class="post-content">
               <ul id="markdown-toc">
@@ -374,6 +374,19 @@ https://github.com/gruvw/portfolio/blob/master/.github/workflows/build-jekyll.ym
 <p>参考：https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site#publishing-with-a-custom-github-actions-workflow
 https://github.com/helaili/jekyll-action</p>
 
+<ol>
+  <li>
+    <p>后台管理参考
+https://github.com/prose/prose</p>
+  </li>
+  <li>
+    <p>图片加入方法
+可以通过github编辑页面拖拽自动生成
+也可以自己加入到/docs/assets/images
+也可以用图床工具https://github.com/topics/image-hosting</p>
+  </li>
+</ol>
+
             </article>
           <hr>
           <blockquote><p>对于本文内容有问题或建议的小伙伴，欢迎在文章底部留言交流讨论。</p></blockquote>
@@ -382,41 +395,43 @@ https://github.com/helaili/jekyll-action</p>
           </div>
         </div>
       </div>
-      <div class="panel docs-content">
-        <article class="post-content">
-          <div class="wrapper">
-            
-
-
-  <div id="disqus_thread"></div>
-<script>
-
-/**
-*  RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
-*  LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables*/
-/*
-var disqus_config = function () {
-this.page.url = PAGE_URL;  // Replace PAGE_URL with your page's canonical URL variable
-this.page.identifier = PAGE_IDENTIFIER; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
-};
-*/
-(function() { // DON'T EDIT BELOW THIS LINE
-var d = document, s = d.createElement('script');
-s.src = 'https://.disqus.com/embed.js';
-s.setAttribute('data-timestamp', +new Date());
-(d.head || d.body).appendChild(s);
-})();
-</script>
-<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
-
-
- 
-          </div>
-        </article>
-      </div>
+      <!--Gitment-->
+      <!--
+      <div id="container"></div>
+      <link rel="stylesheet" href="https://imsun.github.io/gitment/style/default.css">
+      <script src="https://imsun.github.io/gitment/dist/gitment.browser.js"></script>
+      <script>
+        var gitment = new Gitment({
+          id: window.location.pathname, 
+          owner: 'z2care',
+          repo: 'z2care.github.io',
+          oauth: {
+          client_id: '3b962d46bab20f713630',
+          client_secret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          },
+        })
+        gitment.render('container')
+      </script>
+      -->
+      <div id="gitalk-container"></div>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css">
+      <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js"></script>
+      <script src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+      <script>
+        const gitalk = new Gitalk({
+          clientID: '3b962d46bab20f713630',
+          clientSecret: '32365f06df4cceb10fa60ca61ddb30bc14db7d29',
+          repo: 'z2care.github.io',
+          owner: 'z2care',
+          admin: ['z2care'],
+          id: md5(location.pathname)
+        })
+        gitalk.render('gitalk-container')
+      </script>
     </div>
   </div>
 </div>
+
 
     <footer class="footer" role="contentinfo">
 	<!--不蒜子pv/uv统计-->
