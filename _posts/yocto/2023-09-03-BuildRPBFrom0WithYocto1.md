@@ -14,7 +14,7 @@ tag: Yocto
 
 ### Build Your Raspbarry 4 Linux With Yocto From Zero 
 
-![yocto logo](/least-github-pages/assets/images/YoctoProject_Logo_RGB.jpg)
+![yocto logo](/assets/images/YoctoProject_Logo_RGB.jpg)
 
 ## 一、环境构建
 1. 安装和使用官方poky docker即crops/poky
